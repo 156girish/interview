@@ -1,0 +1,156 @@
+find a missing number from a sorted array.
+
+Input:  [1, 2, 3, 5, 6]
+Output: 4
+
+✅ Approach 1: Simple Linear Search (O(n))
+public class MissingNumber {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 5, 6};
+        int missing = -1;
+
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i + 1] - arr[i] != 1) {
+                missing = arr[i] + 1;
+                break;
+            }
+        }
+
+        System.out.println("Missing Number: " + missing);
+    }
+}
+
+
+i	arr[i]	arr[i+1]	Difference	Check
+0	1	2	1	✅ OK
+1	2	3	1	✅ OK
+2	3	5	2	❌ Not OK → Missing found here
+
+Since arr[i + 1] - arr[i] != 1, we know a number is missing between 3 and 5.
+
+
+✅ Approach 2: Using Sum Formula (O(n))
+
+If the numbers are continuous starting from 1, you can use the sum formula:
+
+        int expectedSum = n * (n + 1) / 2;
+		
+
+public class MissingNumberSum {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 5, 6};
+        int n = 6; // Expected last number
+
+        int expectedSum = n * (n + 1) / 2;
+        int actualSum = 0;
+
+        for (int num : arr) {
+            actualSum += num;
+        }
+
+        int missing = expectedSum - actualSum;
+        System.out.println("Missing Number: " + missing);
+    }
+}
+
+------------------------------------------------------
+
+Anagram
+
+import java.util.HashMap;
+
+public class StringAnagramFrequency {
+    public static void main(String[] args) {
+        String str1 = "triangle";
+        String str2 = "integral";
+
+        str1 = str1.replaceAll("\\s", "").toLowerCase();
+        str2 = str2.replaceAll("\\s", "").toLowerCase();
+
+        if (str1.length() != str2.length()) {
+            System.out.println("Not an Anagram");
+            return;
+        }
+
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        // Count characters in str1
+        for (char c : str1.toCharArray()) {
+            map.put(c, map.getOrDefault(c, 0) + 1);
+        }
+
+        // Subtract counts using str2
+        for (char c : str2.toCharArray()) {
+            if (!map.containsKey(c)) {
+                System.out.println("Not an Anagram");
+                return;
+            }
+            map.put(c, map.get(c) - 1);
+        }
+
+        // Check all counts are zero
+        for (int count : map.values()) {
+            if (count != 0) {
+                System.out.println("Not an Anagram");
+                return;
+            }
+        }
+
+        System.out.println("Anagram");
+    }
+}
+
+------------------------------------------------------
+
+Longest Substring Without Repeating Characters in Java.
+
+import java.util.HashSet;
+
+public class LongestSubstringWithoutRepeating {
+    public static void main(String[] args) {
+        String s = "abcabcbb";
+        System.out.println("Length: " + lengthOfLongestSubstring(s));
+    }
+
+    public static int lengthOfLongestSubstring(String s) {
+        int left = 0, right = 0, maxLength = 0;
+        HashSet<Character> set = new HashSet<>();
+
+        while (right < s.length()) {
+            char c = s.charAt(right);
+
+            // If char already in set, remove from left side
+            while (set.contains(c)) {
+                set.remove(s.charAt(left));
+                left++;
+            }
+
+            // Add current character and move right pointer
+            set.add(c);
+            maxLength = Math.max(maxLength, right - left + 1);
+            right++;
+        }
+
+        return maxLength;
+    }
+}
+
+
+| Step                               | `left` | `right` | Current char        | Current window                                         | Max Length |   |
+| ---------------------------------- | ------ | ------- | ------------------- | ------------------------------------------------------ | ---------- | - |
+| Start                              | 0      | 0       | b                   | `b`                                                    | 1          |   |
+| Move right                         | 0      | 1       | a                   | `ba`                                                   | 2          |   |
+| Move right                         | 0      | 2       | c                   | `bac`                                                  | 3          |   |
+| Next char = a (duplicate)          | -      | -       | -                   | duplicate of `a` found → remove from left until unique |            |   |
+| Remove `b` (left=1), window = `ac` | left=1 | right=3 | now add `a`         | `aca` → after removing properly → `cab`                |            |   |
+| After cleanup                      | left=2 | right=3 | add `a`             | `ca`                                                   | 3          |   |
+| Move right                         | 2      | 4       | b                   | `cab`                                                  | 3          |   |
+| Move right                         | 2      | 5       | c (duplicate)       | remove until unique → remove `c`, left=3               | `ab`       | 3 |
+| Add `c`                            | `abc`  | right=5 | max=3               |                                                        |            |   |
+| Move right                         | 3      | 6       | b (duplicate)       | remove until unique → remove `a`, `b`                  | `c`        | 3 |
+| Add `b`                            | `cb`   | max=3   |                     |                                                        |            |   |
+| Move right                         | 4      | 7       | b (duplicate again) | remove until unique → remove `c`, `b`                  | ``         | 3 |
+| Add `b`                            | `b`    | max=3   |                     |                                                        |            |   |
+
+
+------------------------------------------------------
