@@ -1,0 +1,939 @@
+
+	✅ 1. Reverse a String
+	🔹 Normal Approach
+
+	Convert string to char[]
+
+	Loop from end to start
+
+	Build new string
+
+	String str = "hello";
+	String rev = "";
+
+	for (int i = str.length() - 1; i >= 0; i--) {
+		rev += str.charAt(i);
+	}
+	System.out.println(rev);
+
+
+	⏱ Time: O(n)
+	📦 Space: O(n)
+
+	⚠️ Interview note: String concatenation is costly.
+
+	🔹 Optimized Approach
+
+	Use StringBuilder (mutable).
+
+	String str = "hello";
+	String reversed = new StringBuilder(str).reverse().toString();
+	System.out.println(reversed);
+
+
+	⏱ Time: O(n)
+	📦 Space: O(n)
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 2. Check if a String is Palindrome
+	🔹 Normal Approach
+
+	Reverse string
+
+	Compare original & reversed
+
+	String str = "madam";
+	String rev = new StringBuilder(str).reverse().toString();
+
+	if (str.equals(rev)) {
+		System.out.println("Palindrome");
+	}
+
+	🔹 Optimized Approach (Two Pointer)
+
+	Compare start & end characters
+
+	String str = "madam";
+	int left = 0, right = str.length() - 1;
+	boolean isPalindrome = true;
+
+	while (left < right) {
+		if (str.charAt(left) != str.charAt(right)) {
+			isPalindrome = false;
+			break;
+		}
+		left++;
+		right--;
+	}
+	System.out.println(isPalindrome);
+
+
+	⏱ Time: O(n)
+	📦 Space: O(1)
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 3. First Non-Repeating Character
+	🔹 Normal Approach
+
+	Nested loops
+
+	Count manually
+
+	String str = "aabbcde";
+
+	for (int i = 0; i < str.length(); i++) {
+		boolean unique = true;
+		for (int j = 0; j < str.length(); j++) {
+			if (i != j && str.charAt(i) == str.charAt(j)) {
+				unique = false;
+				break;
+			}
+		}
+		if (unique) {
+			System.out.println(str.charAt(i));
+			break;
+		}
+	}
+
+
+	⏱ Time: O(n²)
+
+	🔹 Optimized Approach (LinkedHashMap)
+
+	Preserves insertion order.
+
+	String str = "aabbcde";
+	Map<Character, Integer> map = new LinkedHashMap<>();
+
+	for (char c : str.toCharArray()) {
+		map.put(c, map.getOrDefault(c, 0) + 1);
+	}
+
+	for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+		if (entry.getValue() == 1) {
+			System.out.println(entry.getKey());
+			break;
+		}
+	}
+
+
+	⏱ Time: O(n)
+	📦 Space: O(n)
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 4. Find Duplicate Characters
+	🔹 Normal Approach
+	String str = "programming";
+
+	for (int i = 0; i < str.length(); i++) {
+		for (int j = i + 1; j < str.length(); j++) {
+			if (str.charAt(i) == str.charAt(j)) {
+				System.out.println(str.charAt(i));
+				break;
+			}
+		}
+	}
+
+	🔹 Optimized Approach (Map)
+	String str = "programming";
+	Map<Character, Integer> map = new HashMap<>();
+
+	for (char c : str.toCharArray()) {
+		map.put(c, map.getOrDefault(c, 0) + 1);
+	}
+
+	map.forEach((k, v) -> {
+		if (v > 1) System.out.println(k);
+	});
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 5. Count Frequency of Each Character
+	🔹 Normal Approach
+	String str = "banana";
+
+	for (int i = 0; i < str.length(); i++) {
+		int count = 0;
+		for (int j = 0; j < str.length(); j++) {
+			if (str.charAt(i) == str.charAt(j)) {
+				count++;
+			}
+		}
+		System.out.println(str.charAt(i) + " = " + count);
+	}
+
+
+	⚠️ Prints duplicates multiple times.
+
+	🔹 Optimized Approach (Java 8)
+	String str = "banana";
+
+	Map<Character, Long> freq =
+			str.chars()
+			   .mapToObj(c -> (char) c)
+			   .collect(Collectors.groupingBy(
+					   c -> c,
+					   LinkedHashMap::new,
+					   Collectors.counting()));
+
+	System.out.println(freq);
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 6. Check if Two Strings Are Anagrams
+	🔹 Normal Approach (Sort)
+	String s1 = "listen";
+	String s2 = "silent";
+
+	char[] a1 = s1.toCharArray();
+	char[] a2 = s2.toCharArray();
+
+	Arrays.sort(a1);
+	Arrays.sort(a2);
+
+	System.out.println(Arrays.equals(a1, a2));
+
+	🔹 Optimized Approach (Frequency Map)
+	String s1 = "listen";
+	String s2 = "silent";
+
+	if (s1.length() != s2.length()) {
+		System.out.println(false);
+		return;
+	}
+
+	int[] count = new int[256];
+
+	for (int i = 0; i < s1.length(); i++) {
+		count[s1.charAt(i)]++;
+		count[s2.charAt(i)]--;
+	}
+
+	System.out.println(Arrays.stream(count).allMatch(c -> c == 0));
+	
+	🧠 Step 0: Create the array
+	int[] count = new int[256];
+
+
+	What JVM does:
+
+	Creates 256 boxes
+
+	Each box has a number (index) and a value
+
+	All values start at 0
+
+	Index : Value
+	108   : 0
+	105   : 0
+	115   : 0
+	(all others also 0)
+
+
+	Nothing added. No math. Just empty boxes.
+
+	🧠 Step 1: First iteration (i = 0)
+	char c1 = s1.charAt(0); // 'l'
+	char c2 = s2.charAt(0); // 's'
+
+
+	Now JVM converts characters to numbers automatically:
+
+	'l' → 108
+	's' → 115
+
+	Execute this line 👇
+	count[c1]++;
+
+
+	Replace with real numbers:
+
+	count[108] = count[108] + 1;
+
+
+	Memory becomes:
+
+	Index : Value
+	108   : 1
+
+	Execute next line 👇
+	count[c2]--;
+
+
+	Replace with real numbers:
+
+	count[115] = count[115] - 1;
+
+
+	Memory now:
+
+	Index : Value
+	108   : 1
+	115   : -1
+
+
+	👉 Notice:
+
+	No 108 + 115
+
+	Two separate boxes changed
+	
+	✅ Final Answer (Plain & Correct)
+
+	It only changes the value stored at that index.
+	The index itself never changes and indexes are never added together.
+		
+	-----------------------------------------------------------------------------------------
+
+	✅ 7. Remove Duplicate Characters (Preserve Order)
+	🔹 Normal Approach
+	String str = "programming";
+	String result = "";
+
+	for (int i = 0; i < str.length(); i++) {
+		if (!result.contains(String.valueOf(str.charAt(i)))) {
+			result += str.charAt(i);
+		}
+	}
+	System.out.println(result);
+
+	🔹 Optimized Approach (LinkedHashSet)
+	String str = "programming";
+	Set<Character> set = new LinkedHashSet<>();
+
+	for (char c : str.toCharArray()) {
+		set.add(c);
+	}
+
+	StringBuilder sb = new StringBuilder();
+	for (char c : set) {
+		sb.append(c);
+	}
+
+	System.out.println(sb.toString());
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 8. Find Longest Word in a Sentence
+	🔹 Normal Approach
+	String sentence = "Java full stack developer";
+	String[] words = sentence.split(" ");
+
+	String longest = words[0];
+
+	for (String word : words) {
+		if (word.length() > longest.length()) {
+			longest = word;
+		}
+	}
+	System.out.println(longest);
+
+	🔹 Optimized (Streams)
+	String sentence = "Java full stack developer";
+
+	String longest = Arrays.stream(sentence.split(" "))
+			.max(Comparator.comparingInt(String::length))
+			.orElse("");
+
+	System.out.println(longest);
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 9. Reverse Each Word in a Sentence
+	🔹 Normal Approach
+	String str = "Java is easy";
+	String[] words = str.split(" ");
+	String result = "";
+
+	for (String word : words) {
+		String rev = new StringBuilder(word).reverse().toString();
+		result += rev + " ";
+	}
+	System.out.println(result.trim());
+
+	🔹 Optimized (Streams)
+	String str = "Java is easy";
+
+	String result = Arrays.stream(str.split(" "))
+			.map(w -> new StringBuilder(w).reverse().toString())
+			.collect(Collectors.joining(" "));
+
+	System.out.println(result);
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 10. Check if String Contains Only Digits
+	🔹 Normal Approach
+	String str = "12345";
+	boolean isDigit = true;
+
+	for (char c : str.toCharArray()) {
+		if (!Character.isDigit(c)) {
+			isDigit = false;
+			break;
+		}
+	}
+	System.out.println(isDigit);
+
+	🔹 Optimized Approach (Regex)
+	String str = "12345";
+	System.out.println(str.matches("\\d+"))
+	
+	-----------------------------------------------------------------------------------------
+	
+	✅ 11. Find Vowels and Consonants Count
+	🔹 Normal Approach
+
+	Loop through characters and manually check vowels.
+
+	String str = "interview";
+	int vowels = 0, consonants = 0;
+
+	for (char c : str.toLowerCase().toCharArray()) {
+		if (c >= 'a' && c <= 'z') {
+			if ("aeiou".indexOf(c) != -1) vowels++;
+			else consonants++;
+		}
+	}
+	System.out.println("Vowels: " + vowels + ", Consonants: " + consonants);
+
+
+	Explanation:
+	We ignore non-alphabet characters and classify letters using vowel lookup.
+
+	🔹 Optimized Approach (Streams)
+	long vowels = str.toLowerCase()
+			.chars()
+			.filter(c -> "aeiou".indexOf(c) != -1)
+			.count();
+
+
+	Why better:
+	Cleaner, declarative style; avoids manual counters.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 12. Remove Whitespaces from String
+	🔹 Normal Approach
+
+	Iterate and skip spaces.
+
+	String str = "Java full stack";
+	String result = "";
+
+	for (char c : str.toCharArray()) {
+		if (c != ' ') result += c;
+	}
+	System.out.println(result);
+
+
+	Explanation:
+	We build a new string by ignoring space characters.
+
+	🔹 Optimized Approach
+	String result = str.replaceAll("\\s+", "");
+	System.out.println(result);
+
+
+	Why better:
+	Regex removes all whitespace (spaces, tabs, newlines).
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 13. Find All Substrings of a String
+	🔹 Normal Approach
+	String str = "abc";
+
+	for (int i = 0; i < str.length(); i++) {
+		for (int j = i + 1; j <= str.length(); j++) {
+			System.out.println(str.substring(i, j));
+		}
+	}
+
+
+	Explanation:
+	Two loops generate every possible start–end combination.
+
+	🔹 Optimized Approach
+
+	Same logic (this is already optimal).
+
+	Interview note:
+	Total substrings = n(n+1)/2, so O(n²) is expected.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 14. Find Longest Common Prefix
+	🔹 Normal Approach
+	String[] strs = {"flower", "flow", "flight"};
+	String prefix = strs[0];
+
+	for (int i = 1; i < strs.length; i++) {
+		while (!strs[i].startsWith(prefix)) {
+			prefix = prefix.substring(0, prefix.length() - 1);
+		}
+	}
+	System.out.println(prefix);
+
+
+	Explanation:
+	We gradually shrink the prefix until all strings match.
+
+	🔹 Optimized Approach
+
+	Same logic; efficient enough for interviews.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 15. Find Largest and Smallest Element in Array
+	🔹 Normal Approach
+	int[] arr = {5, 3, 9, 1, 6};
+	int min = arr[0], max = arr[0];
+
+	for (int n : arr) {
+		if (n < min) min = n;
+		if (n > max) max = n;
+	}
+	System.out.println("Min: " + min + ", Max: " + max);
+
+
+	Explanation:
+	Single traversal avoids sorting.
+
+	🔹 Optimized Approach
+
+	Same approach is already optimal (O(n)).
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 16. Find Second Largest Element
+	🔹 Normal Approach (Sorting)
+	int[] arr = {10, 5, 20, 8};
+	Arrays.sort(arr);
+	System.out.println(arr[arr.length - 2]);
+
+
+	Explanation:
+	Sorting works but is slower.
+
+	🔹 Optimized Approach (Single Pass)
+	int first = Integer.MIN_VALUE, second = Integer.MIN_VALUE;
+
+	for (int n : arr) {
+		if (n > first) {
+			second = first;
+			first = n;
+		} else if (n > second && n != first) {
+			second = n;
+		}
+	}
+	System.out.println(second);
+
+
+	Why better:
+	No sorting → O(n) time.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 17. Find Missing Number (1 to N)
+	🔹 Normal Approach (Sum Formula)
+	int[] arr = {1, 2, 4, 5};
+	int n = 5;
+
+	int expectedSum = n * (n + 1) / 2;
+	int actualSum = Arrays.stream(arr).sum();
+
+	System.out.println(expectedSum - actualSum);
+
+
+	Explanation:
+	Missing number = expected sum − actual sum.
+
+	🔹 Optimized Approach (XOR)
+	int xor = 0;
+	for (int i = 1; i <= n; i++) xor ^= i;
+	for (int num : arr) xor ^= num;
+
+	System.out.println(xor);
+
+
+	Why better:
+	Avoids overflow risk of sum.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 18. Remove Duplicates from Sorted Array
+	🔹 Normal Approach
+	int[] arr = {1, 1, 2, 2, 3};
+	Set<Integer> set = new LinkedHashSet<>();
+
+	for (int n : arr) set.add(n);
+	System.out.println(set);
+
+
+	Explanation:
+	Set removes duplicates but uses extra space.
+
+	🔹 Optimized Approach (Two Pointer)
+	int j = 0;
+	for (int i = 1; i < arr.length; i++) {
+		if (arr[i] != arr[j]) {
+			arr[++j] = arr[i];
+		}
+	}
+	System.out.println(j + 1);
+
+
+	Why better:
+	In-place, no extra memory.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 19. Find Duplicate Elements in Array
+	🔹 Normal Approach
+	int[] arr = {1, 2, 3, 2, 4};
+
+	for (int i = 0; i < arr.length; i++) {
+		for (int j = i + 1; j < arr.length; j++) {
+			if (arr[i] == arr[j]) {
+				System.out.println(arr[i]);
+				break;
+			}
+		}
+	}
+
+
+	Explanation:
+	Brute force comparison.
+
+	🔹 Optimized Approach (Set)
+	Set<Integer> set = new HashSet<>();
+
+	for (int n : arr) {
+		if (!set.add(n)) {
+			System.out.println(n);
+		}
+	}
+
+
+	Why better:
+	Stops early and runs in O(n).
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 20. Reverse an Array
+	🔹 Normal Approach
+	int[] arr = {1, 2, 3, 4};
+	int[] rev = new int[arr.length];
+
+	for (int i = 0; i < arr.length; i++) {
+		rev[i] = arr[arr.length - 1 - i];
+	}
+
+
+	Explanation:
+	Uses extra array.
+
+	🔹 Optimized Approach (In-Place)
+	int left = 0, right = arr.length - 1;
+
+	while (left < right) {
+		int temp = arr[left];
+		arr[left] = arr[right];
+		arr[right] = temp;
+		left++;
+		right--;
+	}
+
+
+	Why better:
+	O(1) space, cleaner logic.
+	
+	-----------------------------------------------------------------------------------------
+	
+	✅ 21. Sort an Array Without Using sort()
+	🔹 Normal Approach (Bubble Sort)
+	int[] arr = {5, 3, 1, 4, 2};
+
+	for (int i = 0; i < arr.length - 1; i++) {
+		for (int j = 0; j < arr.length - 1 - i; j++) {
+			if (arr[j] > arr[j + 1]) {
+				int temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+		}
+	}
+	System.out.println(Arrays.toString(arr));
+
+
+	Explanation:
+	We repeatedly swap adjacent elements if they are in the wrong order.
+
+	🔹 Optimized Approach
+
+	For interviews, this is enough.
+	Bubble/Selection sort is expected for logic clarity.
+
+	-----------------------------------------------------------------------------------------
+	
+	✅ 22. Find Frequency of Each Element in an Array
+	🔹 Normal Approach
+	int[] arr = {1, 2, 2, 3, 1};
+
+	for (int i = 0; i < arr.length; i++) {
+		int count = 1;
+		for (int j = i + 1; j < arr.length; j++) {
+			if (arr[i] == arr[j]) {
+				count++;
+			}
+		}
+		System.out.println(arr[i] + " = " + count);
+	}
+
+
+	Explanation:
+	Nested loop counts occurrences but repeats output.
+
+	🔹 Optimized Approach (HashMap)
+	Map<Integer, Integer> map = new HashMap<>();
+
+	for (int n : arr) {
+		map.put(n, map.getOrDefault(n, 0) + 1);
+	}
+	System.out.println(map);
+
+
+	Why better:
+	Single pass, no duplicates.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 23. Check if Array Is Sorted
+	🔹 Normal Approach
+	int[] arr = {1, 2, 3, 4};
+
+	boolean sorted = true;
+	for (int i = 0; i < arr.length - 1; i++) {
+		if (arr[i] > arr[i + 1]) {
+			sorted = false;
+			break;
+		}
+	}
+	System.out.println(sorted);
+
+
+	Explanation:
+	We compare each element with the next one.
+
+	🔹 Optimized Approach
+
+	This is already optimal → O(n).
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 24. Move All Zeros to End
+	🔹 Normal Approach
+	int[] arr = {0, 1, 0, 3, 12};
+	int[] result = new int[arr.length];
+	int index = 0;
+
+	for (int n : arr) {
+		if (n != 0) result[index++] = n;
+	}
+	System.out.println(Arrays.toString(result));
+
+
+	Explanation:
+	Create new array and copy non-zero elements.
+
+	🔹 Optimized Approach (Two Pointer)
+	int index = 0;
+
+	for (int i = 0; i < arr.length; i++) {
+		if (arr[i] != 0) {
+			arr[index++] = arr[i];
+		}
+	}
+	while (index < arr.length) {
+		arr[index++] = 0;
+	}
+
+
+	Why better:
+	In-place, no extra space.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 25. Find Common Elements Between Two Arrays
+	🔹 Normal Approach
+	int[] a = {1, 2, 3};
+	int[] b = {2, 3, 4};
+
+	for (int i : a) {
+		for (int j : b) {
+			if (i == j) {
+				System.out.println(i);
+			}
+		}
+	}
+
+
+	Explanation:
+	Brute force comparison.
+
+	🔹 Optimized Approach (Set)
+	Set<Integer> set = new HashSet<>();
+	for (int i : a) set.add(i);
+
+	for (int j : b) {
+		if (set.contains(j)) {
+			System.out.println(j);
+		}
+	}
+
+
+	Why better:
+	O(n) lookup.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 26. Find Pair with Given Sum
+	🔹 Normal Approach
+	int[] arr = {2, 7, 11, 15};
+	int target = 9;
+
+	for (int i = 0; i < arr.length; i++) {
+		for (int j = i + 1; j < arr.length; j++) {
+			if (arr[i] + arr[j] == target) {
+				System.out.println(arr[i] + ", " + arr[j]);
+			}
+		}
+	}
+
+
+	Explanation:
+	Checks all possible pairs.
+
+	🔹 Optimized Approach (HashSet)
+	Set<Integer> set = new HashSet<>();
+
+	for (int n : arr) {
+		int diff = target - n;
+		if (set.contains(diff)) {
+			System.out.println(diff + ", " + n);
+		}
+		set.add(n);
+	}
+
+
+	Why better:
+	Single pass, O(n).
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 27. Count Word Frequency in a Sentence
+	🔹 Normal Approach
+	String sentence = "java is java";
+	String[] words = sentence.split(" ");
+
+	Map<String, Integer> map = new HashMap<>();
+	for (String word : words) {
+		map.put(word, map.getOrDefault(word, 0) + 1);
+	}
+	System.out.println(map);
+
+
+	Explanation:
+	Split sentence into words and count.
+
+	🔹 Optimized Approach (Streams)
+	Map<String, Long> freq =
+			Arrays.stream(sentence.split(" "))
+				  .collect(Collectors.groupingBy(
+						  w -> w,
+						  Collectors.counting()));
+						  
+	-----------------------------------------------------------------------------------------
+
+	✅ 28. Sort Map by Value
+	🔹 Normal Approach
+	Map<String, Integer> map = new HashMap<>();
+	map.put("A", 3);
+	map.put("B", 1);
+	map.put("C", 2);
+
+	List<Map.Entry<String, Integer>> list = new ArrayList<>(map.entrySet());
+	list.sort(Map.Entry.comparingByValue());
+
+	System.out.println(list);
+
+
+	Explanation:
+	Convert map to list and sort entries.
+
+	🔹 Optimized Approach (Streams)
+	map.entrySet().stream()
+	   .sorted(Map.Entry.comparingByValue())
+	   .forEach(System.out::println);
+	   
+	-----------------------------------------------------------------------------------------
+
+	✅ 29. First Repeated Element in Array
+	🔹 Normal Approach
+	int[] arr = {1, 2, 3, 2, 1};
+
+	for (int i = 0; i < arr.length; i++) {
+		for (int j = i + 1; j < arr.length; j++) {
+			if (arr[i] == arr[j]) {
+				System.out.println(arr[i]);
+				return;
+			}
+		}
+	}
+
+
+	Explanation:
+	First element that appears again.
+
+	🔹 Optimized Approach (Set)
+	Set<Integer> set = new HashSet<>();
+
+	for (int n : arr) {
+		if (!set.add(n)) {
+			System.out.println(n);
+			break;
+		}
+	}
+
+
+	Why better:
+	Stops at first repeat.
+	
+	-----------------------------------------------------------------------------------------
+
+	✅ 30. Intersection & Union of Two Arrays
+	🔹 Normal Approach
+	int[] a = {1, 2, 3};
+	int[] b = {3, 4, 5};
+
+	Set<Integer> union = new HashSet<>();
+	Set<Integer> intersection = new HashSet<>();
+
+	for (int i : a) union.add(i);
+	for (int j : b) {
+		if (!union.add(j)) {
+			intersection.add(j);
+		}
+	}
+	System.out.println("Union: " + union);
+	System.out.println("Intersection: " + intersection);
+
+
+	Explanation:
+	Set automatically removes duplicates.
+	
+	-----------------------------------------------------------------------------------------
