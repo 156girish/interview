@@ -1,0 +1,252 @@
+================================================================================
+⚠️   ANGULAR INTERVIEW QUESTIONS FOR JAVA FULL STACK DEVELOPERS
+================================================================================
+
+1. What is the main difference between Angular and AngularJS?
+Answer: Angular (2+) is a complete rewrite. It is component-based, uses TypeScript, and supports mobile development. AngularJS (1.x) was based on MVC (Model-View-Controller) using $scope and was primarily JavaScript-based.
+
+2. Explain the high-level architecture of an Angular application.
+Answer: An Angular app consists of Modules (NgModules), Components (UI + Logic), Templates (HTML), Metadata (Decorators like @Component), Data Binding, Directives, Services, and Dependency Injection.
+
+3. What are Standalone Components?
+Answer: Introduced in Angular 14+, standalone components allow you to create components without needing a parent NgModule. This simplifies the application structure and reduces boilerplate, making the project more modular.
+
+4. What is the difference between a Component and a Directive?
+Answer: A Component is a directive with a template; it is the building block of the UI. A Directive adds behavior to existing DOM elements. There are two types: Structural (e.g., *ngIf, *ngFor) and Attribute (e.g., ngClass).
+
+5. Why use ngOnInit() instead of the constructor() for initialization?
+Answer: The constructor is a standard TypeScript feature used for dependency injection. ngOnInit() is an Angular lifecycle hook where the component's input properties are available and initialization logic should reside.
+
+6. How do you handle CORS issues between Angular and Spring Boot?
+Answer: In the Spring Boot controller, use the @CrossOrigin annotation. Alternatively, configure a proxy in Angular using a proxy.conf.json file during development.
+
+7. What is the role of an HTTP Interceptor?
+Answer: Interceptors allow you to inspect or transform HTTP requests from your app to the backend. Common use cases include adding a JWT Token to the Authorization header or logging error responses globally.
+
+8. Explain the difference between Observables and Promises.
+Answer: Promises handle a single event/value and are not cancellable. Observables (RxJS) handle a stream of values over time, are cancellable, and provide operators like map, filter, and switchMap.
+
+9. How do you share data between two unrelated components?
+Answer: Use a Shared Service with a BehaviorSubject or Subject. This acts as a centralized data store that components can subscribe to.
+
+10. What is the async pipe and why is it recommended?
+Answer: The async pipe automatically subscribes to an Observable or Promise in the template and automatically unsubscribes when the component is destroyed, preventing memory leaks.
+
+11. Difference between Template-driven and Reactive Forms?
+Answer: Template-driven forms have logic in the HTML (using ngModel) and are good for simple forms. Reactive forms have logic in the TypeScript class (using FormGroup, FormControl) and are better for complex validation and testing.
+
+12. What are Route Guards?
+Answer: Guards determine if a user can navigate to or away from a route. Common types include CanActivate (for authentication) and CanDeactivate (to prevent leaving unsaved forms).
+
+13. What is Lazy Loading?
+Answer: It is a technique where feature modules are loaded only when the user navigates to their routes. This reduces the initial bundle size and improves performance.
+
+14. What is AOT (Ahead-of-Time) compilation?
+Answer: AOT compiles Angular HTML and TypeScript into efficient JavaScript during the build phase before the browser downloads it. This leads to faster rendering and smaller bundle sizes.
+
+15. Explain Change Detection Strategies: Default vs. OnPush.
+Answer: The Default strategy checks every component in the tree on every event. The OnPush strategy only checks the component if its @Input() reference changes or an event is triggered within it.
+
+16. What are Pipes? Give an example.
+Answer: Pipes transform data in the template. Example: {{ price | currency:'USD' }}. Custom pipes can be created for specific logic like date formatting.
+
+17. Difference between Pure and Impure Pipes?
+Answer: A Pure Pipe only executes when it detects a change to the input value (primitive or reference). An Impure Pipe executes on every change detection cycle.
+
+18. What is Dependency Injection (DI) in Angular?
+Answer: Angular has its own DI framework. You register a service in the providers array (or use providedIn: 'root') and inject it into the component constructor.
+
+19. How do you handle errors globally in Angular?
+Answer: By creating a class that implements ErrorHandler. You can then provide it in your module to catch all uncaught exceptions across the app.
+
+20. What is trackBy in an *ngFor loop?
+Answer: Using trackBy with a unique ID tells Angular to only re-render the specific item that changed in a list, rather than re-rendering the entire list, which improves performance.
+
+================================================================================
+
+shared components
+@input syntax 
+input in angualr 17
+check all the data binding *******practise it
+📦 Objects in Angular (clear + interview-ready)
+
+Interview-ready explanation 🎯
+ng content : 
+
+Even though @Input() is present, ng-content is required because @Input() is used only for passing data, while ng-content is needed to project HTML or components from the parent into the child’s template. In this case, the dashboard item receives data via inputs and dynamic content via content projection.
+
+
+*shared html code / component
+*types of selector
+*instead of input we can use ng content for  buttons shared one
+*ngProjectAs
+*@input vs     lable = input.required<string>();
+*  encapsulation: ViewEncapsulation.None
+*  :host  (css) 
+* hostelement
+* @HostBinding
+* hostlistner
+* add css conditionaly
+*             <div [style.height]="(dataPoint.value / maxTraffic) * 100 + '%'"></div>
+* dynamic style
+* life cycle hooks
+* implements OnInit interface
+*DestroyRef
+*form submit 
+	ngModel → Writing answers in an exam sheet
+
+	ngSubmit → Handing over the paper to the examiner
+	
+*HTMLInputElement
+*    form.reset();
+* @ViewChild
+
+	export class NewTicketComponent {
+	  
+	  @ViewChild('form') form?: ElementRef<HTMLFormElement>;
+
+	  onSubmit(title: string, ticketText: string) {
+		console.log(title);
+		console.log(ticketText);
+		this.form?.nativeElement.reset();
+	  }
+
+	}
+	
+*@ContentChild
+*alias
+*         <input name="title" id="title" #titleInput #input>
+	instead of this we can use two way binding
+	
+*custim two way binding
+
+--------------------------------------------------------------------------------
+
+
+*ngModel internal working 
+* computed
+*custome directives
+* selector while creating directive(attribut or tag) these are the types of selector
+	@Directive({
+    selector: 'a[appSafeLink]'
+})
+
+*types of selector
+*custom structire diretcive
+*effect function
+*ngTemplate vs div
+*inject TemplateRef
+*inject viewCOntainerref
+*hostDirectives
+
+
+*pipes
+*custom pipes
+* chaining pipes
+* pure and impure pipes
+
+* depedency injection
+* services
+* sercies using new keyword vs in constrctor
+* constructor() vs inject()
+* private tasks = signal<Task[]>([]);
+  allTasks = this.tasks.asReadonly();
+*multiple injectors
+	platform envInjector
+	application root
+	moduleInjector
+	elementInjector
+* how we can use root service in which ways
+*service in service
+*injectionToken in main ts ( for class and non class ) (useclass/usevalue/useFactory) 
+*provider
+*so in chnage detection it will not call function but only bindings
+*so while change detction it go through all the compoennets
+*zoneJS
+*NgZone ( runOutsideANgualr and OnPush)
+*changes dection manually : chnage detector ref
+*async pipe
+*zoneJS vs signal vs RXjs
+
+----------------------------------------------
+*Observalble (yoube and subscribe exmaple)
+*subscribe
+*operators
+*pipes
+*subjects
+*signal vs observables 
+*signal to observables or vice versa (toObservable and toSignal)
+* custom observables
+
+*httpcleint
+*observe
+*subscribe 
+*    pipe(
+      map((resData) => resData.places),
+      catchError((error) => 
+        throwError(()=>(
+          new Error()
+        )))
+    )
+
+*.pipe(tap({
+      next: (userPlaces)=> this.userPlaces.set(userPlaces) 
+    }));
+*subject to communatce the service
+*http interceptor : function and class 
+	request and resposne 
+
+
+*forms
+*ways to handle the forms
+*ngModel without two way binding
+* #form="ngForm"
+*<input id="email" type="email" name="email" ngModel required /> why we added ngModel here ?
+*preadded values in form
+*        this.form().valueChanges?.subscribe();
+
+*reactive form
+*FormGroup
+*FormControl and formControlName
+*Validators
+*custom validator
+*asynValidtor
+*how can we manage role in form optin ( studment | teacher )
+*array form
+
+
+*routing
+*rendering routes
+*<router-outlet/>
+*routerLink
+*routerLinkActive
+*dynamic routes
+*withComponentInputBinding
+*private actiavateRoute = inject(ActivatedRoute);
+*nested routes
+*withRouterConfig
+*    this.router.navigate(['/users',this.userId(),'tasks'],{
+      replaceUrl: true,
+    });
+	
+*redirectTo
+*        pathMatch: 'prefix' vs full
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

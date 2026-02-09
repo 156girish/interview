@@ -1,0 +1,97 @@
+🔸 1. Find the Second Highest Number in a List
+List<Integer> list = Arrays.asList(5, 3, 8, 7, 8, 2);
+
+        Optional<Integer> i = list.stream()
+                .distinct()
+                .sorted(Comparator.reverseOrder())
+                .skip(2)
+                .findFirst();
+				
+				list.stream()
+				
+				
+🔸 2. Find Duplicates in a List
+        List<String> names = Arrays.asList("A", "B", "C", "A", "D", "B");
+        Set<String> seen = new HashSet<>();
+        List<String> nonDuplicate = names.stream()
+                .filter(n -> !seen.add(n))
+                .collect(Collectors.toList());
+				
+🔸 3. Find the First Non-Repeating Character
+String input = "aabbcde";
+        Optional<Character> a = input.chars()
+                .mapToObj(c -> (char)c)
+                .collect(Collectors.groupingBy(
+                        c -> c ,
+                        Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(n-> n.getValue()==1)
+                .map(n-> n.getKey())
+                .findFirst();
+				
+				
+🔸 4. Group Employees by Department
+
+    private int id;
+    private String name;
+    private String department;
+
+        List<Employee> employees = Arrays.asList(
+            new Employee(101, "Alice", "HR"),
+            new Employee(102, "Bob", "IT"),
+            new Employee(103, "Charlie", "Finance"),
+            new Employee(104, "David", "IT"),
+            new Employee(105, "Eve", "HR"),
+            new Employee(106, "Frank", "Finance"),
+            new Employee(107, "Grace", "IT")
+        );
+		
+	Map<String, List<Employee>> emp = employees.stream()
+	.collect(Collectors.groupingBy(n -> n.getDepartment()));
+	
+🔸 5. Count Frequency of Each Element
+		List<String> words = Arrays.asList("apple", "banana", "apple", "orange");
+        Map<String, Long> map =  words.stream()
+                .collect(Collectors.groupingBy(n-> n , Collectors.counting()));
+				
+				
+				
+				
+				
+-------------------------------------------------------------
+				
+Functional Interface :
+
+@FunctionalInterface
+interface Operations {
+	int add (int a , int b);
+}
+
+
+public class Test{
+	
+	public static void main(String [] args){
+		Operations add = new Operations(){
+		@Override
+		int add (int a , int b){
+		return a + b;
+		}
+		};
+	}
+}
+
+public class Test{
+	
+	public static void main(String [] args){
+		Operations add = (a,b)->a+b;
+		int sum = add.add(2,6);
+		),
+	}
+}
+				
+-------------------------------------------------------------
+
+
+
+

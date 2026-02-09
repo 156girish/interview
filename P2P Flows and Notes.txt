@@ -1,0 +1,179 @@
+	
+	What is Procure-to-Pay (P2P)?
+
+	Procure-to-Pay is the end-to-end business process that starts when a company decides to buy something and ends when the supplier is paid for it.
+
+	In short:
+	👉 Request → Buy → Receive → Invoice → Pay
+
+
+---------------------------------------
+
+👉 EBP -> read mail and sent file to GB (OCR)
+
+👉 purchase-requisition -> A Purchase Requisition is an internal request raised by an employee or department to ask permission to buy goods or services.
+
+📌 It is not sent to the supplier
+📌 It is not a legal document
+📌 It starts the Procure-to-Pay process
+
+Simple Example
+
+	An employee needs a laptop.
+
+	👉 They raise a Purchase Requisition saying:
+
+	Item: Laptop
+	Quantity: 1
+	Estimated cost
+	Cost center
+	Business justification
+	This request goes for approval.
+	
+PR Flow in P2P
+
+	1 ️⃣ Employee creates PR
+	2 ️⃣ Manager / Finance approves it
+	3️ ⃣ Approved PR becomes a Purchase Order (PO)
+	4️ ⃣ PO is sent to supplier
+	
+	
+Purchase Requisition Creation via MFG (API Flow)
+
+	High-Level Idea
+
+		MFG exposes an API that allows external systems to create Purchase Requisitions (PRs) directly in SAP Ariba.
+		MFG acts as a controlled integration layer between internal systems and Ariba.
+
+	One-Paragraph Interview Answer (Very Solid)
+
+		We expose a PR creation API through MFG that allows upstream systems to create purchase requisitions in SAP Ariba. The API is implemented using AWS API Gateway and Lambda. MFG receives PR data in a generic format, reads configuration and mapping rules from S3, transforms the request into Ariba-specific format, and invokes Ariba’s PR creation API. The response from Ariba is then processed and returned to the calling system.
+		
+👉 Po-Receipt 
+
+	PO Receipt Creation API in MFG
+	Purpose (Business View)
+
+	The PO Receipt API allows upstream systems (like the Pricing Engine) to confirm receipt of goods or services against an existing Purchase Order in SAP Ariba.
+
+	📌 This is required for:
+
+	3-way matching (PO–GR–Invoice)
+	Invoice approval
+	Payment eligibility
+
+	One-Paragraph Interview Answer
+
+	We implemented a PO Receipt API in MFG that allows upstream systems like the Pricing Engine to create goods or service receipts in SAP Ariba against an existing purchase order. The API is exposed via AWS API Gateway and backed by a Lambda function that validates the request, loads configuration from S3, transforms the data into Ariba’s receipt format, and invokes the Ariba PO Receipt API. This enables 3-way matching and downstream invoice processing.
+	
+👉 Exports API in MFG (Ariba → Downstream Systems)
+
+	📌 Purpose (Business View)
+	The Exports APIs are used to fetch transactional and master data from SAP Ariba and distribute it to downstream teams/systems for:
+
+	Reporting
+	Reconciliation
+	Compliance
+	Analytics
+	Downstream processing
+
+	📌Data includes:
+
+	Invoices
+	Purchase Orders
+	Purchase Requisitions
+	Contracts
+	High-Level Design
+
+	📌 MFG provides a call-ariba service that acts as a generic outbound integration layer for all Ariba data exports.
+	
+	We implemented export APIs in MFG to fetch invoice, PO, PR, and contract data from SAP Ariba and distribute it to downstream systems. MFG uses a centralized call-ariba service that first obtains an access token from Ariba, then invokes the relevant Ariba APIs to fetch data in JSON format. The retrieved data is transformed if required and sent to respective downstream team APIs.
+	
+	Common Follow-Up Questions (Prepare These)
+
+	Q: How do you handle token expiry?
+	👉 Cache token with expiry and refresh when needed.
+
+	Q: How do you handle large data volumes?
+	👉 Pagination and incremental fetch.
+
+	Q: How do you handle failures when sending to downstream teams?
+	👉 Retries, DLQ, and status tracking.
+	
+
+
+MFG PTP reporting :
+
+	Reporting Service in MFG
+	Purpose (Business View)
+
+	Reporting Service provides centralized, reliable access to Ariba transactional data for:
+
+	Reporting
+	Analytics
+	Downstream applications
+	Audit & compliance
+
+	It avoids multiple teams directly calling Ariba.
+	
+	⭐ One-Paragraph Interview Answer
+
+	We built a reporting service that periodically fetches data from SAP Ariba using scheduled jobs and stores it in PostgreSQL using batch insertion for performance. The stored data is used to generate CSV exports for downstream teams and is also exposed through secure REST APIs with Swagger documentation, pagination, and OAuth2 authentication. This service acts as a centralized reporting layer, reducing direct dependency on Ariba.
+	
+	Likely Follow-Up Questions (Prepare These)
+
+	Q: Why batch insertion?
+	👉 To efficiently handle large datasets and reduce DB overhead.
+
+	Q: Why not let teams call Ariba directly?
+	👉 To avoid performance issues, rate limits, and tight coupling.
+
+	Q: How do you handle data freshness?
+	👉 Daily scheduler + timestamp-based incremental fetch.
+
+	Q: How do you secure APIs?
+	👉 OAuth2 with token validation.
+	
+	
+	
+	
+	
+I’m working on a Procure-to-Pay middleware system for an enterprise client.
+The goal of the project is to automate invoice processing and integrate supplier invoices with SAP Ariba.”
+
+
+Purchase Request – Business raises a request
+Purchase Order (PO) – Approved PO is sent to supplier
+Goods / Services Received
+Invoice Received – Supplier sends invoice
+Invoice Matching – Invoice matched with PO & receipt
+Payment – Supplier is paid
+
+
+We act as an upstream and downstream middleware platform in the Procure-to-Pay process.
+Upstream systems use our APIs to create PRs, POs, receipts, invoices, and remittance details in SAP Ariba.
+On the downstream side, we export transactional data like invoices, POs, and payment status from Ariba to reporting and reconciliation systems.
+This architecture reduces direct dependency on Ariba and standardizes integrations.
+
+
+
+
+
+
+	Procure-to-Pay is the end-to-end business process that starts when a company decides to buy something and ends when the supplier is paid for it.
+
+	In short:
+	👉 Request → Buy → Receive → Invoice → Pay
+ 
+ 
+My name is Girish Mahajan, and I have around 3.7 years of experience as a Specialist Software Engineer.
+
+Currently, I’m working on a Procure-to-Pay application built using Java and Spring Boot, where our application acts as a middleware layer in the P2P process, handling interactions between upstream and downstream systems across PR, PO, and Invoice flows.
+
+I mainly work on developing Spring Boot microservices for the invoice processing flow, which includes fetching invoice emails from Outlook using Microsoft Graph API and SFTP, reading and writing files to AWS S3, converting XML to cXML, and integrating with Ariba APIs.
+
+Along with feature development, I also work on writing unit and integration test cases and fixing SonarQube issues to ensure code quality and maintain test coverage above 80%.
+
+From a archectureal perspective, the application uses a combination of Docker-based services and AWS serverless components.
+
+That’s a brief overview of my role and project.

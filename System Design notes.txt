@@ -1,0 +1,1040 @@
+API Gateway :
+
+	What is an API Gateway?
+	An API Gateway is a single entry point for all client requests in a microservices architecture.
+
+	Why do we need an API Gateway?
+	In microservices, problems arise if clients directly hit services:
+	❌ Too many endpoints to manage
+	❌ Security duplicated in every service
+	❌ Hard to handle auth, logging, throttling
+	❌ Client tightly coupled to servicesthis
+	API Gateway solves this
+	
+	
+	Responsibilities of an API Gateway:
+	🔹 1. Request Routing
+
+	Routes incoming requests to the correct microservice.
+
+	Example:
+
+	/users/**   → User Service
+	/orders/**  → Order Service
+	/payments/** → Payment Service
+	
+	With API Gateway
+	Client
+	   ↓
+	API Gateway
+	   ↓
+	--------------------------------
+	| Auth | Invoice | PO | Reports |
+	--------------------------------
+	
+	🔹 2. Authentication & Authorization
+
+	Central place to handle:
+	JWT validation
+	OAuth2
+	API Keys
+
+	👉 Services don’t need to re-implement security logic.
+	
+	🔹 3. Load Balancing
+
+	Distributes traffic across multiple instances of a service.
+
+	🔹 4. Rate Limiting & Throttling
+
+	Prevents abuse:
+	Max requests per second
+	Protects backend services
+
+	🔹 5. Request / Response Transformation
+
+	Convert headers
+	Modify payload
+	Add/remove fields
+	Example:
+	Client sends JSON
+	Backend expects XML / cXML (very relevant to your Ariba P2P project)
+
+	🔹 6. Logging & Monitoring
+
+	Centralized request logs
+	Latency tracking
+	Error tracking
+
+	🔹 7. Circuit Breaker & Resilience
+
+	If one service is down, gateway can:
+	Return fallback response
+	Avoid cascading failures
+	
+	
+🔥 How YOU can explain this in an interview (Perfect Answer)
+
+	“API Gateway acts as a single entry point in our microservices architecture.
+	It handles routing, authentication, rate limiting, logging, and request transformation.
+	This reduces duplication of cross-cutting concerns in individual services and improves security and maintainability.
+	In my project, we used AWS API Gateway / Spring Cloud Gateway to route requests to invoice and PO services, validate tokens, and monitor traffic.”
+	
+🔥 What happens if API Gateway goes down? Isn’t it a single point of failure?
+
+	👉Smart interview answer (short & crisp)
+
+			“API Gateway looks like a single point of entry, but not a single point of failure.
+			In managed gateways it’s highly available by default.
+			In self-hosted setups, we deploy multiple gateway instances behind a load balancer so failure of one instance doesn’t impact the system.”
+
+	👉In managed gateways (AWS API Gateway, Azure APIM, GCP)
+
+			They are highly available by default
+			Deployed across multiple Availability Zones
+			Auto-scaling, health checks, and failover are handled by the cloud provider
+			So one node/zone going down does NOT bring your system down
+	
+	👉In self-hosted gateways (Spring Boot + Zuul / Spring Cloud Gateway / NGINX)
+	
+			Wrong design ❌
+			Client → Single API Gateway → Services
+			
+			Correct design ✅
+			Client
+			  ↓
+			Load Balancer (ALB / NLB)
+			  ↓
+			Multiple API Gateway instances
+			  ↓
+			Microservices
+			So if one gateway instance dies, traffic is routed to others.
+	
+	👉How we prevent Gateway from becoming SPOF
+	
+			✅ 1. Horizontal scaling
+
+			Run multiple gateway instances
+			Auto-scale based on traffic
+
+			✅ 2. Load balancer in front
+
+			ALB / NGINX / HAProxy
+			Health checks remove unhealthy gateway instances
+
+			✅ 3. Circuit breakers & timeouts
+
+			Prevent gateway from waiting forever on a dead service
+
+			✅ 4. Multi-region (advanced setups)
+
+			Route53 / Global Accelerator
+			Active-active gateways across regions
+
+
+--------------------------------------------------------------------------------
+
+Vertical vs Horizontal scaling:
+
+	👉Vertical Scaling? -> Vertical scaling (Scale Up) means adding more power to a single machine.
+	  Client → Server (bigger & bigger)
+
+	
+	👉Horizontal Scaling? -> Horizontal scaling (Scale Out) means adding more machines.
+		Client → Load Balancer → Server 1
+								 Server 2
+                                 Server 3
+								 
+	👉2-Line Interview Answer (Memorize This)
+
+	“Vertical scaling increases the capacity of a single machine by adding more resources, while horizontal scaling increases capacity by adding more machines. In cloud and microservices architectures, horizontal scaling is preferred due to better availability and fault tolerance.”
+	
+
+👌 How scality exactly worked with serverless architecture ?
+
+	Core idea of Serverless Scalability
+
+		👉 Serverless scales horizontally by default
+
+			You don’t:
+			Add instances
+			Configure auto-scaling groups
+			Manage load balancers
+			The platform does it automatically per request/event.
+			
+	How Scalability Works – Step by Step (AWS Example)
+	
+			Client → API Gateway → Lambda → DynamoDB
+
+			Step 1: Incoming Traffic
+
+			1 request → 1 Lambda execution
+			1,000 requests → 1,000 Lambda executions
+			Each execution runs independently.
+
+			Step 2: Automatic Horizontal Scaling
+
+			AWS:
+			Spins up more Lambda execution environments
+			No pre-configured instance count
+			Scaling happens within milliseconds
+			👉 This is pure horizontal scaling.
+
+			Step 3: Concurrency Handling (Very Important)
+
+			Each request = 1 concurrent execution
+			AWS tracks concurrent executions
+			Example:
+			Default concurrency limit: ~1000 per region (soft limit)
+			Can be increased via request
+
+👉Cold Start vs Warm Start (Interview Favorite)
+			Cold Start
+
+				New container is created
+				JVM / runtime starts
+				Higher latency
+
+			Warm Start
+
+				Existing container reused
+				Much faster
+
+			Scaling impact:
+
+				Sudden traffic spike → more cold starts
+				Steady traffic → mostly warm starts
+				
+				
+👉 Interview-Ready Answer (Say This)
+
+	“In serverless architecture, scalability is automatic and event-driven. Each incoming request or event triggers an independent function execution, allowing the system to scale horizontally without managing servers. The cloud provider handles provisioning, concurrency, and load balancing, while developers control limits and downstream capacityInterview-Ready Answer (Say This)
+
+
+🔥 if 1000 lambda's are wokring then how dydnamo db handle those many connections ?
+
+1️. Key Concept: DynamoDB Is Connectionless
+
+	Unlike RDS / MySQL:
+
+	❌ No persistent TCP connections
+	❌ No connection pool
+	❌ No session per client
+
+	DynamoDB is HTTP-based and stateless.
+
+	Each Lambda makes:
+
+	HTTPS request → DynamoDB API
+
+
+	So:
+
+	1 Lambda = 1 API request (not a DB connection)
+	1000 Lambdas = 1000 API requests
+	No “connection exhaustion” problem
+
+	💡 This is the biggest difference.
+	
+2. How DynamoDB Scales with 1000 Lambdas
+
+	DynamoDB internally:
+
+	Is fully managed
+	Auto-partitioned
+	Horizontally scalable
+	Multi-tenant under the hood
+
+	AWS:
+
+	Distributes your data across many partitions
+	Each partition handles a portion of traffic
+	
+	
+	1000 Lambda invocations
+			↓
+	1000 HTTPS API calls
+			↓
+	AWS front-end fleet
+			↓
+	Partitioned storage nodes
+	
+🔥 What If All Lambdas Hit the Same Partition? (HOT PARTITION 🔥)
+
+	This is the real bottleneck, not connections.
+
+	Bad design:
+	partitionKey = "INVOICE"
+
+	All traffic → one partition → throttling
+
+	Good design:
+	partitionKey = invoiceId
+	partitionKey = customerId#date
+
+	Traffic spreads evenly → scales smoothly
+	
+	“DynamoDB doesn’t manage client connections like traditional databases. Each Lambda invocation makes stateless API calls over HTTPS, so even thousands of Lambdas don’t exhaust connections. DynamoDB scales horizontally using partitions and controls load through read/write capacity units rather than connections.”
+	
+🔥 so to access dynamodb we have API request ?
+
+	Accessing DynamoDB is done via API requests, not traditional DB connections.
+	
+	Application → AWS SDK → HTTPS API call → DynamoDB
+	
+
+🔥	Can you scale without a load balancer?
+
+	No, you cannot reliably scale without a load balancer.
+	Scaling means running multiple instances, but without a load balancer there’s no mechanism to distribute traffic or remove unhealthy instances.
+	A load balancer performs health checks and routes traffic only to healthy instances, which makes scaling and fault tolerance possible.
+	
+	Health checks allow the load balancer to automatically detect failed or slow instances and stop sending traffic to them, ensuring high availability during scaling.
+	
+🔥	How do you handle scaling when traffic spikes suddenly?
+
+	Sudden traffic spikes are handled using auto-scaling combined with asynchronous processing.
+	Auto-scaling scales instances based on metrics like CPU usage, request rate, or queue depth.
+	To handle burst traffic without overwhelming the system, we introduce queues so requests are processed asynchronously instead of synchronously during spikes.
+	
+		Key techniques to mention (quick bullets)
+
+		Auto Scaling Groups → scale app/gateway instances
+		Queues (SQS / Kafka / RabbitMQ) → absorb bursts
+		Backpressure → protect downstream services
+		Rate limiting → prevent abuse during spikes
+		
+	“Auto-scaling reacts in seconds or minutes, but queues handle spikes instantly, which is why async is critical during sudden traffic surges.”
+	
+🔥 How do you prevent cascading failures while scaling?
+
+	First: what is a cascading failure? (in plain English)
+
+		One service becomes slow or fails →
+		calling services keep waiting →
+		their threads get blocked →
+		they also fail →
+		boom: whole system goes down
+
+		This happens a lot during scaling or traffic spikes.
+	
+	Why scaling makes this worse
+
+		When traffic increases:
+		More requests
+		More inter-service calls
+		One slow dependency = multiplied impact
+
+		If Service A waits forever on Service B, A will die even if B is the only problem.
+		
+	Now the answer (step by step)
+		1️ Timeouts (MOST IMPORTANT — the trick)
+
+		Never wait forever.
+		If a downstream service doesn’t respond in, say, 2 seconds → fail fast
+		Frees threads and resources
+		Prevents thread pool exhaustion
+
+		👉 Timeouts are the first line of defense
+
+		2️ Circuit Breakers
+
+		Stop calling a service that is already failing.
+		After N failures → circuit opens
+		Requests fail immediately (no waiting)
+		Periodically tests if service has recovered
+		This protects both caller and callee.
+
+		3️ Retries (with backoff, not blindly)
+
+		Retry smartly, not aggressively.
+		Immediate retries during an outage = disaster
+
+		Use:
+		Exponential backoff
+		Limited retry count
+		Retries without backoff = self-DDOS 😅
+
+		4️ Bulkheads
+
+		Failure in one area shouldn’t sink the whole ship.
+		Separate thread pools / connection pools
+		If one dependency is slow, others stay healthy
+
+		Example:
+		Payment calls don’t block Order processing threads
+
+
+-------------------------------------------------------------------------------------------------------------
+
+Load balancer :
+
+	A Load Balancer (LB) is a component that distributes incoming traffic across multiple servers to ensure:
+
+	High availability
+	Scalability
+	Fault tolerance
+	Better 
+	
+	Client → Load Balancer → Server 1
+                             Server 2
+                             Server 3
+							 
+
+🔥 Why Load Balancer is Needed
+
+		Without LB:
+
+		One server handles all traffic
+		Server overload = downtime
+		No failover
+
+		With LB:
+
+		Traffic is spread
+		Failed servers are skipped
+		System stays up
+		
+🔥 Core Responsibilities of a Load Balancer
+
+		🔹 1. Traffic Distribution
+		Distributes requests among healthy servers.
+
+		🔹 2. Health Checks
+		Continuously checks:
+		Is the server alive?
+		Is the application responding?
+		If not → remove from traffic.
+
+		🔹 3. Failover
+		If a server crashes:
+		LB routes traffic to remaining servers
+		No client-side changes needed
+
+		🔹 4. Scalabilit
+		New servers added → LB starts routing traffic
+		Servers removed → LB stops routing
+		
+🔥 Load Balancing Algorithms (Important)
+
+		🔹 Round Robin : Requests distributed evenly.
+		🔹 Least Connections : Routes to server with fewest active connections.
+		🔹 Weighted Round Robin : More traffic to powerful servers.
+		🔹 IP Hash : Same client IP → same server 
+
+🔥 Load Balancer in Scaling Flow (End-to-End)
+		Client
+		  ↓
+		DNS
+		  ↓
+		Load Balancer
+		  ↓
+		Auto Scaling Group
+		  ↓
+		Application Instances	
+		
+🎯 Interview-Ready Answer (Memorize This)
+
+		“A load balancer distributes incoming traffic across multiple servers to ensure availability, scalability, and fault tolerance. It performs health checks, routes traffic using algorithms like round-robin or least connections, and enables horizontal scaling.”
+		
+🔥 for servrelss compoennent load lancer is not required right ?
+
+		Serverless components don’t require a traditional load balancer because scaling and traffic distribution are managed by the cloud platform.
+		Entry services like API Gateway or event sources handle routing, throttling, and availability instead.		
+		
+			You don’t manage instances: 
+				AWS automatically:
+				Scales executions
+				Distributes traffic
+				Handles failures
+				
+🔥	What happens if one backend server becomes slow but not dead?
+
+		Answer:
+		If health checks are based only on “alive” checks, traffic may still be sent. Advanced health checks or latency-based routing is needed to remove slow servers.
+
+		Trick: Health ≠ performance.
+		
+🔥 Difference between sticky sessions and stateless design?
+
+		Answer:
+		Sticky sessions bind a client to one server, reducing scalability. Stateless design allows any server to handle any request and is preferred for horizontal scaling.
+
+		Trick: Sticky sessions are a compromise, not best practice.
+		
+🔥 Does load balancer replace API Gateway?
+
+		Answer:
+		No. Load balancer handles traffic distribution, while API Gateway handles API-level concerns like authentication, rate limiting, and request transformation.
+
+		Trick: They solve different problems.
+		
+-------------------------------------------------------------------------------------------------------------------------
+
+Database scaling : https://bytebytego.com/guides/7-must-know-strategies-to-scale-your-database/
+
+	What is Database Scalability?
+	Database scalability means the ability of a database to handle growing data, users, and requests without slowing down or failing.
+	
+	
+	
+🔥	Vertical Scaling (Scale Up)
+
+	Increase power of a single database server
+
+		Add more CPU
+		Add more RAM
+		Add faster disk
+		
+		Before:
+	+------------------+
+	|   DB Server      |
+	|  CPU: 4 cores    |
+	|  RAM: 8 GB       |
+	+------------------+
+
+	After (Scale Up):
+	+------------------+
+	|   DB Server      |
+	|  CPU: 16 cores   |
+	|  RAM: 64 GB      |
+	+------------------+
+
+	Pros
+
+		Easy to implement
+		No application change
+
+	Cons
+
+		Hardware limit
+		Expensive
+		Single point of failure ❌
+		
+
+🔥	Horizontal Scaling (Scale Out)
+
+	Add more database servers instead of making one bigger.
+	
+	🔥 Read Replicas (Read Scaling)
+	
+	
+						  READ
+					  +--------+
+					  | Replica|
+					  +--------+
+						   |
+						   |
+		Client ---> +------------------+
+					|   Primary DB     |
+					| (Read + Write)  |
+					+------------------+
+						   |
+						   |
+					  +--------+
+					  | Replica|
+					  +--------+
+						READ
+
+				Use case
+
+				Heavy read traffic
+				Reports, dashboards
+
+				Limitation
+
+				Writes still go to one DB
+				
+				
+	🔥 Sharding (Data Partitioning)
+
+				What it means:
+				Split data across multiple databases based on a key.
+				
+							+----------------+
+				Client ---> |  Shard Router  |
+							+----------------+
+							   |      |      
+							   |      |
+						+-----------+  +-----------+
+						| Shard 1   |  | Shard 2   |
+						| invoiceId |  | invoiceId |
+						| 1 - 500k  |  | 500k+     |
+						+-----------+  +-----------+
+						
+				Pros
+
+				Handles massive scale
+				Write scalability ✅
+
+				Cons
+
+				Complex queries
+				Cross-shard joins are hard
+
+				Interview Line
+				Sharding improves write scalability but increases operational complexity.
+
+
+	🔥 Caching (Indirect Scalability)
+
+				Reduce database load by caching frequent data.
+			
+			
+🔥 Sharding Strategies
+
+	Sharding = splitting data across multiple databases (shards) using a shard key
+	Example shard key: userId, invoiceId, orderId
+	
+	1 ️⃣ Hash-Based Sharding
+	How it works
+
+	Apply a hash function on shard key
+	Hash result decides which shard stores the data
+	
+				+------------------+
+	Client ---> |   Hash Function  |
+				+------------------+
+						 |
+						 v
+				  hash(invoiceId)
+						 |
+			  -----------------------
+			  |          |          |
+		   +------+   +------+   +------+
+		   |Shard1|   |Shard2|   |Shard3|
+		   +------+   +------+   +------+
+		   
+	invoiceId = 101 → hash(101) % 3 → Shard2
+	invoiceId = 102 → hash(102) % 3 → Shard1
+	invoiceId = 103 → hash(103) % 3 → Shard3
+	
+	Pros
+
+	✅ Even data distribution
+	✅ Avoids hot shards
+	✅ Great for write-heavy systems
+
+	Cons
+
+	❌ Range queries are hard
+	❌ Re-sharding is painful when adding shards
+	
+	2️ ⃣ Range-Based Sharding
+	How it works
+	Data is split based on value ranges
+	Each shard stores a specific range of shard key
+
+					Client
+					  |
+					  v
+			+------------------+
+			|  Range Router    |
+			+------------------+
+					   |
+					   |
+		   -----------------------
+		   |          |          |
+		+--------+ +--------+ +--------+
+		|Shard 1 | |Shard 2 | |Shard 3 |
+		|1-100k  | |100k-2M | |2M+     |
+		+--------+ +--------+ +--------+
+
+	invoiceId 1 – 100k     → Shard 1
+	invoiceId 100k – 2M   → Shard 2
+	invoiceId 2M+         → Shard 3
+
+
+	Pros
+
+	✅ Very fast range queries
+	✅ Easy to understand
+	✅ Efficient sequential reads
+
+	Cons
+
+	❌ Uneven load (hot shards)
+	❌ Latest data often hits same shard
+	
+🔥 Is Denormalization a Scaling Strategy?
+
+	YES.
+	Denormalization improves read scalability by reducing joins and extra queries, at the cost of some data duplication.
+
+	It doesn’t scale capacity (like sharding), but it scales performance under load.
+
+	Example (Normalized Data ❌)
+	
+	Customer (id, name)
+	Invoice (id, customer_id, amount)
+
+	1 query → get all invoices
+	N queries → get customer for each invoice
+	
+	App
+	 |
+	 |-- Query 1: SELECT * FROM invoice;
+	 |
+	 |-- Query 2: SELECT * FROM customer WHERE id = 1;
+	 |-- Query 3: SELECT * FROM customer WHERE id = 2;
+	 |-- Query 4: SELECT * FROM customer WHERE id = 3;
+	 ...
+
+	Denormalized Table (✅)
+	
+	Invoice
+	---------------------------------
+	invoice_id
+	customer_id
+	customer_name   <-- duplicated
+	amount
+
+	1 query → everything needed
+	
+	App
+	 |
+	 |-- Query: SELECT * FROM invoice;
+
+	Why This Helps Scaling
+	Without Denormalization
+	1000 requests
+	× 10 invoices each
+	= 10,000 DB queries ❌
+
+	With Denormalization
+	1000 requests
+	× 1 query
+	= 1000 DB queries ✅
+	
+------------------------------------------------------------------------------------------------------
+
+🔥 Backpressure
+
+	Backpressure = telling upstream systems to slow down when you are overloaded.
+	
+	Producer
+	   |
+	   v
+	+-----------+
+	| Consumer  |
+	| (Limited) |
+	+-----------+
+	   |
+	   v
+	Backpressure Signal
+	   |
+	   v
+	Producer slows / buffers
+
+	🟢Real Examples
+		Messaging Systems
+
+		Kafka
+		SQS
+		RabbitMQ
+		
+
+🔥 Rate Limiting
+
+	Rate limiting = controlling how many requests a client can make per time window.
+	
+	Client
+	  |
+	  v
+	+----------------+
+	| Rate Limiter   |
+	| (Token Bucket) |
+	+----------------+
+	  |
+	  v
+	Service
+
+	Which One Should You Use?
+	
+	Scenario                         | Choice
+	---------------------------------|-----------------------
+	Single JVM app                   | In-memory limiter
+	Spring Boot REST API             | Filter + Bucket4j
+	Distributed microservices        | Redis / Bucket4j
+	Public APIs                      | API Gateway
+	
+	Interview Power Answer 💯
+
+	Rate limiting in Java can be implemented using token bucket or leaky bucket algorithms. For single-instance applications, in-memory limiters work, while distributed systems require centralized storage like Redis or libraries such as Bucket4j. Ideally, rate limiting is enforced at the API gateway level.
+	
+	
+--------------------------------------------------------------------------------------
+
+🔥 Caching
+
+	Caching = storing frequently accessed data in fast storage to reduce latency and backend load.
+	
+	
+	⭐ The "Cache Penetration" Problem
+	The Definition: Cache Penetration occurs when requests for data that does not exist (e.g., user_id: -999) bypass the cache and hit the database every single time.
+
+	If an attacker sends 10,000 requests per second for non-existent IDs, your database will crash because the cache can't "help" with data it doesn't have.
+
+	The Solutions:
+	1. Cache Null Values: If the DB returns "Not Found," store a "Null" object in the cache with a short TTL (e.g., 5 minutes). Next time that fake ID is requested, the cache handles it.
+
+	2. Bloom Filters: This is the sophisticated "Senior" answer. A Bloom Filter is a space-efficient data structure that sits in front of the cache. It can tell you with 100% certainty if an item does not exist. If the filter says "No," you don't even check the cache or DB.
+	
+	Client
+	  |
+	  v
+	Cache → MISS
+	  |
+	  v
+	DB → NOT FOUND
+
+
+	⭐ Where should caching be implemented?
+	Caching is most effective when applied in layers. This is known as a Multi-Level Caching strategy.
+
+	Client Side (Browser): Uses HTTP headers (Cache-Control) to store assets (images, CSS) locally so the user doesn't even make a network request.
+
+	CDN (Edge): Caches static content geographically close to the user.
+
+	Load Balancer/Reverse Proxy: Tools like Nginx can cache entire HTML pages or common API responses.
+
+	Application Level (L1): Local memory (in-process) within the server code (e.g., a Hashmap or Caffeine cache). This is the fastest but uses server RAM.
+
+	Distributed Cache (L2): External stores like Redis or Memcached. This is shared across all your server instances.
+
+	Database Cache: Databases have internal buffers (like the Buffer Pool in MySQL) to keep frequent disk blocks in memory.
+	
+	
+	⭐ Cache-Aside vs. Write-Through: Which is better?
+
+	================================================================================
+			  CACHE-ASIDE (Lazy)        vs.        WRITE-THROUGH
+	================================================================================
+
+	FEATURE         | CACHE-ASIDE (LAZY)           | WRITE-THROUGH
+	----------------|------------------------------|--------------------------------
+	HOW IT WORKS    | App checks Cache -> DB.      | App writes to Cache, 
+					| On miss, App updates Cache.  | Cache updates DB immediately.
+	----------------|------------------------------|--------------------------------
+	WRITE LATENCY   | LOW (Writes only to DB).     | HIGH (Must wait for Cache + DB).
+	----------------|------------------------------|--------------------------------
+	READ SPEED      | SLOW on first read (Miss).   | FAST (Data is always in Cache).
+	----------------|------------------------------|--------------------------------
+	CONSISTENCY     | EVENTUAL (Can be stale).     | STRONG (Always in sync).
+	----------------|------------------------------|--------------------------------
+	RESILIENCE      | HIGH (Works if Cache fails). | MEDIUM (Relies on Cache sync).
+	----------------|------------------------------|--------------------------------
+	BEST FOR...     | Read-heavy / General apps.   | Critical data (e.g. Banking).
+	----------------|------------------------------|--------------------------------
+
+	[KEY TAKEAWAYS]
+	* Cache-Aside: Best for 90% of cases. Efficient use of memory because only 
+	  requested data is cached.
+	* Write-Through: Best for high-accuracy data. Prevents stale data but wastes 
+	  memory on data that might never be read again.
+	  
+----------------------------------------------------------------------------------------------------------------
+
+🔥 Transaction
+
+	A transaction groups a sequence of operations into a single unit of work: all succeed (COMMIT) or none take effect (ROLLBACK). Spring provides declarative transaction management so you don’t write boilerplate begin/commit/rollback.
+	
+		Caller
+		  |
+		  v
+		@Transactional Proxy
+		  |
+		  v
+		Target method (service logic)
+	
+	⭐ Transactions in Spring Boot (The Modern Way)
+	
+		Spring Boot uses Declarative Transaction Management. Instead of writing "start," "commit," and "rollback" manually, you just use an annotation: @Transactional.
+
+		How it works (AOP & Proxies)
+		When you put @Transactional on a method, Spring doesn't just run your code. It creates a Proxy (a wrapper) around your class.
+
+		1. Proxy starts the transaction.
+		2. Your Method runs its logic.
+		3. Proxy checks for errors. If no exception is thrown, it calls commit(). If a RuntimeException is thrown, it calls rollback() automatically.
+		
+		
+		================================================================================
+       ⭐    SPRING TRANSACTIONAL: THE INTERNAL CALL PROBLEM
+		================================================================================
+
+		THE ISSUE      : Calling a @Transactional method from another method in the 
+						 SAME class bypasses the Spring Proxy. 
+		RESULT         : No transaction is started; No rollback occurs on error.
+
+		THE FIXES      :
+		1. REFACTOR    : Move transactional method to a separate @Service. (Best practice)
+		2. SELF-INJECT : @Autowire the service into itself & call via the injected field.
+		3. TEMPLATE    : Use TransactionTemplate for manual logic without proxies.
+
+		KEY RULE       : Transactions ONLY trigger when a call comes from OUTSIDE 
+						 the current bean instance.
+		================================================================================
+		
+		⭐ CONCEPT: The Proxy Bypass
+		--------------------------------------------------------------------------------
+		1. Spring wraps your @Service in a "Proxy" to handle Transactions.
+		2. Internal calls (Method A -> Method B in same class) DO NOT hit the Proxy.
+		3. Transaction fails to start.
+
+		THE REFACTOR FIX:
+		--------------------------------------------------------------------------------
+		- Move @Transactional method to a SECOND class.
+		- @Autowire that second class into the first class.
+		- Result: Every call is now "External" and must pass through the Proxy.
+		--------------------------------------------------------------------------------
+		
+		================================================================================
+        ⭐        THE "EXTERNAL CALL" REQUIREMENT
+		================================================================================
+
+		1. STARTING POINT: The transaction ONLY triggers if the initial call comes 
+		   from a DIFFERENT bean (class) managed by Spring.
+
+		2. SAME-CLASS MISTAKE:
+		   class MyService {
+			   void standardMethod() { 
+				   transactionalMethod(); // NO TRANSACTION HERE!
+			   }
+
+			   @Transactional
+			   void transactionalMethod() { ... }
+		   }
+
+		3. THE FIX: Always call the method via an @Autowired reference from a 
+		   different class to ensure you hit the "Proxy Entrance."
+		================================================================================
+		
+		================================================================================
+        ⭐        SPRING TRANSACTION PROPAGATION TYPES
+		================================================================================
+
+		TYPE          | BEHAVIOR IF XACT EXISTS      | BEHAVIOR IF NO XACT EXISTS
+		--------------|------------------------------|----------------------------------
+		REQUIRED      | Joins existing (Default).    | Creates a new one.
+		--------------|------------------------------|----------------------------------
+		REQUIRES_NEW  | Suspends current; New one.   | Creates a new one.
+		--------------|------------------------------|----------------------------------
+		MANDATORY     | Joins existing.              | THROWS EXCEPTION.
+		--------------|------------------------------|----------------------------------
+		SUPPORTS      | Joins existing.              | Runs without transaction.
+		--------------|------------------------------|----------------------------------
+		NOT_SUPPORTED | Suspends current; Runs empty.| Runs without transaction.
+		--------------|------------------------------|----------------------------------
+		NEVER         | THROWS EXCEPTION.            | Runs without transaction.
+		================================================================================
+
+		[INTERVIEW TIP]
+		If Method A (Required) calls Method B (Requires_New):
+		- If B fails: B rolls back. A can still catch the error and COMMIT.
+		- If A fails: A rolls back. B stays COMMITTED (because it was a separate xact).
+		
+		================================================================================
+           REQUIRED PROPAGATION: THE BANKING EXAMPLE
+		================================================================================
+
+		SCENARIO: Transfer $100 from User A to User B.
+
+		1. START     : Parent.transferMoney() begins. (Transaction ID: 101)
+		2. STEP 1    : AccountService.debit() checks for xact. Finds 101. Joins it.
+		3. STEP 2    : AccountService.credit() checks for xact. Finds 101. Joins it.
+		4. EXCEPTION : If credit() crashes, the Transaction Manager sees that 101 
+					   is "marked for rollback."
+		5. END       : Both the Debit and the Credit are undone. Data is safe.
+		================================================================================
+		
+		================================================================================
+        ⚠️    EXCEPTION HANDLING IN @TRANSACTIONAL
+		================================================================================
+
+		EXCEPTION TYPE      | DEFAULT ACTION | WHY?
+		--------------------|----------------|------------------------------------------
+		RuntimeException    | ROLLBACK       | Considered a fatal/unexpected error.
+		Error (StackOverflow| ROLLBACK       | System-level failure.
+		Checked Exception   | COMMIT         | Considered a "checked" business case.
+		--------------------|----------------|------------------------------------------
+
+		[HOW TO CHANGE IT]
+		- @Transactional(rollbackFor = Exception.class) -> Rollback for EVERYTHING.
+		- @Transactional(noRollbackFor = Specific.class) -> Keep data even if error.
+
+		[THE GOLDEN RULE]
+		If a shared transaction (REQUIRED) fails in a sub-method, the WHOLE 
+		transaction is "poisoned." You cannot catch the error in the parent to 
+		force a commit.
+		================================================================================
+		
+		
+---------------------------------------------------------------------------------------------------------------------
+
+1. what is differnce between docker and kubernetes , uses
+
+	🐳 Docker
+
+			Docker is used to package the application into an image.
+
+			A Docker image contains:
+			Java version
+			Application code
+			Dependencies
+			Required configuration
+			📌 So yes — Docker image = code + runtime + dependencies
+	
+	☸ Kubernetes
+
+			Kubernetes is used to deploy and manage that Docker image.
+
+			It helps to:
+
+			Deploy multiple instances (replicas) of the same image
+			Manage 20 or more containers easily
+			Auto-restart containers if they crash
+			Increase or decrease CPU / memory allocation
+			Provide load balancing
+			Handle scaling and deployments automatically
+			📌 Kubernetes = container manager / orchestrator
+
+	🧠 Simple Interview-Ready Explanation (Say This)
+
+			Docker is used to create an image that contains my Spring application along with Java and dependencies. Kubernetes is used to deploy and manage those images at scale by creating replicas, handling memory and CPU allocation, load balancing, and auto-healing.
+		
+		
+
+2. what do you keep in mind when developing Java using docker and Kubernetes.
+
+	✅ Points to Keep in Mind When Developing Java Applications Using Docker & Kubernetes
+
+	1.Design the application as stateless
+	(Do not store session or data in memory or local disk)
+
+	2.Externalize configuration
+	Use environment variables, ConfigMaps, and Secrets)
+
+	3.Use lightweight Docker images
+	(Prefer JRE, slim/alpine images, multi-stage builds)
+
+	4.Tune JVM for container limits
+	(Respect CPU and memory limits to avoid OOM issues)
+
+	5.Ensure fast application startup
+	(Important for scaling and pod restarts)
+
+	6.Expose health check endpoints
+	(Liveness and readiness probes for Kubernetes)
+
+	7.Log to STDOUT, not to files
+	(Containers are ephemeral)
+
+	8.Handle graceful shutdown properly
+	(So in-flight requests are not lost)
+
+	9.Control database connections and thread pools
+	(Multiple pods can overload DB if not tuned)
+
+	10.Use immutable, CI/CD-friendly deployments
+	(New image for every release, no manual changes)

@@ -1,0 +1,2627 @@
+
+
+👉 ngModule :
+
+In Angular, you should NOT put all components into one single AppModule—especially in real projects.
+
+❌ Why adding everything to AppModule is a bad idea
+
+		If you put all components in one module:
+		App becomes hard to maintain
+		Lazy loading is impossible
+		Reusability becomes messy
+		Build size grows
+		Interviewers ❌ dislike this
+	
+Feature Modules (most important)
+A Feature Module is an Angular module created to handle one specific feature of the application.
+Group related components into feature modules.	
+		
+app/
+ ├── auth/
+ │    ├── login.component.ts
+ │    ├── register.component.ts
+ │    └── auth.module.ts
+ ├── dashboard/
+ │    ├── dashboard.component.ts
+ │    └── dashboard.module.ts
+ ├── shared/
+ │    └── shared.module.ts
+ └── app.module.ts
+ 
+👉 What NOT to do (very important)
+
+	[1] ❌ Do NOT import SharedModule in AppModule and every feature module blindly
+	[2] ❌ Do NOT put services in SharedModule
+	[3] ❌ Do NOT declare the same component in multiple modules
+
+👉 When to use SharedModule
+
+	Use it ONLY for:
+		Reusable components
+		Reusable directives
+		Reusable pipes
+		Common Angular modules (CommonModule, FormsModule)
+	
+“SharedModule contains reusable UI components, directives, and pipes.
+It also re-exports CommonModule and FormsModule so feature modules don’t need to import them again.”
+
+
+Commonly used Angular modules
+
+	[1] BrowserModule
+	Used once in AppModule to run the app in the browser.
+
+	[2] CommonModule
+	Provides common directives like ngIf, ngFor, and basic pipes.
+
+	[3] FormsModule
+	Used for template-driven forms and ngModel.
+
+	[4] ReactiveFormsModule
+	Used for reactive forms with FormGroup and FormControl.
+
+	[5] RouterModule
+	Handles routing and navigation between components.
+
+	[6] HttpClientModule
+	Used to make HTTP / REST API calls.
+	
+	
+----------------------------------------------------------------------------------------------
+
+👉 Eager Loading (Default)
+
+	What it is
+	All modules are loaded at application startup.
+
+			import { UsersModule } from './users/users.module';
+
+			@NgModule({
+			  imports: [UsersModule]
+			})
+			export class AppModule {}
+
+👉 Lazy Loading
+
+	What it is
+	Modules are loaded only when required (on route access).
+
+	How it works (Routing)
+
+			const routes: Routes = [
+			  {
+				path: 'users',
+				loadChildren: () =>
+				  import('./users/users.module').then(m => m.UsersModule)
+			  }
+			];
+			
+			
+			
+	Lazy Loading vs Eager Loading in Angular
+	✅ Eager Loading
+
+	Definition: Modules are loaded at application startup.
+	Default behavior in Angular.
+	AppModule is always eagerly loaded.
+	Any module imported directly inside AppModule is also eagerly loaded.
+
+	✔ What happens?
+
+	All eagerly loaded modules are bundled and downloaded when the app starts.
+
+	Increases initial load time if the app is large.
+
+	@NgModule({
+	  imports: [
+		BrowserModule,
+		UserModule,   // 👈 eagerly loaded
+		AdminModule   // 👈 eagerly loaded
+	  ]
+	})
+	export class AppModule {}
+
+	✅ Lazy Loading
+
+	Definition: Modules are loaded only when required (on demand).
+	Commonly used for feature modules.
+	Implemented using Angular Router.
+	Improves performance and reduces initial bundle size.
+
+	✔ What happens?
+
+	The module is downloaded only when the user navigates to its route.
+
+	const routes: Routes = [
+	  {
+		path: 'admin',
+		loadChildren: () =>
+		  import('./admin/admin.module').then(m => m.AdminModule)
+	  }
+	];
+
+
+	➡️ AdminModule loads only when /admin is visited.
+
+	🔁 Your Statement — Corrected Version
+
+	“Lazy loading means loading feature modules only when required, but AppModule is eager loading and loads all modules at the start.”
+
+	✅ Corrected & precise:
+
+	Lazy loading loads feature modules only when they are needed.
+	AppModule is always eagerly loaded, and any module directly imported into AppModule is also eagerly loaded.
+				
+
+
+-----------------------------------------------------------------------------------------
+
+👉 Style scoping
+
+Why do we need style scoping in Angular
+
+(Even when we already write CSS in component files?)
+
+	Writing CSS in a component file alone does NOT guarantee isolation.
+	By default, CSS is global in the browser. Angular adds style scoping to enforce isolation.
+	
+	Interview-ready one-line answer
+	Even though we write CSS in component files, the browser treats all CSS as global. Angular uses style scoping to isolate component styles and prevent conflicts across the application.
+	
+🔹 ViewEncapsulation (Short Note)
+
+	ViewEncapsulation in Angular controls how component styles are scoped and applied. By default, Angular uses Emulated encapsulation, which scopes styles to the component by adding unique attributes to HTML and CSS, preventing style conflicts.
+
+Angular provides three types of ViewEncapsulation:
+
+	Emulated (Default):
+		Styles are scoped to the component using generated attributes. Works in all browsers and is used in most applications.
+
+	None:
+		Styles are not scoped and become global, affecting the entire application. Useful for global themes or layout components but risky if overused.
+
+	ShadowDom:
+		Uses the browser’s native Shadow DOM for true style isolation. Best for web components and design systems but has limited styling access from outside.
+
+	In short: ViewEncapsulation ensures component style isolation and helps avoid CSS conflicts in large Angular applications.
+	
+	
+		👉 Style Scoping in Angular (Simple & Interview-Ready)
+
+	Style scoping in Angular means:
+	👉 CSS written for one component affects only that component, not the entire application.
+
+	This avoids CSS conflicts and makes components truly reusable.
+
+	🔹 How Angular Achieves Style Scoping
+
+	Angular uses View Encapsulation to scope styles.
+
+	Default behavior:
+	@Component({
+	  selector: 'app-user',
+	  templateUrl: './user.component.html',
+	  styleUrls: ['./user.component.css']
+	})
+	export class UserComponent {}
+
+
+	➡️ Angular automatically scopes styles to this component.
+
+	Internally, Angular:
+	Adds unique attributes to HTML elements
+	Rewrites CSS selectors to match only those attributes
+	
+	Example (conceptual):
+
+	<h1 _ngcontent-c1>Profile</h1>
+
+	h1[_ngcontent-c1] {
+	  color: blue;
+	}
+
+	🔹 Types of View Encapsulation
+	1 ️⃣ Emulated (Default & Most Used) ✅
+	encapsulation: ViewEncapsulation.Emulated
+
+
+	Styles apply only to the component
+	Uses attribute selectors internally
+	Works in all browsers
+
+	✔ Best for most applications
+	
+	✅ encapsulation: ViewEncapsulation.Emulated means:
+
+	The styles added in this component will apply ONLY to this component.
+	They will not affect:
+	Other components
+	Parent components
+	Child components (outside its template)
+
+	2 ️⃣ None (Global Styles) 🌍
+	encapsulation: ViewEncapsulation.None
+
+
+	Styles behave like normal CSS
+	Affects entire application
+	No scoping
+	❌ Can cause style conflicts
+
+	📌 Used for:
+
+	Global themes
+
+	Design systems
+
+	3 ️⃣ Shadow DOM 🌑
+	encapsulation: ViewEncapsulation.ShadowDom
+
+
+	Uses native browser Shadow DOM
+	True isolation
+	Styles cannot leak in or out
+	⚠️ Limited browser support & harder to style globally
+	
+	
+	
+	
+--------------------------------------------------------------------------------------------------------------
+
+	👉 Small Summary (Beginner → Interview Level)
+
+	[1] Host Element
+
+	Host element is the HTML element on which a component or directive is applied.
+
+	<button appHighlight>Click</button>
+
+
+	➡ <button> is the host element
+
+	[2] Why Host Element Matters
+
+	Angular:
+	• attaches logic to it
+	• updates its styles, classes, attributes
+	• listens to its events
+
+	Everything happens on the host element.
+
+	[3] ElementRef (Old Way)
+
+	Used to directly access the host DOM element.
+
+	this.el.nativeElement.style.background = 'yellow';
+
+
+	❌ Not recommended
+	❌ Unsafe
+	❌ Not Angular-friendly
+
+	[4] @HostBinding (Recommended Way)
+
+	Used to bind properties TO the host element safely.
+
+	@HostBinding('style.backgroundColor')
+	bg = 'yellow';
+
+
+	✔ Safe
+	✔ Angular-way
+	✔ Auto updates with change detection
+
+	[5] @HostListener
+
+	Used to listen to events FROM the host element.
+
+	@HostListener('click')
+	onClick() {
+	  console.log('clicked');
+	}
+
+
+	✔ No (click) needed in template
+	✔ Keeps logic inside directive/component
+
+	[6] HostBinding + HostListener Together
+	@HostBinding('class.active') isActive = false;
+
+	@HostListener('mouseenter')
+	onEnter() {
+	  this.isActive = true;
+	}
+
+
+	👉 Event happens → variable changes → host updates
+
+	[7] Relationship (Very Important)
+	Host Element → exists by HTML
+	@HostBinding → modifies host
+	@HostListener → listens to host
+
+	🧠 One-Line Memory Cheatsheet
+
+	• Host Element → where Angular attaches
+	• @HostBinding → apply TO host
+	• @HostListener → listen FROM host
+	• ElementRef → avoid if possible
+
+	🎯 Interviewer Tips (Very Important)
+	Q1: What is host element?
+
+	✅
+
+	“The host element is the HTML element on which a directive or component is applied.”
+
+	Q2: Why not use ElementRef?
+
+	✅
+
+	“Because it directly accesses DOM and is unsafe. Angular recommends HostBinding or Renderer2.”
+
+	Q3: Difference between HostBinding and HostListener?
+
+	✅
+
+	“HostBinding binds properties to the host element, while HostListener listens to events from the host element.”
+
+	Q4: When do you use HostBinding?
+
+	✅
+
+	“When I need to add or update styles, classes, or attributes on the host element.”
+
+	Q5: When do you use HostListener?
+
+	✅
+
+	“When I want to handle host element events like click, hover, or key press.”
+
+	❌ Common Interview Mistakes
+
+	• Saying HostBinding replaces host element
+	• Saying HostListener works on child elements
+	• Using ElementRef for styling
+
+	⭐ Final Interview Sentence (Use This)
+
+	“Angular provides HostBinding and HostListener to safely interact with the host element without directly touching the DOM.”
+
+	⭐ host vs @HostListener
+
+		Your code using host 👇
+
+			host: {
+			  '(click)': 'onConfirmLeavePage($event)'
+			}
+
+
+		Same thing using @HostListener 👇
+
+			@HostListener('click', ['$event'])
+			onConfirmLeavePage(event: MouseEvent) { ... }
+			
+			
+	🎯 Goal of the Example
+
+	👉 When the user hovers over a button:
+
+	Background color should change
+
+	When mouse leaves → color should reset
+
+	Without writing any event or class in HTML
+
+	1 ️⃣ HTML (Very Clean)
+	<button appHoverEffect>
+	  Submit
+	</button>
+
+
+	✅ No (mouseenter)
+	✅ No (mouseleave)
+	✅ No classes
+
+	👉 Behavior is fully handled by the directive.
+
+	2 ️⃣ Directive Code (Main Logic)
+	import { Directive, HostBinding, HostListener } from '@angular/core';
+
+	@Directive({
+	  selector: '[appHoverEffect]'
+	})
+	export class HoverEffectDirective {
+
+	  // 🔹 Bind style to the HOST element (button)
+	  @HostBinding('style.backgroundColor') bgColor = 'blue';
+
+	  // 🔹 Listen to mouse enter on the HOST element
+	  @HostListener('mouseenter')
+	  onMouseEnter() {
+		this.bgColor = 'green';
+	  }
+
+	  // 🔹 Listen to mouse leave on the HOST element
+	  @HostListener('mouseleave')
+	  onMouseLeave() {
+		this.bgColor = 'blue';
+	  }
+	}
+
+	3 ️⃣ What is Happening Internally? 🧠
+	🔹 Host Element
+	<button appHoverEffect>
+
+
+	This <button> is the host element
+
+	🔹 @HostBinding
+	@HostBinding('style.backgroundColor') bgColor = 'blue';
+
+
+	👉 Means:
+
+	“Bind bgColor variable to the button’s background color”
+
+	So Angular internally does:
+
+	<button style="background-color: blue;">
+
+	🔹 @HostListener
+	@HostListener('mouseenter')
+
+
+	👉 Means:
+
+	“Listen for mouseenter event on the button itself”
+
+	No need to write:
+
+	<button (mouseenter)="...">
+
+	4️ ⃣ Flow (Very Important for Interviews)
+
+	Button loads → color = blue
+
+	Mouse enters button
+	→ onMouseEnter() triggered
+	→ color becomes green
+
+	Mouse leaves button
+	→ onMouseLeave() triggered
+	→ color becomes blue
+
+	5 ️⃣ Why This is Better Than Normal HTML Events?
+
+	❌ Bad Approach:
+
+	<button
+	  (mouseenter)="changeColor()"
+	  (mouseleave)="resetColor()">
+
+
+	Problems:
+
+	Logic in template
+
+	Not reusable
+
+	Messy HTML
+
+	✅ Angular Way:
+
+	Behavior inside directive
+
+	Clean HTML
+
+	Reusable anywhere
+
+	🎯 Interview One-Line Explanation
+
+	@HostListener listens to events on the host element, and @HostBinding dynamically updates its properties such as styles or classes.
+
+	🧠 Easy Memory Trick
+
+	HostListener → Listen to host events 🎧
+
+	HostBinding → Bind data to host 🧲
+	
+	
+	Your statement → Interview-ready version ✅
+🔥	Host is the element from HTML on which a component or directive is applied.
+	HostBinding binds properties like class, style, or attributes of that host element from the component.
+	HostListener listens to events on the host element, and when an event happens, it triggers a method.
+
+--------------------------------------------------------------------------------------------------------------
+
+👉 @Input() and @Output() — Short Notes (with Interview Tips)
+🔹 @Input()
+
+	What it is
+	Used to receive data from parent to child component.
+
+	Direction
+	Parent ➝ Child
+
+	How it works
+	Parent binds a value, child receives it as a property.
+
+			<app-child [title]="pageTitle"></app-child>
+
+			@Input() title!: string;
+
+
+	Key Points
+
+		One-way data binding
+		Value comes from parent
+		Updates trigger ngOnChanges()
+
+	Interview Tips
+
+		Say “one-way data flow”
+		Mention ngOnChanges
+		Don’t say child can change parent data ❌
+
+🔹 @Output()
+
+	What it is
+	Used to send events or data from child to parent.
+
+	Direction
+	Child ➝ Parent
+
+	How it works
+	Child emits event, parent listens.
+
+		@Output() notify = new EventEmitter<string>();
+		this.notify.emit('Hello');
+
+		<app-child (notify)="onNotify($event)"></app-child>
+
+
+	Key Points
+
+		Uses EventEmitter
+		Parent listens using event binding
+		$event holds emitted data
+
+	Interview Tips
+
+		Say “event-based communication”
+		Mention EventEmitter
+		Don’t say two-way binding ❌
+
+🔹 Quick Comparison
+	Feature				@Input()			@Output()
+	Direction			Parent → Child		Child → Parent
+	Purpose				Pass data			Send events
+	Binding type		Property binding	Event binding
+
+----------------------------------------------------------------------------------------------------
+
+👉 ngContent :
+
+	🔹 What is ng-content in Angular?
+
+	👉 ng-content is used to pass HTML content from a parent component into a child component.
+
+	This is called Content Projection.
+
+	It helps with:
+
+	✅ Reusability
+
+	✅ Flexible components
+
+	✅ Clean separation of structure and content
+
+	🧠 Simple Definition (Interview One-liner)
+
+	ng-content allows a parent component to project its HTML content into a child component’s template.
+
+📝 ng-content – Short Notes
+
+	ng-content is used for content projection
+	It allows parent HTML to be displayed inside a child component
+	Used to create shared / reusable HTML layouts
+	Child defines structure, parent provides content
+	It passes HTML/template, not data
+
+✅ When to Use ng-content
+
+	Common UI layout needed
+	Content changes per component
+
+	Examples:
+
+		Card
+		Modal
+		Panel
+		Layout wrapper
+
+❌ When NOT to Use
+
+	To pass values → use @Input
+	To send events → use @Output
+
+🔹 Simple Example
+	<!-- child -->
+	<div class="card">
+	  <ng-content></ng-content>
+	</div>
+
+	<!-- parent -->
+	<app-card>
+	  <p>Any HTML here</p>
+	</app-card>
+
+🔁🔁🔁🔁🔁🔁🔁🔁🔁🔁🔁 Difference: ng-content vs @Input vs @Output
+
+	+-----------+-------------+-----------+-----------+
+	| Feature   | ng-content  | @Input()  | @Output() |
+	+-----------+-------------+-----------+-----------+
+	| Purpose   | Share HTML /| Pass data | Send      |
+	|           | template    | to child  | events to |
+	|           |             |           | parent    |
+	+-----------+-------------+-----------+-----------+
+	| Direction | Parent →    | Parent →  | Child →   |
+	|           | Child       | Child     | Parent    |
+	+-----------+-------------+-----------+-----------+
+	| Type      | HTML / UI   | Values    | Events    |
+	|           | content     | (string,  |           |
+	|           |             | number,   |           |
+	|           |             | object)   |           |
+	+-----------+-------------+-----------+-----------+
+	| Used For  | Layout      | Data      | Event     |
+	|           | reuse       | binding   | comm.     |
+	+-----------+-------------+-----------+-----------+
+	| Example   | Cards,      | User data | Button    |
+	|           | Modals      |           | click     |
+	+-----------+-------------+-----------+-----------+
+
+
+🎯 Interview One-Liner
+
+	ng-content is used for reusable layouts by projecting HTML, while @Input passes data and @Output sends events.
+	
+🔹 Case 2: Multiple Contents → Selector Needed ✅
+
+	Now the child has multiple slots.
+
+	Child Component
+	<div class="card">
+	  <header>
+		<ng-content select="[title]"></ng-content>
+	  </header>
+
+	  <section>
+		<ng-content></ng-content>
+	  </section>
+
+	  <footer>
+		<ng-content select="[footer]"></ng-content>
+	  </footer>
+	</div>
+
+	Parent Component
+	<app-card>
+	  <h2 title>Profile</h2>
+	  <p>User information here</p>
+	  <button footer>Save</button>
+	</app-card>
+
+
+	✔ Angular matches:
+
+	[title] → header
+
+	default ng-content → body
+
+	[footer] → footer
+
+✅ Your Understanding (Corrected)
+
+	If we are passing a single block of HTML from parent to child, we only need one <ng-content> and no class or selector is required.
+	If we are passing multiple pieces of content, we need to use selectors (class, attribute, or element) with <ng-content> to tell Angular where each content should go.
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+👉 Lifecycle hooks :
+
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Phase          | Method                    | Interface                 | Summary                                                      |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Creation       | constructor               | —                         | Standard JavaScript class constructor. Runs when Angular     |
+|                |                           |                           | instantiates the component.                                  |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Change         | ngOnInit                  | OnInit                    | Runs once after Angular has initialized all component inputs |
+| Detection      |                           |                           | and the first change detection cycle completes.              |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Change         | ngOnChanges               | OnChanges                 | Runs every time one or more @Input() values change.          |
+| Detection      |                           |                           | Receives SimpleChanges object.                               |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Change         | ngDoCheck                 | DoCheck                   | Runs during every change detection cycle. Used for custom    |
+| Detection      |                           |                           | change detection logic.                                      |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Content        | ngAfterContentInit        | AfterContentInit          | Runs once after content projected via ng-content is          |
+| Initialization |                           |                           | initialized.                                                 |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Content        | ngAfterContentChecked     | AfterContentChecked       | Runs after every check of projected content.                 |
+| Check          |                           |                           |                                                              |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| View           | ngAfterViewInit           | AfterViewInit             | Runs once after the component’s view and child views are     |
+| Initialization |                           |                           | fully initialized.                                           |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| View           | ngAfterViewChecked        | AfterViewChecked          | Runs after every change detection check of the component’s   |
+| Check          |                           |                           | view and child views.                                        |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Rendering      | afterNextRender           | AfterNextRender           | Runs once after the next render when all components are      |
+|                |                           |                           | rendered to the DOM.                                         |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Rendering      | afterRender               | AfterRender               | Runs after every render when all components are rendered     |
+|                |                           |                           | to the DOM.                                                  |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+| Destruction    | ngOnDestroy               | OnDestroy                 | Runs once just before the component is destroyed. Used for   |
+|                |                           |                           | cleanup (unsubscribe, clear timers, etc.).                   |
++----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+
+
+🔥 Interview Quick Tips
+
+	constructor ≠ lifecycle hook (Angular does not control it)
+	ngOnInit → initialization logic
+	ngOnChanges → reacts to @Input() changes
+	ngDoCheck → use carefully (performance risk)
+	ngOnDestroy → must mention cleanup
+	
+🔹 Why Lifecycle Interfaces Exist
+
+	To know when a lifecycle hook is available
+	To get compile-time checking
+	To make code clean and readable
+	Angular will call lifecycle methods even if you don’t implement the interface, but implementing it is a best practice.
+	
+	
+🔹 During Initialization – Lifecycle Flow (Diagram)
+
+	Component Created
+		   |
+		   v
+	constructor()
+		   |
+		   v
+	ngOnChanges()        (only if @Input() exists)
+		   |
+		   v
+	ngOnInit()
+		   |
+		   v
+	ngAfterContentInit()
+		   |
+		   v
+	ngAfterViewInit()
+	
+✅ Correct Understanding (Polished)
+
+	The constructor is used only for dependency injection,
+	and ngOnInit() is used for component logic initialization.
+
+	✔ This is exactly how Angular expects you to use them.
+	
+🔹 Why NOT put logic in the constructor?
+	🔸 Constructor purpose
+	constructor(private service: UserService) {}
+
+
+	Runs when class is created
+
+	Used to:
+
+	Inject dependencies
+	Simple property initialization
+	❌ Component is not fully initialized yet
+	❌ @Input() values are NOT available
+	
+🔹 Why use ngOnInit()?
+	ngOnInit() {
+	  this.loadUsers();
+	}
+
+	Runs after Angular initializes inputs
+	Safe place for:
+	API calls
+	Subscritions
+	Business logic
+	Data binding logic
+	
+-----------------------------------------------------------------------------------------------------------------
+
+👉 @ViewChild in Angular
+
+	What it is
+	@ViewChild allows a component to access an element, directive, or child component from its own template.
+	
+🔹 Why we use @ViewChild
+
+	Access DOM elements
+	Call child component methods
+	Read values (input, height, width)
+	Control focus or behavior programmatically
+	
+🔹 Simple Example (HTML Element)
+
+	Template
+
+	<input #nameInput type="text">
+
+
+	Component
+
+	@ViewChild('nameInput') nameInput!: ElementRef;
+
+	ngAfterViewInit() {
+	  console.log(this.nameInput.nativeElement.value);
+	}
+
+	🔹 Accessing Child Component
+	@ViewChild(ChildComponent) child!: ChildComponent;
+
+	ngAfterViewInit() {
+	  this.child.someMethod();
+	}
+	
+❌ Why ngModel is NOT enough
+
+	ngModel ❌ cannot:
+	Focus an input
+	Scroll to an element
+	Read element height / width
+	Call a child component method
+	Access native DOM APIs
+
+	Example:
+
+	this.username = '';   // works
+	this.username.focus(); // ❌ not possible
+	
+🔹 When @ViewChild is REQUIRED
+	
+	Focus input
+	this.input.nativeElement.focus();
+
+	Call child component method
+	this.child.resetForm();
+
+	Read DOM property
+	this.input.nativeElement.offsetHeight
+	
+🔹 Short Summary: ngModel vs @ViewChild & Why @ViewChild for Components
+
+	ngModel is used for two-way data binding. It helps you read and update values from form elements.
+
+	@ViewChild (HTML element) is used when you need direct access to the DOM, such as focusing an input, scrolling, or reading size/position.
+
+	@ViewChild (component) is used to get the child component instance, so the parent can:
+
+	Call child methods
+
+	Read child state
+
+	Control reusable UI components (modal, tabs, timer, form reset)
+
+	@Input() and @Output() are for data and events, but they cannot directly control a child component.
+	That’s why @ViewChild exists—for direct, programmatic control when needed.
+
+🔹 Interview Questions (Add at Last)
+
+	Q1. If we already have ngModel for two-way binding, why do we need @ViewChild?
+	👉 ngModel handles data binding, but @ViewChild is needed to access and control DOM elements or child components directly (focus, methods, state).
+
+	Q2. Why do we use @ViewChild to access another component?
+	👉 To get the child component instance and directly call its methods or control its behavior, which is not possible using only @Input() and @Output().
+	
+	
+	ngModel vs @ViewChild (Clear Comparison)
+	Feature						ngModel				@ViewChild
+	Access value					✅						✅
+	Access DOM element				❌						✅
+	Call methods (focus, blur)		❌						✅
+	Access validation state			⚠️ Limited				✅
+	Access child component			❌						✅
+		
+-----------------------------------------------------------------------------------------------------------------
+
+👉 ngModel : Summary: How ngModel works
+
+	ngModel is a template-driven directive for two-way data binding.
+	Angular converts [(ngModel)] into property + event binding.
+	It creates an internal FormControl automatically.
+	Uses ControlValueAccessor to connect HTML input with Angular.
+	Syncs data in both directions:
+	Model → View using writeValue()
+	View → Model using ngModelChange
+	Tracks state: value, valid/invalid, touched, dirty.
+	Requires FormsModule to work
+	
+	"ngModel works by creating an internal FormControl and using ControlValueAccessor to synchronize data between the component and the DOM through two-way binding."
+	
+Important internal facts (interview gold)
+
+	[1] ngModel creates FormControl internally
+	[2] It works via ControlValueAccessor pattern
+	[3] Two-way binding is syntactic sugar, not magic
+	[4] Change detection syncs model ↔ view
+	[5] Template-driven forms are directive-driven
+	
+	ngModel = FormControl + ControlValueAccessor + Change Detection
+	
+	
+😄	ngModel vs [(ngModel)]
+
+	1. ngModel (one-way binding) :
+	
+			<input ngModel />
+		
+		What it does:
+
+			Creates a FormControl
+			Tracks value + state (valid, touched, dirty)
+			Does NOT update the component variable automatically
+
+		Use case:
+
+			When you only want form control behavior
+			Validation, tracking status, using #ref="ngModel"
+
+		Example:
+
+			<input name="email" ngModel #email="ngModel" />
+
+			email.valid
+			email.touched
+
+		📌 Interview line
+
+			ngModel alone provides form control and validation, but not two-way data binding.
+			
+	2. [(ngModel)] (two-way binding 🍌 banana in a box)
+	
+				<input [(ngModel)]="username" />
+				
+			What it does:
+				Combines:
+				[ngModel] → from component to template
+				(ngModelChange) → from template to component
+
+			Keeps template and component in sync
+
+			Example:
+
+				username = '';
+				<input [(ngModel)]="username" />
+				Typing in input updates username automatically.
+
+			📌 Interview line
+
+				[(ngModel)] enables two-way data binding between template and component.
+				
+🔥 One-Line Interview Answer (Memorize This 🔥 )
+
+	ngModel is used for form control and validation, while [(ngModel)] provides two-way data binding by synchronizing the value between the template and the component.
+	
+	
+😎 Bonus (Smart Candidate Answer 😎)
+
+	In modern Angular applications, reactive forms are preferred over ngModel for better scalability and testability.
+-----------------------------------------------------------------------------------------------------------------
+
+👉 Computed Signal :
+
+computed (Angular Signals)
+
+	computed creates a derived signal.
+	Its value is calculated from other signals.
+	It automatically re-runs when dependent signals change.
+	It is read-only (you can’t set it directly).
+	It is lazy → recalculates only when someone reads it.
+	
+	eg. count = signal(2);
+
+	doubleCount = computed(() => this.count() * 2);
+	( If count() changes → doubleCount() updates automatically. )
+	
+How it works (internally)
+
+	Tracks which signals are read inside it
+	Subscribes to those signals
+	Recomputes only when needed
+	Caches the last value
+-----------------------------------------------------------------------------------------------------------------
+
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| Signal     | Purpose             | Writable  | Depends on Others  | Typical Use Case       | Example Code                                  |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| signal()   | Store state          | Yes       | No                | Local component state  | count = signal(0);                            |
+|            |                     |           |                    |                        | count.set(1);                                 |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| computed() | Derived value        | No        | Yes               | Calculated data        | double = computed(() => count() * 2);         |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| effect()   | Side effects         | No        | Yes               | API calls, logging     | effect(() => {                                |
+|            |                     |           |                    |                        |   console.log(count());                       |
+|            |                     |           |                    |                        | });                                           |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| input()    | Component input      | No        | No                | Parent → Child data    | title = input<string>();                      |
+|            |                     |           |                    |                        | title(); // read                              |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| model()    | Two-way binding      | Yes       | No                | Parent ↔ Child sync    | name = model<string>();                      |
+|            |                     |           |                    |                        | name.set('Angular');                          |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| toSignal() | Observable → Signal  | No        | Yes               | RxJS integration       | user = toSignal(user$);                      |
+|            |                     |           |                    |                        | user(); // latest value                       |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+| untracked()| Ignore tracking      | No        | No                | Skip dependency track  | effect(() => {                                |
+|            |                     |           |                    |                        |   untracked(() => count());                  |
+|            |                     |           |                    |                        | });                                           |
++------------+---------------------+-----------+--------------------+------------------------+-----------------------------------------------+
+
+-----------------------------------------------------------------------------------------------------------------
+
+👉 Directives: 
+
+	What are Directives?
+
+		👉 Directives are instructions that tell Angular how to change the DOM — either its structure, appearance, or behavior.
+
+	📌 Interview one-liner
+
+		Directives are used to manipulate the DOM by adding behavior, changing styles, or modifying the structure of elements.
+
+
+[1] Component Directive (Most common)
+
+	@Component({
+	  selector: 'app-card',
+	  template: `<p>Hello</p>`
+	})
+	export class CardComponent {}
+	Usage:
+
+	<app-card></app-card>
+
+	*A component is a directive with a template.
+	
+	Behavior in a component lives in the component class (.ts file)
+	→ methods, variables, event handlers, lifecycle hooks.
+
+	Template (.html) only displays UI and triggers behavior
+	→ (click), {{ }}, bindings call class logic.
+
+	Directive = behavior only
+	→ no template, just modifies an existing element.
+
+	Component = directive + template
+	 
+	
+	→ behavior and UI together.
+
+⭐ One-line to remember (interview perfect):
+
+	Component is a directive that has its own template; its behavior is defined in the component class.
+
+⭐ Why Angular says “Component is a Directive”
+
+	Internally Angular treats:
+	@Component as directive + template
+	@Directive as logic only
+	That’s why Component is called a “Component Directive”
+	
+[2] Attribute Directive
+
+	Attribute Directive = changes the look or behavior of an existing HTML element.
+	It does NOT create new HTML
+	
+    ⭐ ngClass
+	ngClass is an Angular attribute directive used to add or remove CSS classes dynamically.
+	
+	Why do we need ngClass?
+
+	In normal HTML, classes are fixed:
+	<p class="active">Hello</p>
+	
+	But in Angular, sometimes:
+	condition changes
+	data changes
+	user clicks something
+	So we need dynamic classes → that’s where ngClass comes in.
+	
+	<p [ngClass]="{ active: isActive }">
+	  Hello Angular
+	</p>
+	
+	.active {
+	color: green;
+	font-weight: bold;
+	}
+	
+	
+	isActive = true;
+	➡ ngClass adds/removes a class
+	➡ Text style changes
+	➡ HTML element stays the same
+	
+	⭐ ngStyle
+	
+	<p [ngStyle]="{ color: 'red', fontSize: '20px' }">
+	Styled text
+	</p>
+	➡ Changes style only, not structure
+	
+	Interview Comparison (Say this 👇)
+
+	Yes, instead of using [ngClass] in the template, we can use @HostBinding to bind CSS classes directly to the host element.
+	@HostBinding is mainly useful in directives or reusable components, while [ngClass] is more readable for normal components
+	
+[3] Custom Attribute Directive
+	
+	@Directive({
+	 selector: '[appHighlight]'
+	})
+	export class HighlightDirective {
+	  constructor(private el: ElementRef) {
+		this.el.nativeElement.style.background = 'yellow';
+	  }
+	}
+	<p appHighlight>Hello</p>
+	➡ <p> stays <p>
+	➡ Behavior/style added
+	
+Interview one-liner ⭐
+
+	Attribute directive modifies the appearance or behavior of an existing element without changing the DOM structure.
+
+		
+⭐ but ngclass also we are adding css and in ngstyle also then ?
+
+	ngClass → adds/removes CSS class names
+	ngStyle → adds/removes inline styles
+	
+	When to use ngClass ✅ (recommended)
+
+	Use when:
+
+	styles are reusable
+	UI states like active, error, disabled
+	team projects / clean code
+
+	Example:
+
+	<p [ngClass]="{ error: hasError }">Error</p>
+
+
+	✅ Clean
+	✅ Maintainable
+	✅ CSS separate
+	
+	When to use ngStyle ⚠️
+
+	Use when:
+
+	value is dynamic
+	calculated at runtime
+
+	Example:
+
+	<p [ngStyle]="{ width: progress + '%' }">
+	  Progress
+	</p>
+
+
+	CSS class cannot do this easily.
+	
+4. Structural Directives (Angular)
+
+
+	*ngIf
+
+		Conditionally adds/removes elements from the DOM
+
+		<div *ngIf="isLoggedIn">Welcome</div>
+
+		Element is not present in DOM when condition is false
+
+	*ngFor
+
+		Repeats an element for each item in a collection
+
+		<li *ngFor="let user of users; index as i">
+		  {{ i }} - {{ user.name }}
+		</li>
+
+
+	*ngSwitch
+
+		Displays one of many possible elements
+
+		<div [ngSwitch]="role">
+		  <p *ngSwitchCase="'admin'">Admin</p>
+		  <p *ngSwitchCase="'user'">User</p>
+		  <p *ngSwitchDefault>Guest</p>
+		</div>
+	
+------------------------------------------------------------------
+
+📌PIPES :
+
+	Pipes are used to transform data in the template (HTML) before displaying it to the user.
+	They do not change the original data, only the view output.
+	
+📌 Why Pipes are used
+
+	Format dates, currency, text
+	Filter or sort data
+	Keep HTML clean
+	Avoid writing logic in templates
+	
+🔧 Custom Pipe (Very Important for Interviews)
+	
+	import { Pipe, PipeTransform } from '@angular/core';
+	@Pipe({
+	  name: 'shorten'
+	})
+	export class ShortenPipe implements PipeTransform {
+	  transform(value: string, limit: number) {
+		return value.length > limit
+		  ? value.substring(0, limit) + '...'
+		  : value;
+	  }
+	}
+	
+	HTML :
+	{{ description | shorten:10 }}
+
+⚡ Pure vs Impure Pipes
+	Type		Runs When					Performance
+	Pure 		(default)					Input value changes	✅ Fast
+	Impure		Every change detection		❌ Slow
+	
+	
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| Pipe Name      | Purpose              | Example Usage                               | Output Example              |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| uppercase      | Convert text to caps | {{ name | uppercase }}                     | GIRISH                      |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| lowercase      | Convert text to low  | {{ name | lowercase }}                     | girish                      |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| titlecase     | Capitalize words     | {{ name | titlecase }}                     | Girish Mahajan              |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| date           | Format date          | {{ today | date:'dd-MM-yyyy' }}            | 05-01-2026                  |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| currency       | Format money         | {{ price | currency:'INR' }}               | ₹1,500.00                   |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| number         | Format numbers       | {{ num | number:'1.2-2' }}                 | 1,234.50                    |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| percent        | Convert to percent   | {{ score | percent }}                      | 75%                         |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| slice          | Extract part of data | {{ text | slice:0:5 }}                     | Hello                       |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| json           | Debug object         | {{ user | json }}                          | { "id":1,"name":"A" }       |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| async          | Handle async data    | {{ data$ | async }}                        | Resolved value              |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+| keyvalue       | Loop object values   | *ngFor="let i of obj | keyvalue"           | key : value pairs           |
++----------------+----------------------+--------------------------------------------+-----------------------------+
+
+🔗 Pipe Chaining in Angular
+
+Data → Pipe 1 → Pipe 2 → Pipe 3 → View
+	{{ value | pipe1 | pipe2 | pipe3 }}
+	{{ name | uppercase | slice:0:5 }}
+	Input: girishmahajan
+	Output: GIRIS
+
+--------------------------------------------------------------------------------------------------------
+
+🧩 Services in Angular
+
+	Services are plain TypeScript classes used to hold business logic, data access, and shared functionality that should not live inside components.
+	
+📌 Why Services are Needed
+
+	Share data between components
+	Keep components clean & thin
+	Centralize API calls
+	Easier testing & maintenance
+	Follow Single Responsibility Principle
+	
+✅ With Service (Best Practice)
+	
+	[1] Create Service
+		@Injectable({ providedIn: 'root' })
+		export class UserService {
+		  getUsers() {
+			return fetch('/api/users')
+			  .then(res => res.json());
+		  }
+		}
+
+	[2] Use Service in Component
+		@Component({...})
+		export class UserComponent {
+		  users: any[] = [];
+
+		  constructor(private userService: UserService) {}
+
+		  ngOnInit() {
+			this.userService.getUsers()
+			  .then(data => this.users = data);
+		  }
+		}
+		
+📦 Where Can We Provide Services?
+
+	+----------------------+----------------------------------+
+	| Provided At          | Instance Behavior                 |
+	+----------------------+----------------------------------+
+	| providedIn: 'root'   | Singleton (whole app)             |
+	| Module providers     | One per module                    |
+	| Component providers  | New instance per component tree   |
+	+----------------------+----------------------------------+
+	
+🔑 constructor() vs inject()
+	constructor() = traditional & most common
+	inject() = modern, function-based & flexibl
+	
+	✅ 1) constructor() Injection (Classic & Recommended)
+	
+	@Component({...})
+	export class UserComponent {
+	  constructor(private userService: UserService) {}
+
+	  ngOnInit() {
+		this.userService.getUsers();
+	  }
+	}
+	
+	✅ 2) inject() Function (Modern Angular)
+	
+	@Component({...})
+	export class UserComponent {
+	  private userService = inject(UserService);
+
+	  ngOnInit() {
+		this.userService.getUsers();
+	  }
+	}
+
+	
+🧑‍💼 Interview One-Liner Answers
+
+	Q: Difference between constructor and inject()?
+
+	“constructor injection is class-based and most commonly used, while inject() is a function-based API mainly used in functional guards and standalone Angular features.”
+
+	Q: Which is better?
+
+	“constructor() is preferred for components and services; inject() is useful in functional scenarios.”
+	
+------------------------------------------------------------------------------------------------------------------------
+
+💉 Dependency Injection (DI) in Angular
+
+	Dependency Injection is a design pattern where Angular provides required objects (dependencies) to a class instead of the class creating them itself.
+	
+🧩 Providers (Very Important)
+	[1] Root-level Provider
+		@Injectable({ providedIn: 'root' })
+		export class AuthService {}
+
+		✔ Singleton
+		✔ App-wide instance
+
+	[2] Module-level Provider
+		@NgModule({
+		  providers: [AuthService]
+		})
+
+	[3] Component-level Provider
+		@Component({
+		  providers: [AuthService]
+		})
+
+	✔ New instance for that component & its children
+	
+🌳 Injector Hierarchy (Interview Favorite)
+	Root Injector
+	   |
+	Module Injector
+	   |
+	Component Injector
+	   |
+	Element Injector
+
+
+	✔ Child can access parent service
+	❌ Parent cannot access child service
+	
+----------------------------------------------------------------------------------------------------
+
+🪙 InjectionToken in Angular
+
+	InjectionToken is used when you want to inject non-class values (string, number, object, config) or when a type alone is not enough to uniquely identify a dependency.
+
+🧠 Simple Meaning
+
+	Classes → inject by type
+	Non-classes → inject by InjectionToken
+	
+	constructor(private apiUrl: string) {} // ❌ Angular doesn't know WHICH string
+	export const API_URL = new InjectionToken<string>('api_url');  ✅ Solution: InjectionToken
+	
+🔧 Basic Example (Most Common)
+	[1] Create Token
+	import { InjectionToken } from '@angular/core';
+
+	export const API_URL = new InjectionToken<string>('api_url');
+
+	[2] Provide Value
+	providers: [
+	  { provide: API_URL, useValue: 'https://api.example.com' }
+	]
+
+	[3] Inject It
+	constructor(@Inject(API_URL) private apiUrl: string) {}
+	
+🏭 InjectionToken with useFactory
+	export const API_URL = new InjectionToken<string>('api_url');
+
+	providers: [
+	  {
+		provide: API_URL,
+		useFactory: () => environment.production
+		  ? 'https://prod.api.com'
+		  : 'http://localhost:3000'
+	  }
+	]
+
+
+	✔ Dynamic value creation
+	
+	
+🧩 InjectionToken vs Class Provider (Interview Table)
++----------------------+----------------------------+---------------------------+
+| Feature              | Class Service              | InjectionToken            |
++----------------------+----------------------------+---------------------------+
+| Used for             | Classes                    | Non-class values          |
+| Example              | UserService                | API URL / config          |
+| Inject by            | Type                       | Token                     |
+| Singleton support    | Yes                        | Yes                       |
+| Type safety          | Yes                        | Yes (generic)             |
++----------------------+----------------------------+---------------------------+
+
+➡ Component-level provider
+	@Component({
+	  selector: 'app-parent',
+	  providers: [CounterService]
+	})
+	export class ParentComponent {}
+
+
+	➡ Angular creates an Element Injector on <app-parent>
+
+➡ Directive-level provider (also element-level)
+	@Directive({
+	  selector: '[appHighlight]',
+	  providers: [HighlightService]
+	})
+	export class HighlightDirective {}
+
+
+	➡ Angular creates an Element Injector on the element using appHighlight
+	
++----------------------+-----------------------------+
+| Provided at          | Who can access it           |
++----------------------+-----------------------------+
+| Component providers  | Component + its children    |
+| Directive providers  | That element + its children |
+| Root                 | Whole application           |
++----------------------+-----------------------------+
+
+------------------------------------------------------------------------------------------------------------------
+
+🔄 Change Detection in Angular
+
+	Change Detection is the process by which Angular checks whether component data has changed and updates the DOM accordingly.
+
+🧠 Simple Meaning
+
+	Data changes → Angular detects it → UI updates automatically
+	
+🔁 How Change Detection Works (Step-by-Step)
+	User Event / Async Task
+			↓
+	Zone.js notifies Angular
+			↓
+	Angular runs Change Detection
+			↓
+	Checks component bindings
+			↓
+	Updates DOM if needed
+	
+🌳 Change Detection Tree
+
+	Angular starts from root component
+
+	Goes top → down through all child components
+
+	This process is called a Change Detection Cycle
+
+		AppComponent
+		   ↓
+		HeaderComponent
+		   ↓
+		DashboardComponent
+		   ↓
+		ChildComponent
+
+🔔 What Triggers Change Detection?
+	+---------------------------+----------------------------------+
+	| Trigger                   | Example                          |
+	+---------------------------+----------------------------------+
+	| Browser events            | click, keyup, scroll             |
+	| HTTP calls                | API response                     |
+	| setTimeout / setInterval  | async operations                 |
+	| Promise / Observable      | async pipe, subscribe            |
+	| @Input() value change     | Parent → child data change       |
+	+---------------------------+----------------------------------+
+	(All handled using Zone.js)
+	
+🧩 What Angular Checks During CD?
+
+	Angular checks:
+
+		Property bindings → {{ value }}
+
+		Attribute bindings → [disabled]
+
+		Structural directives → *ngIf, *ngFor
+
+	🚫 Angular does NOT call methods automatically
+	⚠️ But functions inside templates ARE executed every cycle
+
+		{{ getName() }}   ❌ (called many times)
+		{{ name }}        ✅ (recommended)
+
+
+⚙️ Change Detection Strategies
+	[1] Default Strategy (default)
+	@Component({
+	  changeDetection: ChangeDetectionStrategy.Default
+	})
+
+	✔ Runs on every change detection cycle
+	✔ Checks whole subtree
+
+[2] OnPush Strategy (Important for Interviews)
+	@Component({
+	  changeDetection: ChangeDetectionStrategy.OnPush
+	})
+
+	Runs only when:
+
+	@Input() reference changes
+	Event happens inside component
+	Observable emits (async pipe)
+	markForCheck() is called
+	
+	✔ Better performance
+	✔ Used in large applications
+	
+🧪 Manual Change Detection (Advanced)
+	constructor(private cdr: ChangeDetectorRef) {}
+
+	this.cdr.detectChanges();   // force check
+	this.cdr.markForCheck();    // mark for OnPush
+	
+⚡ Performance Best Practices
+	+---------------------------+-------------------------------+
+	| Tip                       | Why                           |
+	+---------------------------+-------------------------------+
+	| Use OnPush                | Reduces checks                |
+	| Avoid functions in HTML   | Prevents repeated execution   |
+	| Use async pipe            | Auto subscribe + efficient    |
+	| Immutable data            | Works well with OnPush        |
+	+---------------------------+-------------------------------+
+
+⚡ so while change detction it go through all the compoennets
+
+	Short answer ✅
+	Yes — by default, during change detection Angular goes through all components from the root to the leaves.
+	
+		Any event happens
+		  ↓
+	Angular starts from AppComponent
+		  ↓
+	Checks every child component
+		  ↓
+	Checks their children
+		  ↓
+	Updates DOM where bindings changed
+	
+	✔ Even if only one value changed, Angular checks the whole component tree
+	
+Very common interview trap ❗
+
+	Wrong statement ❌
+
+		“Angular re-renders all components every time”
+
+	Correct statement ✅
+
+		“Angular checks all components, but updates the DOM only where data changes.”
+		
+30-second interview answer (memorize this)
+
+	“In Default change detection, Angular traverses the entire component tree from root to leaf and checks bindings. It does not re-render everything; it only updates the DOM where values actually change. With OnPush, unchanged subtrees are skipped.”
+	
+One-line summary 🧾
+
+	Default CD → all components are checked
+	OnPush → only affected components are checked
+	
+--------------------------------------------------------------
+
+🔄 Async Pipe in Angular
+
+The async pipe is used to subscribe to an Observable or Promise in the template, get its latest value, and automatically unsubscribe when the component is destroyed.
+
+Why do we need async pipe?
+
+		❌ Without async pipe (manual subscription)
+		userName!: string;
+
+		ngOnInit() {
+		  this.userService.user$.subscribe(name => {
+			this.userName = name;
+		  });
+		}
+		
+		Must remember to unsubscribe
+		More code
+		Risk of memory leaks
+		
+		✅ With async pipe
+		<p>{{ userService.user$ | async }}</p>
+
+
+		That’s it.
+		No subscribe(), no unsubscribe().
+		
+How async pipe works (simple flow)
+
+		Subscribes automatically when template loads
+		Listens for new values
+		Updates the UI automatically
+		Unsubscribes when component is destroyed	
+
+
+Service
+		private nameSubject = new BehaviorSubject<string>('Guest');
+		name$ = nameSubject.asObservable();
+
+		setName(name: string) {
+		  this.nameSubject.next(name);
+		}		
+		
+Component (HTML only)
+		<h2>Welcome {{ name$ | async }}</h2>
+
+
+		Or directly:
+
+		<h2>Welcome {{ userService.name$ | async }}</h2>
+		
+Common mistakes 🚨
+
+		❌ Using subscribe() in component + async pipe together
+		❌ Forgetting async pipe and manually unsubscribing
+		❌ Using async pipe inside .ts file (it’s template-only)
+	
+Async pipe with HTTP call
+		users$ = this.http.get<User[]>('/api/users');
+
+		<ul>
+		  <li *ngFor="let user of users$ | async">
+			{{ user.name }}
+		  </li>
+		</ul>
+		
+------------------------------------------------
+
+Q: “Can we use fetch instead of HttpClient in Angular?”
+Best answer:
+
+“Yes, but it’s not recommended for backend calls because it bypasses Angular interceptors, RxJS, and global error handling. HttpClient is preferred for enterprise Angular apps.”
+
+What are Promises?
+
+A Promise is a JavaScript object that represents a value that will be available in the future
+(or fail).
+
+If we already use HttpClient, why Promises at all?
+Short truth (mentor mode):
+
+👉 For backend calls in Angular, you should NOT design your code around Promises.
+Angular is Observable-first.
+
+Promises still exist because JavaScript requires them, not because Angular prefers them.
+
+-----------------------------------------------------------------
+
+Subject and BehaviorSubject :
+
+✔ When one service changes a value and other components need to react to that change,
+	we create a BehaviorSubject in the service, emit new values, and subscribe in the components by injecting that service.
+	
+Interview-ready explanation 🎯
+
+	“We use a BehaviorSubject in a shared service to maintain state. The service emits updates using next(), and components subscribe to the exposed observable to react to changes.”
+		
+	
+Service (single source of truth)
+
+		import { BehaviorSubject } from 'rxjs';
+
+		@Injectable({ providedIn: 'root' })
+		export class UserStateService {
+
+		  private userSubject = new BehaviorSubject<string | null>(null);
+
+		  user$ = this.userSubject.asObservable(); // expose as observable
+
+		  setUser(user: string) {
+			this.userSubject.next(user); // emit value
+		  }
+		}
+
+Component A (changes the value)
+
+		this.userStateService.setUser('Girish');
+
+Component B (reacts to change)
+	
+		this.userStateService.user$.subscribe(user => {
+		  console.log(user);
+		});
+
+
+		Component A
+		   |
+		   |  (calls method)
+		   v
+		Shared Service
+		   |
+		   |  (BehaviorSubject emits)
+		   v
+		Component B
+		
+		✔ Components never talk directly
+		✔ Service is the middleman / single source of truth
+
+
+
+Subject (RxJS)
+
+	👉 What is Subject?
+
+	👉 A Subject is an RxJS object that can:
+		send data (using next())
+		receive data (using subscribe())
+
+	It does not store any value.
+	It only sends data to subscribers who are listening at that moment.
+	
+	👉Important points about Subject
+
+	No initial value
+	Does not remember old values
+	Late subscribers miss previous values
+	Used mainly for events
+	One value can be sent to many subscribers
+	
+	
+	import { Subject } from 'rxjs';
+
+	const subject = new Subject<number>();
+
+	subject.subscribe(v => console.log('A:', v));
+	subject.next(1);
+
+	subject.subscribe(v => console.log('B:', v));
+	subject.next(2);
+	
+	A: 1
+	A: 2
+	B: 2
+	
+	
+BehaviorSubject (RxJS)
+
+	What is BehaviorSubject?
+
+	A BehaviorSubject is a Subject that:
+	always has a value
+	remembers the latest value
+	sends the latest value to new subscribers
+	It is mainly used for state management.
+	
+	Important points about BehaviorSubject
+
+	Needs an initial value
+	Stores the latest value
+	New subscribers immediately receive the last value
+	Every new value overrides the previous one
+
+
+	import { BehaviorSubject } from 'rxjs';
+
+	const bs = new BehaviorSubject<number>(0);
+
+	bs.subscribe(v => console.log('A:', v));
+	bs.next(1);
+
+	bs.subscribe(v => console.log('B:', v));
+	bs.next(2);
+
+
+	A: 0
+	A: 1
+	B: 1
+	A: 2
+	B: 2
+
+
+🔥 Input and Output Vs Subject and behaviorSubject
+
+	1. @Input() / @Output() – Parent ↔ Child only
+		ParentComponent
+		   |
+		   v
+		ChildComponent
+
+	
+	2. Subject / BehaviorSubject – Unrelated components
+		Component A → Service → Component B
+
+
+🚨 Comparison table (remember this)
+
+	Scenario							Use
+	----------------------------------------------------
+	Parent → Child						@Input
+	Child → Parent						@Output
+	Sibling components					Subject
+	Components on different routes		Subject
+	Shared state						BehaviorSubject
+	
+	
+--------------------------------------------------------------------------------------------------------
+
+Forms in Angular :
+
+🔥 Template-Driven Forms
+
+	import { FormsModule } from '@angular/forms';
+
+	<form #f="ngForm" (ngSubmit)="submit(f)">
+	  <input name="email" ngModel required />
+	  <button type="submit">Submit</button>
+	</form>
+
+	submit(form: any) {
+	  console.log(form.value);
+	}
+
+
+🔥 Reactive Forms (MOST IMPORTANT 🔥)
+
+	import { ReactiveFormsModule } from '@angular/forms';
+
+👉 Core building blocks
+
+	1. FormControl : Represents one single form field
+	
+		const name = new FormControl('', Validators.required);
+	
+	2. FormGroup : Collection of FormControls (and even other FormGroups)
+	
+		const userForm = new FormGroup({
+		  name: new FormControl('', Validators.required),
+		  email: new FormControl('', Validators.email)
+		});
+
+ 
+	3. FormArray : Dynamic list of FormControls or FormGroups
+	
+		const skills = new FormArray([
+			  new FormControl('Java'),
+			  new FormControl('Spring')
+			]);
+			
+		skills.push(new FormControl('Angular'));
+
+	4. Validators : 
+	
+	Validators.required
+	Validators.email
+	Validators.minLength(5)
+	Validators.maxLength(10)
+	Validators.pattern('[0-9]+')
+	
+	new FormControl('', [
+	  Validators.required,
+	  Validators.minLength(3)
+	]);
+	
+	🔹 Custom Validator
+	function noSpaceValidator(control: FormControl) {
+	  return control.value?.includes(' ')
+		? { noSpace: true }
+		: null;
+	}
+	
+	
+	.ts
+	
+	form = new FormGroup({
+	  email: new FormControl('', [Validators.required, Validators.email]),
+	  password: new FormControl('', Validators.required)
+	});
+
+	.html
+	
+	<form [formGroup]="form" (ngSubmit)="submit()">
+	  <input formControlName="email" />
+	  <input formControlName="password" />
+	  <button type="submit">Submit</button>
+	</form>
+
+
+👉 What is the difference between setValue() and patchValue()?
+
+	Answer:
+
+	setValue() requires all form controls
+	patchValue() allows partial updates
+	If any control is missing, setValue() throws an error.
+	
+	🔁 API → Form (where setValue() / patchValue() is used)
+	Example: Edit User / Edit Invoice
+	
+	Step-by-step:
+		User opens Edit page
+		Angular calls GET API
+		API returns JSON
+		Angular sets form values
+		Template auto-updates
+
+	ngOnInit() {
+	  this.api.getUserById(1).subscribe(response => {
+		this.userForm.patchValue(response); // 👈 HERE
+	  });
+	}
+	
+---------------------------------------------------------------------------------------------------
+
+🔥 Routing :
+
+	Routing = navigating between different views/components without reloading the page
+
+	/login   → LoginComponent
+	/home    → HomeComponent
+	/profile → ProfileComponent
+	
+	👉 Why do we need Routing?
+
+	Without routing:
+
+	Everything in one component ❌
+	Page reload on every navigation ❌
+
+	With routing:
+
+	Fast navigation ✅
+	Clean URLs ✅
+	Component-based pages ✅
+	
+	👉
+	app-routing.module.ts
+
+			import { NgModule } from '@angular/core';
+			import { RouterModule, Routes } from '@angular/router';
+			import { HomeComponent } from './home/home.component';
+			import { LoginComponent } from './login/login.component';
+
+			const routes: Routes = [
+			  { path: 'login', component: LoginComponent },
+			  { path: 'home', component: HomeComponent }
+			];
+
+			@NgModule({
+			  imports: [RouterModule.forRoot(routes)],
+			  exports: [RouterModule]
+			})
+			export class AppRoutingModule {}
+			
+	app.component.html	
+	
+			<router-outlet></router-outlet>
+
+
+	👉 Navigation Methods
+	
+		1 ️⃣ Template-based navigation
+			<a routerLink="/login">Login</a>
+			<a routerLink="/home">Home</a>
+
+		2 ️⃣ Programmatic navigation (TS)
+			constructor(private router: Router) {}
+
+			loginSuccess() {
+			  this.router.navigate(['/home']);
+			}
+			
+
+🔐 What are Route Guards?
+
+	Route Guards decide whether a route is allowed or not.
+	They run BEFORE a route is activated, loaded, or exited.
+	Think of them as security checkpoints for routes.
+	
+	Why do we need Route Guards?
+
+	Without guards:
+
+	Anyone can access /admin by typing URL ❌
+	Sensitive pages exposed ❌
+
+	With guards:
+
+	Auth check ✅
+	Role check ✅
+	Prevent data loss ✅
+	
+	1️. CanActivate (Most used 🔥)
+	
+			Purpose
+
+			✔️ Controls access to a route
+
+			Use case
+
+			Authentication
+			Authorization
+			
+			@Injectable({ providedIn: 'root' })
+			export class AuthGuard implements CanActivate {
+
+			  constructor(private auth: AuthService, private router: Router) {}
+
+			  canActivate(): boolean {
+				if (this.auth.isLoggedIn()) {
+				  return true;
+				}
+				this.router.navigate(['/login']);
+				return false;
+			  }
+			}
+
+			{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard] }
+
+
+	2️. CanActivateChild
+			Purpose
+			✔️ Protects child routes
+			
+			{
+			  path: 'dashboard',
+			  component: DashboardComponent,
+			  canActivateChild: [AuthGuard],
+			  children: [
+				{ path: 'profile', component: ProfileComponent },
+				{ path: 'settings', component: SettingsComponent }
+			  ]
+			}
+
+	3. CanDeactivate : ✔️ Prevent user from leaving a page
+	4. Resolve : ✔️ Load data before route loads
+	5. CanLoad : ✔️ Prevent loading of lazy modules
+	
+	
+Guards can return:
+
+	boolean
+	Observable<boolean>
+	Promise<boolean>
+	UrlTree
+
+Important Interview Points ⚠️
+
+	Guards run before component creation
+	Guards DO NOT replace backend security
+	Always secure APIs too
+	UI guards = UX + basic protection
+	
+	
+🔐 Route Guards – Real Interview Scenarios & Traps
+
+
+-------------------------------------------------------------------
+⚠️ Short practice checklist (what to be able to do in the interview)
+
+	1. Explain modules vs feature modules vs shared module and why you shouldn’t put everything in AppModule. 
+	2. Sketch a small example: lazy load AdminModule via loadChildren and protect it with CanLoad.
+	3. Show a quick HttpClient call and write a simple interceptor that adds JWT header and handles 401.
+	4. Explain difference switchMap vs mergeMap with a quick example (search suggestions).
+	5. Rewrite a small component to OnPush and explain what changes in how you update data.
+	6. Implement a reactive form with an async validator and show patchValue() vs setValue().
+	7. Describe dependency injection scopes (root vs component) and InjectionToken usage.
+	
+	
+⚠️ Important gaps / must-add items (prioritize these)
+
+	These are the topics interviewers often ask or expect you to be able to discuss, and they’re either missing or deserve a short focused addendum in your notes:
+
+	1. HttpClient / Interceptors (must)
+
+	How to use HttpClient (get/post/put/delete) with typed responses.
+	Interceptors: adding auth headers, global error handling, logging, retry logic, caching.
+	Error handling patterns (catchError + user-friendly UI).
+	Why: Integration with backends is a core part of full-stack work.
+
+	2. RxJS operators & patterns (must)
+
+	map, filter, switchMap, mergeMap, concatMap, exhaustMap, debounceTime, distinctUntilChanged, takeUntil.
+	When to use switchMap vs mergeMap (common interview/whiteboard question).
+	Unsubscribe patterns: takeUntil(this.destroy$) and async pipe advantages.
+	Why: Interviewers often pick an RxJS scenario (search box, dependent HTTP calls) to test reasoning.
+	
+-------------------------------------------------------------------
+
+Some of the questions I faced today were:
+1️⃣ Difference between Reactive Forms and Template-driven Forms in Angular
+2️⃣ How Change Detection works in Angular and how to optimize it
+3️⃣ Usage of RxJS operators (mergeMap, switchMap, concatMap) with real-time scenarios
+4️⃣ How lazy loading works and why it’s important in large-scale applications
+5️⃣ Explanation of NgRx state management and its benefits
+6️⃣ Writing custom pipes and directives and their use cases
+7️⃣ Handling API errors globally using interceptors
+8️⃣ Optimizing Angular apps for performance and bundle size
+
+-----------------------------------------
+
+
+Q. What are the differences between a Component and a Directive in Angular?
+Q. How do you handle performance issues in Angular?
+
+	- Optimize code by using trackBy in ngFor loops
+		trackBy improves performance by helping Angular identify list items uniquely,
+		so it updates only the changed DOM elements instead of re-rendering the entire list.
+		
+	- Reduce HTTP requests by using caching and pagination
+		Yes, Angular supports caching using services, RxJS shareReplay, HTTP interceptors, or browser storage to reduce API calls and improve performance.
+		
+	- Use lazy loading to load only necessary components
+	
+	- Use AOT compilation to reduce load time
+		AOT compiles Angular templates at build time, resulting in faster startup, smaller bundles, and early error detection
+		- Errors caught before runtime
+		- Angular compiler runs during build
+		- Templates → optimized JavaScript
+		
+	- Avoid using ngIf with heavy computations
+		Yes, we should avoid heavy computations inside *ngIf because Angular evaluates template expressions on every change detection cycle, which can hurt performance.
+		
+	- Use ChangeDetectionStrategy.OnPush to reduce change detection cycles
+		
+	
+Q. What are the different data bindings in Angular?
+
+	ANGULAR DATA BINDING – CHART WITH EXAMPLES
+	================================================================================
+	Binding Type        Syntax                  Direction              Example
+	================================================================================
+	Interpolation       {{ value }}             Component -> View      <h1>{{ name }}</h1>
+
+	Property Binding    [property]              Component -> View      <img [src]="imgUrl">  imageUrl = 'logo.png';
+
+	Event Binding       (event)                 View -> Component      <button (click)="save()">
+
+	Two-way Binding     [(ngModel)]             Both directions        <input [(ngModel)]="username">
+	================================================================================
+
+Q. Why Angular, difference between angular ans react
+Q. What are @Input() and @Output()?
+
+	@INPUT() AND @OUTPUT() – ANGULAR CHART
+	================================================================================
+	Decorator     Purpose                     Data Flow          Used In
+	================================================================================
+	@Input()      Receive data from parent    Parent -> Child    Child Component
+
+	@Output()     Send data to parent          Child -> Parent    Child Component
+	================================================================================
+
+Q. What is a pipe in Angular
+
+	A pipe in Angular is used to transform data before displaying it in the template.
+	Pipes are used in templates to format data before displaying it to the user
+	There are built-in pipes like DatePipe, UpperCasePipe, LowerCasePipe, etc.
+
+Q. What is the difference between pure and impure pipes in Angular?
+	
+	Pure Pipe
+
+		Default in Angular
+		Executes only when input reference changes
+		Works with immutable data changes
+		Faster and better performance
+		Does NOT run on internal mutations (push, sort)
+
+	Impure Pipe
+
+		Executes on every change detection
+		Detects internal changes in array/object
+		Slower (performance expensive)
+		Must be explicitly set: pure: false
+
+Q. What is NgViewInit()?
+	NgViewInit() is a lifecycle hook method in Angular that is called after the component's view has been fully initialized.
+	
+			ngOnInit()
+			ngAfterContentInit()
+			ngAfterViewInit()   ✅
+	
+	Why it is needed
+
+			At this stage, template DOM is ready
+			@ViewChild() and @ViewChildren() are available
+			Safe place to access or manipulate view elements
+			
+
+Q. How do you call REST APIs in Angular?
+
+	For Modules :
+		Import the HttpClientModule in your Angular module
+		Inject the HttpClient service in your component or service
+		Use the HttpClient methods to make HTTP requests to the REST APIs
+		Handle the response using observables and subscribe to them
+		Example: httpClient.get('https://api.example.com/data')
+		Example: httpClient.post('https://api.example.com/data', postData)
+		
+	For standalone :
+		Providing HttpClient using provideHttpClient()
+		Creating a service
+		Calling the API in the component (usually in ngOnInit)
+		
+
+Q. What is angular js and angular
+
+Q. What is an Angular Interceptor?
+
+	It can be used to add headers, modify requests, handle errors, and more.
+	Interceptors can be global or specific to a certain request.
+	Example use cases include adding authentication tokens to requests or logging responses.
+	Interceptors are implemented using the HttpInterceptor interface in Angular.
+	
+	Component → Service → HttpClient
+        → Interceptor(s) → Backend
+        ← Interceptor(s) ← Response
+		
+	If interceptor is needed for only some requests
+	
+		1. Use condition inside interceptor (most common)
+			Check flag inside interceptor
+		2. Apply interceptor logic inside service (simple cases)
+		3. Use multiple interceptors (advanced)
+		
+		
+Q. What is a lifecycle hook in Angular?
+
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Phase          | Method                    | Interface                 | Summary                                                      |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Creation       | constructor               | —                         | Standard JavaScript class constructor. Runs when Angular     |
+	|                |                           |                           | instantiates the component.                                  |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Change         | ngOnInit                  | OnInit                    | Runs once after Angular has initialized all component inputs |
+	| Detection      |                           |                           | and the first change detection cycle completes.              |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Change         | ngOnChanges               | OnChanges                 | Runs every time one or more @Input() values change.          |
+	| Detection      |                           |                           | Receives SimpleChanges object.                               |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Change         | ngDoCheck                 | DoCheck                   | Runs during every change detection cycle. Used for custom    |
+	| Detection      |                           |                           | change detection logic.                                      |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Content        | ngAfterContentInit        | AfterContentInit          | Runs once after content projected via ng-content is          |
+	| Initialization |                           |                           | initialized.                                                 |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Content        | ngAfterContentChecked     | AfterContentChecked       | Runs after every check of projected content.                 |
+	| Check          |                           |                           |                                                              |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| View           | ngAfterViewInit           | AfterViewInit             | Runs once after the component’s view and child views are     |
+	| Initialization |                           |                           | fully initialized.                                           |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| View           | ngAfterViewChecked        | AfterViewChecked          | Runs after every change detection check of the component’s   |
+	| Check          |                           |                           | view and child views.                                        |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Rendering      | afterNextRender           | AfterNextRender           | Runs once after the next render when all components are      |
+	|                |                           |                           | rendered to the DOM.                                         |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Rendering      | afterRender               | AfterRender               | Runs after every render when all components are rendered     |
+	|                |                           |                           | to the DOM.                                                  |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+	| Destruction    | ngOnDestroy               | OnDestroy                 | Runs once just before the component is destroyed. Used for   |
+	|                |                           |                           | cleanup (unsubscribe, clear timers, etc.).                   |
+	+----------------+---------------------------+---------------------------+--------------------------------------------------------------+
+
+
+Q. What is the difference between template-driven and reactive forms?
+	Ans. Template driven forms are based on directives while reactive forms are based on reactive programming.
+	Template driven forms are easier to use and require less code.
+	Reactive forms are more flexible and allow for more complex validation.
+	Template driven forms are suitable for simple forms while reactive forms are better for complex forms.
+	Template driven forms use two-way data binding while reactive forms use observable streams.
+	Template driven forms are synchronous while reactive forms are asynchronous.
+	
+Q. How do you communicate between components in Angular?
+	
+	1. Parent → Child (most common) 	-> @Input()
+	2. Child → Parent 					-> @Output() + EventEmitter
+	3. Parent ↔ Child (Direct access	-> Using @ViewChild()
+		@ViewChild(ChildComponent) child!: ChildComponent;
+		this.child.someMethod();
+		✅ When parent needs to call child methods
+		
+	4. Sibling Components 				-> Using a Shared Service (BehaviorSubject)
+		@Injectable({ providedIn: 'root' })
+		export class DataService {
+		  data$ = new BehaviorSubject<string>('');
+		}
+		
+		// sender
+		this.dataService.data$.next('Hello');
+		
+		// receiver
+		this.dataService.data$.subscribe(value => console.log(value));
+		
+
+Q. Tell me about Angular Directives.
+
+	Angular Directives are used to manipulate the DOM or change the behavior and appearance of HTML elements.	
+	They tell Angular how to transform or control elements in the template.
+	
+	1. Structural Directives -> Change the structure of the DOM (add/remove elements).
+			*ngIf
+			*ngFor
+			*ngSwitch
+	2. Attribute Directives -> Change the appearance or behavior of an element.
+		Attribute directives change the appearance or behavior of DOM elements based on conditions, 
+		but they do not add or remove elements from the DOM.
+			ngClass
+			ngStyle
+			Custom attribute directives
+	3. Component Directives -> A component itself is a directive with a template.
+	
+	🎯 Key Interview Points
+
+	Directives are classes with @Directive decorator
+	Components are special directives
+	Structural directives use * syntax
+	Directives help reuse behavior
+	
+Q. How do you create and use custom directives?
+	@Directive({
+	  selector: '[appHighlight]'
+	})
+	export class HighlightDirective {
+	  constructor(private el: ElementRef) {
+		this.el.nativeElement.style.backgroundColor = 'yellow';
+	  }
+	}
+	
+	<p appHighlight>Highlighted text</p>
+	
+	🎯 One-liner for interview
+
+	“To create a custom directive, we define a class with @Directive, select it using an attribute selector, and add behavior using ElementRef, Input, and HostListener
+	
+Q. What is Decorators and Directives
+
+	Decorators : Decorators are special functions that add metadata to a class, method, property, or parameter.
+				 Angular uses this metadata to understand how a class should behave.
+				 
+				@Component
+				@Directive
+				@Pipe
+				@Injectable
+				@Input, @Output
+				@HostListener, @HostBinding
+				
+	Directives : Directives are Angular features used in templates to manipulate the DOM or change element behavior.
+	
+				1. Structural – change DOM structure
+				2. Attribute – change appearance/behavior
+				3. Component – directive with template
+				
+				
+Q. Tell me about Angular Routes.
+	Ans. Angular Routes are used to navigate between different components and views in an Angular application.
+	
+		Routes are defined in the app-routing.module.ts file
+		Each route maps a URL path to a component
+		Routes can have parameters and child routes
+		Navigation between routes can be done using routerLink directive or programmatically using Router service
+		
+
+Q. How can you secure an Angular app?
+
+	================================================================================
+	Topic                     Purpose
+	================================================================================
+	Authentication             Verify user identity using JWT / OAuth
+	Authorization              Control access based on roles and permissions
+	Route Guards               Prevent unauthorized access to routes
+	HTTP Interceptors          Attach auth token and handle HTTP errors
+	XSS Protection             Prevent script injection (Angular escapes HTML)
+	CSRF Protection            Prevent cross-site request forgery attacks
+	HTTPS                      Secure client-server communication
+	Secure Build               Optimize code and remove debug data in production
+	================================================================================
+	
+Q. What are the building blocks in Angular?
+	Ans. Building blocks in Angular are components, directives, services, and modules.
+
+Q. How angular works , architecture
+	Angular uses a component-based architecture to build reusable UI components
+	It uses a declarative approach to define UI elements and their behavior
+	Angular provides a powerful set of tools for data binding, dependency injection, and routing
+	It follows the MVC (Model-View-Controller) pattern to separate concerns and improve maintainability
+	
+	
+Q. What is ng-content?
+	ng-content is an Angular directive used for content projection.
+	It allows a component to receive and display content from its parent component inside its own template.
+	
+	It is used to insert external HTML into a component’s template.
+	
+		Why we use ng-content
+
+			To make reusable components
+			To allow parent components to pass HTML/content
+			To create flexible layouts (cards, modals, panels)
+			
+			Child component
+			<div class="card">
+			  <ng-content></ng-content>
+			</div>
+			
+				
+			Parent component
+			<app-card>
+			  <h2>Title</h2>
+			  <p>This content comes from parent</p>
+			</app-card>
+			
+			
+
+Q. How can a component be loaded only after three specific services have loaded?
+
+	In Angular, this is achieved using a Route Resolver or by combining multiple observables and waiting for all of them to complete.
+	
+	✅ Best & Interview-Preferred Approach: Route Resolver
+
+	A Resolver ensures that required data is loaded before the component is activated.
+	
+	Step 1: Create Resolver
+	
+		@Injectable({ providedIn: 'root' })
+		export class DataResolver implements Resolve<any> {
+
+		  constructor(
+			private service1: Service1,
+			private service2: Service2,
+			private service3: Service3
+		  ) {}
+
+		  resolve() {
+			return forkJoin({
+			  data1: this.service1.getData(),
+			  data2: this.service2.getData(),
+			  data3: this.service3.getData()
+			});
+		  }
+		}
+
+
+	Step 2: Use Resolver in Route
+	
+		{
+		  path: 'dashboard',
+		  component: DashboardComponent,
+		  resolve: {
+			preloadData: DataResolver
+		  }
+		}
+
+	Step 3: Access Data in Component
+	
+	ngOnInit() {
+	  this.route.data.subscribe(data => {
+		this.allData = data['preloadData'];
+	  });
+	}
+	
+	✔️ Component loads only after all 3 services complete
+	
+	
+Q. How is an Angular application bootstrapped?
+Q. what know about angular. what is typescript.
+
+Q. What design patterns are used in Angular?
+
+
+	=========================================================================================
+	Design Pattern          Usage in Angular
+	=========================================================================================
+	MVVM                   Component acts as ViewModel, Template as View, 
+							Services manage business logic and data
+
+	Dependency Injection   Angular provides a built-in DI container to inject
+							services into components, directives, and other services
+
+	Observer               RxJS Observables are used for async data streams,
+							HTTP calls, events, and component communication
+
+	Singleton              Services provided using providedIn:'root' create
+							a single shared instance across the application
+
+	Facade                 Services act as a middle layer between components
+							and backend APIs, hiding complex logic from UI
+
+	Strategy               Different behaviors selected at runtime, such as
+							multiple HTTP interceptors or validation strategies
+
+	Decorator              TypeScript decorators like @Component, @Directive,
+							@Injectable add metadata to Angular classes
+
+	Module                 Feature modules or standalone components help
+							organize code and enable lazy loading
+	=========================================================================================
+
+
+Q. How do you enable SSR in Angular?
+	Ans. Server-side rendering (SSR) in Angular can be enabled by using Angular Universal.
+	1. Install Angular Universal using Angular CLI
+	2. Create a new Angular Universal project
+	3. Update app.module.ts to include server-side rendering
+	4. Build and run the Angular Universal project
+	
+	
+	How it works
+
+	1. Browser requests a page
+	2. Server runs your app (Angular/React/etc.)
+	3. Server sends ready-made HTML
+	4. Browser displays content instantly
+	5. JS loads → page becomes interactive (hydration)
+	
+	
+Q. What are route guards?
+	Ans. Route guards are used in Angular to prevent unauthorized access to certain routes.
+	- Route guards can be used to check if a user is authenticated before allowing access to a route.
+	- There are three types of route guards: CanActivate, CanActivateChild, and CanLoad.
+	- CanActivate is used to protect individual routes, while CanActivateChild is used to protect child routes.
+	- CanLoad is used to prevent lazy-loaded modules from being loaded until certain conditions are met.

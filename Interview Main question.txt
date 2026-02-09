@@ -1,0 +1,1944 @@
+		Hashmap Working
+		HTTP methods: GET, POST, PUT, DELETE (take all posible cross questions)
+		global exception
+		hashset and hashmap
+		all status codes
+		Authotheication (o2Auth / JWt) role base
+		Multithreading (deadlock)
+		What is garbage collection?
+		design patterns (prototype vs singleton)
+		collection in java
+		Java 8+ Features:
+			Lambda Expressions
+			Streams API (map, filter, reduce, collect)
+			Functional Interfaces (Function, Predicate, Consumer, etc.)
+			Method References
+			Optional
+		String pool
+		Jvm jdk jre
+		Memory management
+		Builder class
+		Regex
+		anonymous  class
+
+
+		How would you resolve a merge conflict if two developers are working on the same branch?
+		problem faced when you switch from java 8 to java 11 
+		Volitile
+		interface vs abstract class
+
+
+		1. What are the internal workings of a HashMap?
+		2. How does HashMap handle collisions?
+		3. What is the difference between Abstract Class and Interface?
+		4. What are Functional Interfaces?
+		5. What are the features introduced in Java 8?
+		6. How does parallelStream() work internally?
+		7. What is multithreading in Java and how is it implemented?
+		8. What is the difference between Synchronous and Asynchronous requests?
+		9. How do you handle sudden traffic spikes in your application?
+		10. How can you improve the performance of your application?
+		11. How does caching work in Spring Boot?
+		12. How do you debug an API request that is taking more time to respond?
+		13. Which design patterns have you used in your project?
+		14. Explain the Singleton Design Pattern with example.
+		15. How does a REST API work internally?
+		16. What is an API Gateway and how does it work?
+		17. What is the difference between Monolithic and Microservices architecture?
+		18. What are the advantages and disadvantages of Microservices over Monolithic?
+		19. How does a REST API handle a request from client to server?
+
+
+		4. Your Spring Boot application is experiencing performance issues under high load. What are the steps you would take to identify and address the performance?
+
+		11. What strategies would you use to optimize the performance of a Spring Boot application?
+
+		If you had to scale a Spring Boot application to handle high traffic, what strategies would you use?
+
+		Imagine you are designing a Spring Boot application that interfaces with multiple external APIs. How would you handle API rate limits and failures?
+
+		Collections
+		depedency injection
+		sql injection
+
+
+		recetly faced issue :
+
+		sql query taking time for csv extraction ptp
+		expensib api is down and we calling it again and again
+
+		--------------------------------------------------
+		Github
+		Kubernatees
+		Dokcer file
+		Jenkins
+		Aws services ( lambda , dynamoDB , cloudwatch , api gateway , eventbridge)
+		--------------------------------------------------
+		MySQL Or PostGreSQL
+		joins
+		Views
+		indexing  PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK
+		procedures
+		functions
+		Triggers
+		Aggregate Functions COUNT(), SUM(), AVG(), MIN(), MAX()
+		1NF, 2NF, 3NF (basic understanding)
+		ACID: Atomicity, Consistency, Isolation, Durability
+
+		---------------------------------------------------------------------------------------------------------------------------
+
+		Thanks — I’ll give a quick overview. MFG is a middleware that ingests invoices from sources like SFTP and email, extracts and validates invoice data via a PDF processing service, stores originals in S3 and structured data in a database, then transforms and forwards the data to SAP Ariba for posting.
+
+		Beyond the core invoice flow, we provide platform services for other teams: 
+		we encrypt outgoing files using recipients’ public keys and decrypt incoming encrypted files using our private keys;
+		we build and publish documented REST APIs (Swagger/Postman) so teams can query or post data;
+		and we generate reports per business requirements.
+
+		Technically, some components are Dockerized and some are serverless on AWS — I’ve worked with Lambda, S3, SQS, CloudWatch, EventBridge, API Gateway and DynamoDB.
+
+		---------------------------------------------------------------------------------------------------------------------------
+
+		What is Aggregation and Composition
+		Spring bean scopes
+		how singleton pattern work with mutithreding
+		in restcontroller reposne in xml
+		fibonacci 
+		What is the use of private variables if they are accessible via getters and setters from another class?
+		what is CORS in springBoot ? @CrossOrigin
+		What is the difference between a User thread and a Daemon thread in Java?
+		CompletableFuture
+		TDD and BDD
+		How spring boot application started 
+
+		custom compartor in stream 
+		ApplicationContext and BeanFactory?
+
+
+
+		delta :
+		where you have three independent APIs/methods that:
+		Can be called at the same time (parallel execution).
+		Each takes ~2–3 minutes.
+		After all three responses are available, you use their values to add (or do some combined operation).
+
+		You have an Employee class with fields salary, age, years.
+		You call a method and choose any field(s) to filter on at runtime.
+		If you pass only one filter, it filters by that.
+		If you pass multiple, it applies all.
+
+		You’ve been storing files in S3 for 3 years.
+		AWS charges you per GB stored per month.
+		Old files are costing money even if rarely used.
+		how you can reduce the operating cost
+
+		If we have a JWT token and we’re calling AWS Lambda, do we send the JWT every time we call the Lambda?
+
+		Table – Emp Id, Name, Dept id, Salary
+		 
+		Find a list of employees with a salary > average salary of their department
+
+
+		----------------------------------------------------------------------------------
+		🔹 1. Reverse a String
+
+			String str = "abcd";
+			String str1 = "";
+			char [] arr = str.toCharArray();
+
+			for (int i = arr.length - 1; i >= 0; i--) {
+				str1 += arr[i];
+			}
+
+			System.out.println(str1);
+
+		🔹 2. Check if a String is Palindrome
+
+			String str = "abcba";
+
+			char[] arr = str.toCharArray();
+			int start = 0;
+			int end = arr.length - 1;
+			boolean isPalindrome = true;
+
+			while (start < end) {
+				if (arr[start] != arr[end]) {
+					isPalindrome = false;
+					break;
+				}
+				start++;
+				end--;
+			}
+
+			if (isPalindrome) {
+				System.out.println(str + " is a palindrome");
+			} else {
+				System.out.println(str + " is not a palindrome");
+			}
+
+		🔹 3. Count Occurrences of a Character
+			Map<Character, Integer> map = str.chars()
+					.mapToObj(c -> (char) c)
+					.collect(Collectors.groupingBy(c -> c, Collectors.summingInt(ch -> 1)));
+					
+		🔹 4. Remove Duplicate Characters
+
+			String str = "programming";
+
+				String str1 = str.chars()
+						.mapToObj(c -> String.valueOf((char) c)) // cast to char
+						.distinct()
+						.collect(Collectors.joining());
+
+
+		🔹 1. Sort an Integer Array using Bubble Sort
+
+		public class BubbleSortExample {
+			public static void main(String[] args) {
+				int[] arr = {5, 1, 4, 2, 8};
+
+				for (int i = 0; i < arr.length - 1; i++) {
+					for (int j = 0; j < arr.length - i - 1; j++) {
+						if (arr[j] > arr[j + 1]) {
+							int temp = arr[j + 1];
+							arr[j + 1] = arr[j];
+							arr[j] = temp;
+						}
+					}
+				}
+
+				for (int n : arr) {
+					System.out.print(n + " ");
+				}
+			}
+		}
+		----------------------------------------------------------------------------------
+
+
+			2. Identify the output of the java program and state the reason.
+			 public class InterviewBit
+		{ 
+				  public static void main(String[] args) { 
+						  final int i; 
+						  i = 20;
+						  int j = i+20; 
+						  i = j+30; 
+						  System.out.println(i + " " + j); 
+				  } 
+		}
+
+		SQL questions
+		We have two tables:
+
+		PATIENT(PATIENT_ID, NAME, DOB)
+		VISIT(VISIT_ID, PATIENT_ID, VISIT_DATE)
+
+		1. Write a query to list the names of patients born after January 1, 1970.
+
+
+		select name from Patient where DOB > January 1, 1970
+
+
+		2. List all patient names and their most recent visit date. 
+
+		SELECT p.name, MAX(v.visit_date) AS most_recent_visit
+		FROM Patient p
+		LEFT JOIN Visit v
+		  ON p.patient_id = v.patient_id
+		GROUP BY p.name;
+
+		----------------------------------------------------------------------------------
+		JWT flow :
+
+		The flow is: the client posts username/password to a login endpoint which authenticates using the AuthenticationManager (via UsernamePasswordAuthenticationFilter or a login controller). On success the server issues a JWT and returns it. For every subsequent request the client sends Authorization: Bearer <token>. A OncePerRequestFilter (the JWT filter) — added before UsernamePasswordAuthenticationFilter — extracts and validates the token (signature + expiry), maps claims to GrantedAuthoritys, and sets an Authentication into SecurityContextHolder. The app should use sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS), have proper AuthenticationEntryPoint/AccessDeniedHandler, and a secure refresh-token strategy for production.
+
+		If they ask “If it’s stateless, where/how is the token stored?” answer briefly:
+
+		Stateless means the server does not persist the token — the client stores it and sends it with each request (usually in Authorization: Bearer <token>). Best practice: keep short-lived access tokens in memory and store long-lived refresh tokens in an HttpOnly; Secure; SameSite cookie (server sets it). Use HTTPS, rotate keys, and keep refresh-token state server-side if you need revocation.
+
+		Quick bullets to mention if they probe further:
+
+		- Add the JWT filter with http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).
+		- Set SessionCreationPolicy.STATELESS for JWT APIs.
+		- Use PasswordEncoder + AuthenticationProvider and an AuthenticationManager for login.
+		- Implement AuthenticationEntryPoint and AccessDeniedHandler for 401/403 responses.
+		- Validate signature, expiry, and optionally jti for revocation; consider refresh tokens for UX.
+		- Store refresh tokens in HttpOnly cookies and rotate/blacklist them in DB/Redis if you need logout/revocation.
+
+		----------------------------------------------------------------------------------
+
+		Deployment Flow Explanation
+
+		We follow a CI/CD deployment flow. Developers push Java code to GitHub, which triggers a pipeline. In the CI phase, the code is built, tested, and packaged into a Docker image. This image is pushed to Harbor, our container registry. In the CD phase, Kubernetes manifests or Helm charts are applied, pulling the Docker image from Harbor and deploying it to the cluster. Kubernetes ensures scalability, rolling updates, and service availability. Monitoring and logging are handled via tools like Prometheus and ELK.
+
+		---------------------------------------------------------------------------------
+
+		cheats :
+
+		actuator end points
+		stream methods
+		DI and IOC
+		pagination
+
+		Airbus :
+
+		checked exception and unchecked exception
+		composite key in dynanomDB and GSI
+		can we use @component instead of @service and @reporsitory
+		how you will handle exception on DAO layer 
+		how wil throw exception to next layer
+		global exception handler
+		we have one rest api get if 100 request comes how many instance it will create 
+		test cases for static method
+		Jwt token creation part ( how to you geenrate token from server)
+		stereotype annotation
+		how Transactional work
+		hinernate
+
+
+		Problem:
+
+		Tables:
+
+		Customer(cust_id, cust_name)
+		Orders(order_id, cust_id, order_amount)
+
+		Task:
+
+		Fetch a list of all customers along with their total order amount. 
+		If a customer has no orders, show 0.
+
+
+
+		select c.cust_name , sum(o.order_amount) 
+		from Customer c
+		left join Orders o
+		on c.cust_id == o.cust_id 
+
+
+
+		Infosys:
+
+		reflaction
+		annoatation from junit
+		hashmap vs hashtable
+		can we override static method
+		inbuild fault tolenerce in spring boot
+		hashmap vs hashset
+		Encapsulation
+		immutable class
+		how to make connection between java and s3 
+		constructor chaining
+		branching strategies
+		--------------------------------------------------------------------------------------------------------------
+		Two Sum
+		Best Time to Buy and Sell Stock
+		Move Zeroes
+		Kadane’s Algorithm (Maximum Subarray Sum)
+		Merge Intervals
+		Rotate Array
+		Find Missing Number
+		Find Duplicates in Array
+		Rearrange Array Elements (Positive/Negative alternately)
+		Subarray with Given Sum
+
+		Reverse a String / Words in a String
+		Check for Palindrome
+		Longest Substring Without Repeating Characters
+		Anagram Check
+		Count of Characters or Words
+		String Compression (like “aaabb” → “a3b2”)
+		Valid Parentheses
+		Longest Common Prefix
+		Minimum Window Substring
+		Subsequence and Substring Difference
+		--------------------------------------------------
+
+		HSBC :
+
+		/*
+		You are a developer for a university. Your current project is to develop a system for students to find courses they share with friends. The university has a system for querying courses students are enrolled in, returned as a list of (ID, course) pairs.
+
+		Write a function that takes in a collection of (student ID number, course name) pairs and returns, for every pair of students, a collection of all courses they share.
+
+		Sample Input:
+
+		enrollments1 = [
+		  ["58", "Linear Algebra"],
+		  ["94", "Art History"],
+		  ["94", "Operating Systems"],
+		  ["17", "Software Design"],
+		  ["58", "Mechanics"],
+		  ["58", "Economics"],
+		  ["17", "Linear Algebra"],
+		  ["17", "Political Science"],
+		  ["94", "Economics"],
+		  ["25", "Economics"],
+		  ["58", "Software Design"],
+		]
+
+		Sample Output (pseudocode, in any order):
+
+		find_pairs(enrollments1) =>
+		{
+		  "58,17": ["Software Design", "Linear Algebra"]
+		  "58,94": ["Economics"]
+		  "58,25": ["Economics"]
+		  "94,25": ["Economics"]
+		  "17,94": []
+		  "17,25": []
+		}
+
+		Additional test cases:
+
+		Sample Input:
+
+		enrollments2 = [
+		  ["0", "Advanced Mechanics"],
+		  ["0", "Art History"],
+		  ["1", "Course 1"],
+		  ["1", "Course 2"],
+		  ["2", "Computer Architecture"],
+		  ["3", "Course 1"],
+		  ["3", "Course 2"],
+		  ["4", "Algorithms"]
+		]
+
+		Sample output:
+
+		find_pairs(enrollments2) =>
+		{
+		  "1,0":[]
+		  "2,0":[]
+		  "2,1":[]
+		  "3,0":[]
+		  "3,1":["Course 1", "Course 2"]
+		  "3,2":[]
+		  "4,0":[]
+		  "4,1":[]
+		  "4,2":[]
+		  "4,3":[]
+		} 
+
+		Sample Input:
+		enrollments3 = [
+		  ["23", "Software Design"], 
+		  ["3", "Advanced Mechanics"], 
+		  ["2", "Art History"], 
+		  ["33", "Another"],
+		]
+
+		Sample output:
+
+		find_pairs(enrollments3) =>
+		{
+		  "23,3": []
+		  "23,2": []
+		  "23,33":[]
+		  "3,2":  []
+		  "3,33": []
+		  "2,33": []
+		}
+
+		All Test Cases:
+		find_pairs(enrollments1)
+		find_pairs(enrollments2)
+		find_pairs(enrollments3)
+
+		Complexity analysis variables:
+
+		n: number of student,course pairs in the input
+		s: number of students
+		c: total number of courses being offered (note: The number of courses any student can take is bounded by a small constant)
+
+		*/
+
+		import java.io.*;
+		import java.util.*;
+		import javafx.util.Pair;
+
+		public class Solution {
+		  public static void main(String[] argv) {
+			String[][] enrollments1 = {
+			  {"58", "Linear Algebra"},
+			  {"94", "Art History"},
+			  {"94", "Operating Systems"},
+			  {"17", "Software Design"},
+			  {"58", "Mechanics"},
+			  {"58", "Economics"},
+			  {"17", "Linear Algebra"},
+			  {"17", "Political Science"},
+			  {"94", "Economics"},
+			  {"25", "Economics"},
+			  {"58", "Software Design"}
+			};
+
+			String[][] enrollments2 = {
+			  {"0", "Advanced Mechanics"},
+			  {"0", "Art History"},
+			  {"1", "Course 1"},
+			  {"1", "Course 2"},
+			  {"2", "Computer Architecture"},
+			  {"3", "Course 1"},
+			  {"3", "Course 2"},
+			  {"4", "Algorithms"}
+			};
+
+			String[][] enrollments3 = {
+			  {"23", "Software Design"}, 
+			  {"3",  "Advanced Mechanics"}, 
+			  {"2",  "Art History"}, 
+			  {"33", "Another"},
+			};
+			
+		  }
+		  
+		  public static String [] [] findPair(String enrollments1 [] []){
+			
+			
+			
+			return null;
+		  }
+		}
+		--------------------------------------------------------------------------------------------------------------
+
+		I mainly worked on developing the Spring Boot microservices that handle the invoice processing flow — fetching emails from Outlook using Graph API, reading/writing files to S3, converting XML to cXML, and integrating with Ariba APIs.
+		I also implemented logging, exception handling, and AWS services like Lambda, DynamoDB, CloudWatch, and S3 for automation and monitoring.
+		Additionally, I helped build APIs for fetching invoice and purchase order data for reporting purposes.
+
+
+		My current project is part of the Procure-to-Pay (P2P) process, where our application acts as a middleware and reporting layer between upstream and downstream systems.
+
+		The main goal of the project is to process supplier invoices and ensure that they are converted into a format compatible with Ariba, which is the downstream procurement platform.
+
+		Here’s the overall flow:
+
+		We receive PDF invoices in an S3 bucket, either via SFTP or from emails fetched using Microsoft Graph API.
+
+		Once the invoice is received, we make an entry in our database and then transfer it to another internal service/team, which reads the PDF and converts it into XML.
+
+		That team sends back the PDF and XML as a ZIP file into our S3 bucket.
+
+		We then process this XML — extract important details such as PO number, invoice number, creation date, entity, etc.
+
+		Since Ariba cannot process standard XML, we convert it into cXML format and then send it to Ariba through an API integration.
+
+		During this process, we also store all relevant data in our database for reporting purposes.
+
+		Our service also exposes REST APIs to fetch data related to invoices, purchase orders, and purchase requisitions, and provides reporting dashboards for business users.
+
+		In short, our system acts as a middleware between the supplier and Ariba, handling file processing, data transformation, and reporting within the Procure-to-Pay cycle.
+
+
+		-----------------------------------------------------------------------------------------------------------
+
+		reflaction
+
+		“At runtime” means during the actual execution of the program (inside the JVM), unlike compile time where the compiler checks your code. Reflection works at runtime because it inspects and invokes classes, methods, and fields dynamically while the program is running.
+
+		----------------------
+
+		interface vs Abstract
+
+
+		1. What happens if we don’t implement all methods of an interface?
+
+		If a class implements an interface but does not provide implementations for all of its abstract methods,
+		then that class must be declared as abstract.
+
+		Otherwise, the compiler will throw an error — because a non-abstract class must fully implement all the methods of its interface.
+
+		Because interfaces define a contract.
+		Any concrete class (non-abstract class) that claims to implement that contract must fulfill all the methods,
+		otherwise it breaks the contract.
+
+		2. Can we use an abstract class as a normal class (i.e., without subclassing it)?
+
+		❌ No, you cannot instantiate (create an object of) an abstract class directly.
+		But ✅ you can use it in other ways — for example, as a reference type or by creating an anonymous subclass.
+
+		3. What if two interfaces have methods with the same signature?
+
+					If two interfaces have methods with the same method signature (same name and parameters),
+					then the implementing class needs to provide only one implementation — it will satisfy both interfaces.
+
+					interface A {
+						void show();
+					}
+
+					interface B {
+						void show();
+					}
+
+					class Demo implements A, B {
+						public void show() {
+							System.out.println("Show method implementation");
+						}
+					}
+
+					***If the return types differ, the compiler will throw an error.
+					***If two interfaces have default methods with the same signature,
+					   then the implementing class must override the method to resolve the ambiguity.
+					   
+					interface A {
+						default void show() {
+							System.out.println("A show");
+						}
+					}
+
+					interface B {
+						default void show() {
+							System.out.println("B show");
+						}
+					}
+
+					class Demo implements A, B {
+						public void show() { // 👈 Must override to resolve conflict
+							System.out.println("Demo show");
+						}
+					}
+
+					*** Two methods with the same name and parameters but different return types are incompatible.
+
+					The super keyword (like A.super.show()) works only for default methods (i.e., methods with a body) in interfaces —
+					not for abstract methods.
+
+		4. Can we mark an abstract class as final? Can we declare an interface as final?
+		❌ No. Because final prevents inheritance, and abstract classes are meant to be inherited.
+		❌ No. Interfaces are meant to be implemented.
+
+		5. Why do we need interfaces when abstract classes exist?
+
+		Interfaces support multiple inheritance, loose coupling, and flexibility in design — for example, a class can extend another class and implement multiple interfaces.
+
+		-------------------------------------
+		Dependency Injection
+
+		1. What are the main types of Dependency Injection?
+
+			Constructor Injection – via constructor parameters.
+
+			Setter Injection – via setter methods.
+
+			Field Injection – via annotations on fields.
+			
+		2. What is the difference between dependency injection and inversion of control (IoC)?
+
+			Inversion of Control means the control of object creation and management is transferred (or inverted) from the developer to a framework or container (like Spring).
+
+			In simple words:
+
+			Normally, you create and manage objects yourself using new.
+			But in IoC, the framework creates and manages those objects for you.
+			
+			Dependency Injection (DI) is a design pattern that implements IoC by injecting required dependencies into a class rather than creating them inside it.
+
+			So — IoC is the concept,
+			and DI is the technique used to achieve it.
+			
+		3. What is the role of @Autowired in Spring?
+
+			When Spring starts:
+
+			It scans for all beans (@Component, @Service, @Repository, @Controller, etc.).
+
+			When creating a bean, if it finds @Autowired,
+			it checks the ApplicationContext for a bean of the matching type.
+
+			It injects that bean automatically.
+
+
+		----------------------------------
+
+		Scopes
+
+		prototyp scope example : A shopping cart in an e-commerce app.
+
+		@Scope("prototype") → creates a new bean every time you call context.getBean().
+
+		@Scope("singleton") (default) → returns the same bean each time.
+
+		🔍 Key point:
+
+			Yes, prototype creates a new instance per request, but this "request" means a request to the Spring container, not HTTP requests.
+
+				@Component
+				class A {
+					@Autowired
+					private B b; // B is prototype
+				}
+
+				@Component
+				class C {
+					@Autowired
+					private B b; // B is prototype
+				}
+
+				What happens?
+
+				When Spring creates bean A, it injects one instance of B into A.
+
+				When Spring creates bean C, it injects another instance of B into C.
+
+				But inside A, every access to b is the same object.
+				Because injection happened only once at startup.
+
+		👉 Prototype beans are NOT created every time the bean is used
+
+			They are created every time the bean is requested from Spring.
+
+			Injection happens only once → so you only get one prototype instance per injection.
+
+		✅ Request Scope
+
+			A new bean instance is created for every HTTP request (only valid in web applications).
+
+			The bean lives only during that HTTP request.
+
+			After the request is completed, the bean is destroyed.
+
+		⭐ Simple Memory Trick
+
+			Prototype → Per getBean() call
+
+			Request → Per HTTP request
+
+		----------------------------------
+
+			Encapsulation means binding data (variables) and methods (functions) that operate on that data into a single unit — usually a class — and restricting direct access to some of the object’s components.
+
+			Encapsulation = Hiding data (how things work internally).
+
+			public class BankAccount {
+				private double balance; // data hidden (private)
+
+				// public method to access/modify data
+				public void deposit(double amount) {
+					if (amount > 0)
+						balance += amount;
+				}
+
+				public double getBalance() {
+					return balance;
+				}
+			}
+
+
+			Abstraction means showing only essential features of an object and hiding the complex implementation details.
+			In simple words → you focus on what an object does, not how it does it.
+
+			Abstraction = Hiding implementation (how it works).
+
+			abstract class Payment {
+				abstract void pay(double amount); // abstract method
+			}
+
+			class CreditCardPayment extends Payment {
+				void pay(double amount) {
+					System.out.println("Paid " + amount + " using Credit Card");
+				}
+			}
+
+		----------------------------------------
+
+		Rest API :
+
+		1. What is a REST API?
+
+			REST (Representational State Transfer) is an architectural style that allows systems to communicate over HTTP using standard methods like GET, POST, PUT, DELETE.
+			It treats everything as a resource identified by a unique URI (Uniform Resource Identifier).
+			
+		⚙️ 2. What is a REST Controller in Spring Boot?
+
+			@RestController = @Controller + @ResponseBody
+			It automatically serializes Java objects to JSON responses.
+
+
+		Key Points Interviewers Look For 
+
+			***An idempotent REST API means that multiple identical requests have the same impact as one
+
+			POST is non-idempotent (calling twice → creates two records).
+
+			PUT is idempotent (calling twice → same result, resource replaced).
+
+			PATCH is non-idempotent and for partial updates.
+
+			DELETE should ideally be idempotent.
+
+			GET requests should not change the server state (should be safe).
+			
+			
+		Q1. Why is PUT considered idempotent but POST is not?
+
+			Answer:
+
+			PUT → Replaces the entire resource.
+			If you send the same PUT request multiple times, the state remains the same.
+
+			POST → Creates new resource each time (can generate new IDs), so multiple calls create duplicates.
+
+		🔹 Q2. What’s the difference between PUT and PATCH?
+
+			Answer:
+
+			PUT replaces the entire resource.
+
+			PATCH updates only specific fields.
+
+		🔹 Q8. If you send POST twice accidentally, what happens?
+
+			Answer:
+			Two separate resources may be created (not idempotent).
+			That’s why APIs should return unique IDs and support idempotency keys for payment systems (like Stripe).
+
+
+		🔹 Q13. Can PUT create a new resource?
+
+			Answer:
+			Yes — if the resource with given ID does not exist, PUT can create it.
+			But this behavior should be clearly defined in the API design.
+
+		---------------------------------------------
+
+		static blocks and constructors
+
+		Static Block — Definition
+
+			A static block is executed only once when the class is loaded into memory by the JVM.
+			It is used to initialize static variables or perform setup operations.
+
+			class Demo {
+				static int x;
+				static {
+					System.out.println("Static block executed");
+					x = 10;
+				}
+				Demo() {
+					System.out.println("Constructor called");
+				}
+
+				public static void main(String[] args) {
+					System.out.println("Main method started");
+					Demo obj1 = new Demo();
+					Demo obj2 = new Demo();
+				}
+			}
+
+			Static block executed
+			Main method started
+			Constructor called
+			Constructor called
+
+
+		Constructor — Definition
+
+			A constructor is called each time an object is created.
+			Used for initializing instance variables.
+			Constructors cannot be static, abstract, or final.
+			You can overload constructors.
+			
+			
+			
+		❓Q1. What happens if you have multiple static blocks?
+			class Test {
+				static {
+					System.out.println("First static block");
+				}
+				static {
+					System.out.println("Second static block");
+				}
+			}
+
+			✅ Answer:
+			All static blocks execute in the order they appear, only once, when the class loads.
+
+		❓Q2. Can a class have both static block and constructor?
+
+			✅ Yes.
+			The static block runs first (during class loading), then constructor runs (during object creation).
+
+		❓Q3. Can we access non-static variables in static block?
+
+			❌ No.
+			Static blocks can only access static members directly because non-static variables belong to an instance.
+
+		❓Q4. Can static block throw checked exception?
+
+			❌ No, unless you handle it inside try-catch, because class loading can’t propagate checked exceptions.
+
+		❓Q5. Can we call a constructor from a static block?
+
+			✅ Yes, you can create an object inside a static block:
+
+			class Test {
+				static {
+					Test t = new Test();
+					System.out.println("Object created in static block");
+				}
+				Test() {
+					System.out.println("Constructor executed");
+				}
+			}
+
+
+			Output:
+
+			Constructor executed
+			Object created in static block
+
+		❓Q6. Can we make constructor static?
+
+			❌ No.
+			Because constructors are meant for instance creation, not for class-level operations.
+
+		❓Q7. Can we call one constructor from another?
+
+			✅ Yes, using this() keyword (for constructor chaining).
+			✅ Constructor Under Constructor = Constructor Chaining
+
+			Java allows you to call one constructor inside another using the keyword:
+			this() → calls another constructor of the same class
+			super() → calls parent class constructor
+
+		❓Q8. What is the order of execution?
+			class OrderTest {
+				static {
+					System.out.println("Static block");
+				}
+				{
+					System.out.println("Instance block");
+				}
+				OrderTest() {
+					System.out.println("Constructor");
+				}
+				public static void main(String[] args) {
+					new OrderTest();
+					new OrderTest();
+				}
+			}
+
+
+			Output:
+
+			Static block
+			Instance block
+			Constructor
+			Instance block
+			Constructor
+
+
+			✅ Order:
+
+			Static block → runs once
+
+			Instance block → runs before constructor for each object
+
+			Constructor → runs after instance block
+			
+		---------------------------------------------------------------------------------------------
+
+		@PathVariable → Mandatory by default /api/books/5
+
+		@RequestParam → Optional (can be made optional or have default values) /api/books?id=5
+
+		🧩 Why @PathVariable is mandatory   
+
+			Because it’s part of the URI path pattern —
+			Spring must extract it directly from the URL to match the mapping.
+
+		--------------------------------------------------------------------
+
+		@RequestMapping is used to define the endpoint (URL + HTTP method) for your controller method.
+
+			✅ URL → /api/users/all
+			✅ Method → GET
+
+		@RequestBody is used to map the JSON payload of an incoming HTTP request to a Java object.
+
+			@RequestBody uses HttpMessageConverters (like Jackson) to automatically:
+			Convert JSON → Java object (on input)
+			Convert Java object → JSON (on output, when using @RestController)
+
+		---------------------------------------------------------------------------------------------
+
+		✅ Serialization (in Java) means:
+
+			Converting a Java object into a byte stream so it can be:
+			saved to a file
+			sent over a network
+			stored in memory
+			transferred between JVMs
+
+		✅ How is it done?
+
+			Using ObjectOutputStream.writeObject():
+
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.ser"));
+			oos.writeObject(obj);  // converts the object into a byte stream
+		____________________________________________________
+
+		✅ 1. Global Exception Handler works in the Controller Layer
+
+		@ControllerAdvice / @RestControllerAdvice is designed to handle exceptions thrown by controllers or anything below controllers (Service, DAO).
+
+		Meaning:
+
+			DAO throws exception → goes to Service
+
+			Service throws or rethrows exception → goes to Controller
+
+			Controller doesn’t handle → GlobalExceptionHandler catches it
+
+			So yes, GlobalExceptionHandler works only at the top — Controller/API layer.
+
+		🟦 But can we handle exceptions in other layers?
+
+			Yes, but differently:
+
+			✔ DAO Layer
+
+			Wrap low-level exceptions into custom exceptions and rethrow.
+
+			✔ Service Layer
+
+			Catch DAO exceptions and either:
+
+			Handle (business logic),
+
+			OR wrap into a new Service-level exception,
+
+			OR rethrow to be caught by Controller.
+
+			❌ You should NOT handle API responses in DAO or Service layer.
+
+			Only Controller layer should convert exceptions into HTTP responses.
+
+		🟩 2. Best Practice Flow (Enterprise Pattern)
+			DAO → throws DataAccessException
+			Service → catches & wraps → throws ServiceException
+			Controller → Global Handler converts to HTTP response
+
+
+		Example:
+
+			DAO:
+			catch(SQLException e) {
+				throw new DataAccessException("DB error", e);
+			}
+
+			Service:
+			catch(DataAccessException e) {
+				throw new ServiceException("Service failed", e);
+			}
+
+			Controller Advice:
+			@ExceptionHandler(ServiceException.class)
+			public ResponseEntity<?> handle(ServiceException ex) {
+				return ResponseEntity.status(500).body(ex.getMessage());
+			}
+
+		⭐ Key Rule (Interview Ready)
+
+			DAO and Service layers should throw exceptions upward, but the actual handling (for end-user response) must be done at the Controller level — ideally in a GlobalExceptionHandler.
+
+			This is the cleanest architecture.
+
+		🟡 Summary
+			Layer	Should Catch?	Should Handle?	Should Throw?
+			DAO	Yes	No	Yes (wrap & throw)
+			Service	Yes	Maybe	Yes (wrap & throw)
+			Controller	No	No	Let Global Handler catch
+			Global Exception Handler (@ControllerAdvice)	Yes	Yes	Converts to HTTP response
+
+		🎯 Correct Flow 
+
+			DAO Exception → wrap into DAO_CustomException → throw
+			Service Layer → catch → wrap into Service_CustomException → throw
+			Controller → nothing (let it bubble up)
+			GlobalExceptionHandler → catches & returns proper HTTP JSON response
+
+		-------------------------------------------------------------------------------
+		we have one rest api get if 100 request comes how many instance it will create 
+
+		✅ If a REST API (GET endpoint) receives 100 requests, how many controller instances are created?
+		✔ ONLY ONE INSTANCE
+
+			Spring creates only one object of your Controller (by default).
+			This single instance will serve all 100 requests — one at a time or concurrently depending on thread pool.
+
+		🧠 Why?
+
+			Because:
+
+			▶ Spring beans are singleton by default
+
+			@RestController → @Controller + @ResponseBody
+			And @Controller is a singleton-scoped bean unless changed.
+
+			So:
+
+			1 controller instance per application
+
+			The same instance is reused for every incoming HTTP request
+
+		🍃 Spring Boot Thread Model
+
+			Even though there is one controller object,
+			multiple threads handle requests.
+
+			So:
+
+			100 requests → 100 threads (from Tomcat thread pool)
+			BUT → all threads call the SAME controller instance
+
+		⚠ Important Note
+
+			Since a controller is singleton:
+
+			Do NOT use instance variables that change per request
+			(because multiple threads may modify them simultaneously)
+
+			Example of bad code:
+
+			@RestController
+			public class MyController {
+				private int counter = 0; // ❌ dangerous
+
+				@GetMapping("/test")
+				public int test() {
+					return ++counter;  // race condition!
+				}
+			}
+
+
+			Controllers should be stateless.
+
+		🟩 Summary (Interview Answer)
+
+			Spring creates only one instance of a @RestController (because it is a singleton bean).
+			Even if 100 or 10,000 requests come, the same instance is used.
+			Multiple threads access this controller instance, so controllers must be stateless.
+
+		---------------------------------------
+
+			CrudRepository
+				  ↓
+			PagingAndSortingRepository
+				  ↓
+			JpaRepository
+			
+			JpaRepository extends CrudRepository, all CRUD operations are available in JpaRepository, and you also get additional JPA-specific features.
+
+
+		---------------------------------------
+
+		We maintain only one application.properties inside the codebase.
+		Environment-specific configurations are provided via Kubernetes ConfigMaps for dev, homologation, and production.
+		When the application runs in a pod, Spring Boot automatically picks configuration from the ConfigMap, which overrides the default properties.
+		This allows clean separation of config from code and supports environment-driven deployments.”
+
+		---------------------------------------
+
+		🔄 Complete CI/CD Example (Java + Spring Boot + Kubernetes)
+		Developer flow:
+		commit → push → pipe runs → build → test → Docker image → push to registry → deploy to k8s
+
+
+		Pipeline:
+			CI Stage
+				mvn clean install
+				Run JUnit + Mockito tests
+				SonarQube analysis
+				Build Docker image
+				Push image to AWS ECR
+			CD Stage
+				Update Kubernetes deployment YAML
+				kubectl apply -f deployment.yaml OR ArgoCD auto-sync
+				New pod is created → health checks → old pod removed
+				
+		🔥 User sees updated version automatically.
+
+		⭐ Interview Explanation in One Sentence
+
+		CI/CD automates the entire software lifecycle: CI ensures code is built and tested on every commit, while CD automatically delivers or deploys the application to environments like QA, staging, or production
+
+		---------------------------------------
+		✅ GitHub Branching Strategy
+
+		Here is what you meant, in simple terms:
+
+			1.Create feature branch from develop using Jira ticket ID
+			2.Do development → deploy feature branch to Dev
+			3.QA tests in Dev
+			4.If ok → Deploy same branch to HOMOL/UAT
+			5.After user testing → Merge feature branch into develop
+			6.Develop branch is deployed to Prod
+			7.After Prod release → Merge develop → main (backup)
+			8.Next cycle starts again from develop
+
+
+		---------------------------------------
+		👉 What performance improvements have you personally made in your project?
+
+			In our project, RestTemplate was being created for every API call.
+			This caused extra TCP/SSL handshakes and no connection reuse, which increased latency under load.
+			I optimized it by creating a singleton RestTemplate bean with a pooling connection manager.
+			This allowed connection reuse, reduced overhead, improved throughput, and made our API faster and more scalable
+			
+			🧠 Bonus (If interviewer asks HOW it helps):
+
+			“Pooling helps us avoid creating new connections on every request.
+			It reduces latency and improves performance because existing connections are reused.”
+			
+			✅ Simple meaning of the question
+
+			They want to know what steps you took to improve the application’s performance.
+
+			Optimized DB queries
+			Added caching
+			Added connection pooling
+			Reduced API response time
+			Improved logic or code efficiency
+			Used batch operations
+			Thread pooling
+			Queue-based async processing
+			Reduced external API calls
+			
+		---------------------------------------
+		🚀 Final JWT Flow Summary (Interview-friendly)
+
+			User sends username & password
+			AuthenticationManager loads user from DB
+			If valid → Generate JWT token
+			Client stores token
+			For each request → token sent in Authorization header
+			JWTFilter intercepts the request
+			Validates token
+			Creates Authentication object
+			Places it inside SecurityContext
+			Controller executes only if the user is authenticated
+			
+		--------------------------------------------------
+
+		🚀 What is a Parallel Stream?
+
+			A parallel stream processes data using multiple threads at the same time instead of a single thread.
+
+			It uses the Fork/Join framework internally to split the task into smaller chunks, process them in parallel, and then combine the results.
+			
+		🔥 How Parallel Stream Works (Internally)
+
+			List → split → process in parallel threads → combine → final result
+
+		🎯 Interview-Friendly Explanation
+
+			“Parallel streams use the ForkJoin Framework.
+			When we call .parallelStream(), Java splits the collection into multiple chunks using a Spliterator.
+			Each chunk is processed by different threads from ForkJoinPool.commonPool.
+			After processing, results are combined and returned.
+			It improves performance for CPU-bound tasks on large datasets.”
+			
+		--------------------------------------------------
+
+		❓ If all connections are used, what can we do?
+
+		✅ 1. Increase max pool size (MOST COMMON FIX)
+
+			If your application handles many parallel DB calls:
+
+			maximumPoolSize = 10 or 20
+
+			This allows more concurrent DB operations.
+
+			But…
+			⚠️ Only do this if your DB server can handle the load.
+			Otherwise you push load onto DB, causing crashes.
+
+		✅ 2. Reduce the number of DB calls
+
+			If your API hits DB multiple times, reduce them:
+
+			✔ Combine multiple queries
+			✔ Use joins
+			✔ Use batch operations
+			✔ Avoid unnecessary fetches
+			✔ Use pagination
+
+			Example:
+			Instead of calling DB 10 times:
+
+			SELECT ... WHERE id IN (1,2,3,4)
+
+
+			One single query.
+
+		✅ 3. Add Caching (Redis / In-memory)
+
+			If data is frequently read and rarely updated:
+
+			✔ Cache DB results
+			✔ Serve responses from cache
+			✔ Reduce DB load
+			✔ Free up connection pool
+
+			This is one of the best long-term fixes.
+
+		✅ 4. Reduce Connection Hold Time
+
+			Sometimes connection pool exhaustion happens not because of high traffic but because:
+
+			❌ A query is slow
+			❌ Transaction takes too long
+			❌ Code is blocking
+			❌ Prepared statement not closed
+
+			Fix by:
+
+			✔ Optimizing SQL
+			✔ Adding proper indexes
+			✔ Reducing transaction scope
+			✔ Moving long operations outside DB
+
+		✅ 5. Add a Queue / Async Processing
+
+			If too many requests hit at the same time:
+
+			✔ Process them async
+			✔ Put heavy DB tasks into queues (Kafka, RabbitMQ)
+			✔ API responds fast, processing happens later
+
+		🚨 BONUS — If connection pool is exhausted, Spring Boot logs this:
+		HikariPool-1 - Connection is not available, request timed out after 30000ms
+
+
+		This is a strong indicator that your DB or pool size is insufficient.
+
+		🎯 Final Interview-Ready Answer
+
+		If the interviewer asks:
+
+		“What happens if all DB connections are in use? What would you do?”
+
+		Say this:
+
+			“If all connection pool threads are in use, new requests will block until a connection is free.
+			To fix this, we can increase maximumPoolSize if the DB can handle it.
+			Otherwise, we optimize DB calls, add caching, reduce slow queries, or use async processing to reduce pressure on the DB.
+			The goal is to reduce the time a connection stays busy and minimize DB round trips.”
+			
+		---------------------------------------------------------------------------
+
+		❓ How will you debug if one request/API is taking more time to respond?
+
+			🎯 Perfect Interview Answer (Use this)
+
+			“I debug slow APIs using a step-by-step approach.
+			First, I check the logs with timestamps to identify which part of the flow is slow — controller, service, DB, or external API.
+			Then I analyze SQL queries using EXPLAIN, check DB connection pools, verify thread pools, and measure external API latency.
+			I also monitor CPU, memory, and GC pauses.
+			If available, I use APM tools like New Relic or Prometheus to trace the full request path and find the exact bottleneck.”
+			
+		---------------------------------------------------------------------------
+
+		🚀 Perfect Introduction (Use this in every interview)
+
+			“Hi, my name is Girish. I have around 3.4 years of experience as a Specialist Software Engineer, and I’m currently working at Société Générale.
+			My primary tech stack is Java, Spring Boot, AWS serverless components, MySQL, REST APIs, and AngularJS at the front end.”
+
+		🌟 Project Explanation (Short, Clean, Professional)
+
+			“In my current project, I work in the Procure-to-Pay (P2P) domain, where our application acts as a middleware and reporting layer between upstream systems and the downstream procurement system, Ariba.
+			The main goal of the project is to process supplier invoices, convert them into a format compatible with Ariba, and deliver them reliably.”
+
+		🔥 Detailed But Crisp Workflow (No confusion, no long story)
+
+			**“The flow works like this:
+			We receive supplier PDF invoices through S3 — either via SFTP or email using Microsoft Graph API.
+			As soon as the invoice arrives, we record basic metadata into our database and forward the PDF to an internal service responsible for OCR extraction and XML generation.
+			Once that team returns the processed ZIP file containing both the PDF and XML, we extract invoice attributes such as PO number, invoice number, dates, and company entity.
+			Since Ariba only accepts cXML format, we convert the XML into cXML and send it to Ariba through an API integration.
+
+			During this whole lifecycle, we store all necessary details in our DB so our application can expose REST APIs and dashboards for invoice tracking, purchase orders, and reporting purposes.
+			So effectively, our system works as a middleware — handling file processing, data transformation, and reporting between suppliers and Ariba.”**
+
+		🔧 Your Role (VERY IMPORTANT)
+
+		Interviewers focus heavily on this.
+
+			“My key responsibilities include developing REST APIs, optimizing file-processing flows, writing integrations with AWS services like S3, Lambda, EventBridge, and CloudWatch, and improving performance using best practices such as connection pooling and async processing.
+			I also handle enhancements, production support, debugging slow APIs, and ensuring data accuracy for reporting dashboards.”
+
+		🎯 Perfect final line
+
+			“Overall, I work end-to-end on backend development, AWS integrations, data processing, and performance optimization in a scalable enterprise workflow.”	
+
+		🧩 Full Introduction in One Flow (Final Version)
+
+		You can say the full thing like this in the interview:
+
+		🔥 Full Introduction Script
+
+			“Hi, my name is Girish. I have 3.4 years of experience as a Specialist Software Engineer, currently working at Société Générale.
+			My main skills are Java, Spring Boot, AWS serverless components (Lambda, S3, DynamoDB, CloudWatch, EventBridge), MySQL, REST APIs, and AngularJS.”
+
+			“In my current project, I work in the Procure-to-Pay domain where our application acts as a middleware and reporting layer between upstream invoice sources and the downstream procurement system, Ariba.
+			The purpose is to receive supplier invoices, transform them into Ariba-compatible cXML format, and ensure smooth communication between systems.”
+
+			“We receive PDF invoices in S3 via SFTP or email using Microsoft Graph API.
+			We log the invoice in our database, send it to an internal OCR service which extracts data and returns XML.
+			We then process the XML, extract key information like PO number and invoice details, convert it to cXML, and send it to Ariba via API integration.
+			Throughout the process, we store all data for reporting, and also expose REST APIs for invoice tracking and dashboards.”
+
+			“My role involves developing and enhancing backend microservices, integrating AWS services, converting XML to cXML, optimizing performance using best practices like connection pooling, handling production issues, and ensuring accurate data flow for reporting.”
+
+			“Overall, I work end-to-end on backend development, AWS integration, data transformation, and performance optimization.”
+			
+		---------------------------------------------------------------------------
+
+		HashMap :
+
+		Internal Steps
+
+		1️⃣ Compute hash
+
+			hash = key.hashCode();
+
+
+		2️⃣ Calculate bucket index
+
+			index = (n - 1) & hash;
+
+
+		3️⃣ Check bucket
+
+			If empty → insert node
+
+			If occupied → collision occurs
+
+		4️⃣ Collision Handling
+
+			Compare keys using equals()
+
+			If key exists → update value
+
+			Else → add new node
+			
+		-------------------------------------------------------
+
+		Array + HashMap
+
+		Two pointers
+
+		String traversal
+
+		Basic recursion
+
+		Sorting + scan
+
+		------------
+		/*
+		We're building the game engine for Thrilling Teleporters, a board game with N+1 tiles, starting from tile 0.
+
+		Certain tiles contain teleporters that instantly move the player to a specific tile, either forward or backward. For example, here are three teleporters:
+
+		teleporters1 = [
+		  "3,1", -- From tile 3 to tile  1
+		  "4,2", -- From tile 4 to tile  2
+		  "5,10" -- From tile 5 to tile 10
+		]
+
+		Or as seen on the board:
+
+			   "3,1"
+			 ┌─<───<─┐                                    N = 12
+			 v       │
+		 0 → 1 → 2 → 3 . 4 . 5 . 6 → 7 → 8 → 9 → 10 → 11 → 12
+				 ^       │   │                    ^
+				 └─<───<─┘   └──>───>───>───>───>──┘
+				   "4,2"             "5,10"
+
+		After rolling the die:
+		- The player moves forward by the number rolled.
+		- If the player lands on a tile with a teleporter, they are immediately sent to its destination.
+		- The player can’t move past the final tile N, and only one teleporter is used per die roll.
+		To add variety, the die can have any number of sides (minimum 2).
+
+		Write a function that returns all unique tiles the player can reach in a single die roll, given:
+
+		- A list of teleporter strings
+		- The number of sides on the die
+		- The player's starting tile
+		- The total number of tiles N
+
+		Example:
+		The player starts at tile 0 on a board of size N = 12, using a standard 6-sided die and the teleporters defined earlier.
+
+		teleporters1 = [
+		  "3,1", -- From tile 3 to tile  1
+		  "4,2", -- From tile 4 to tile  2
+		  "5,10" -- From tile 5 to tile 10
+		]
+								   die  start   
+								  sides,tile  N
+		destinations(teleporters1,  6,    0,  12)   => [1, 2, 10, 6]
+
+		They can roll values from 1 to 6, leading to the following tile outcomes: [_, _, _, _, _, _].
+		- Rolling 1, 2, or 6 lands the player on tiles with no teleporters, so they stay on those tiles → [1, 2, _, _, _, 6].
+		- Rolling 3 activates a teleporter from tile 3 to tile 1 → updated list: [1, 2, 1, _, _, 6].
+		- Rolling 4 teleports the player from tile 4 to tile 2 → updated list: [1, 2, 1, 2, _, 6].
+		- Rolling 5 teleports the player from tile 5 to tile 10 → final list: [1, 2, 1, 2, 10, 6].
+		Removing duplicates, the final possible tiles are: [1, 2, 10, 6].
+
+		Additional Inputs:
+		teleporters2 = ["5,10", "6,22", "39,40", "40,49", "47,29"]
+		teleporters3 = ["6,18", "36,26", "41,21", "49,55", "54,52",
+						"71,58", "74,77", "78,76", "80,73", "92,85"]
+		teleporters4 = ["97,93", "99,81", "36,33", "92,59", "17,3",
+						"82,75", "4,1", "84,79", "54,4", "88,53",
+						"91,37", "60,57", "61,7", "62,51", "31,19"]
+		teleporters5 = ["3,8", "8,9", "9,3"]
+
+		All Test Cases:
+		(output can be in any order)
+								   die  start   
+								  sides,tile  N
+		destinations(teleporters1,  6,    0,  12) => [1, 2, 10, 6]
+		destinations(teleporters2,  6,   46, 100) => [48, 49, 50, 51, 52, 29]
+		destinations(teleporters2, 10,    0,  50) => [1, 2, 3, 4, 7, 8, 9, 10, 22]
+		destinations(teleporters3, 10,   95, 100) => [96, 97, 98, 99, 100]
+		destinations(teleporters3, 10,   70, 100) => [72, 73, 75, 76, 77, 79, 58]
+		destinations(teleporters4,  6,    0, 100) => [1, 2, 3, 5, 6]
+		destinations(teleporters5,  7,    2,  20) => [3, 4, 5, 6, 7, 8, 9]
+
+		Complexity Variable:
+		N = number of tiles
+		Note: The number of teleporters, T, and the size of the die, D, are bounded by N.
+
+		*/
+
+		import java.io.*;
+		import java.util.*;
+		import javafx.util.Pair;
+
+		public class Solution {
+		  public static void main(String[] argv) {
+			String[] teleporters1 = {"3,1", "4,2", "5,10"};
+			String[] teleporters2 = {"5,10", "6,22", "39,40", "40,49", "47,29"};
+			String[] teleporters3 = {"6,18", "36,26", "41,21", "49,55", "54,52",
+									"71,58", "74,77", "78,76", "80,73", "92,85"};
+			String[] teleporters4 = {"97,93", "99,81", "36,33", "92,59", "17,3",
+									"82,75", "4,1", "84,79", "54,4", "88,53",
+									"91,37", "60,57", "61,7", "62,51", "31,19"};
+			String [] teleporters5 = {"3,8", "8,9", "9,3"};
+		  }
+		}
+
+
+		--------------------------------------------------------------------------
+
+		Delta air line :
+
+		Circuit breaker 
+		aws iam service
+		exception handling
+		microservices communication 
+		cache how they worked 
+		actuator
+		feidl vs consctrtor DI
+		create rest api with database connection to fetch data
+		❓ Are DOG, dog, and Dog the same string in Java?
+		
+		🔎 Why are they different?
+		Java compares strings based on:
+
+		Characters
+
+		Case (uppercase vs lowercase)
+
+		Order
+
+		'D' != 'd'
+		'O' != 'o'
+		'G' != 'g'
+		
+		Set<String> set = new HashSet<>();
+
+		set.add("DOG");
+		set.add("dog");
+		set.add("Dog");
+
+		[DOG, dog, Dog]
+		✔ All three values are stored
+		✔ They are treated as different element
+
+-----------------------------------------------------------------------------------------
+
+
+		
+1. Write a Java method to determine if a string contains vowels.
+
+2. What is the difference between the Runnable and Callable interfaces?
+
+3. How can you print even and odd numbers in increasing order using two threads in Java?
+
+4. We want you to simulate a deadlock in thread. Then find a solution for it.
+
+5. 2nd highest salary of employees dept wise ->sql
+
+6. Followup - How did you leverage common classes across different Microservices?
+
+7. How would you read large file in chuncks? If you use thread, how would you identify
+
+	*********Chunk Reading by Size (Bytes)
+	try (InputStream in = new BufferedInputStream(
+			new FileInputStream("big.dat"))) {
+
+		byte[] buffer = new byte[8 * 1024]; // 8 KB chunk
+		int bytesRead;
+
+		while ((bytesRead = in.read(buffer)) != -1) {
+			process(buffer, bytesRead);
+		}
+	}
+	
+8. Follow up - I want to generate unique string ID for each employee that will be saved, how to implement that?
+
+9. How to implement caching?
+
+10. How did you handle multi threading in your project?
+
+11. all the status codes 
+
+12. if we have 1000 employee data in table how to display it in front end to display only 100 reocrds per page .
+
+13. List all new features of Java 21.
+
+14. In spring how many ways to create beans.
+		✅ Correct Statement (Refined)
+
+		Beans can be created using @Component, @Configuration + @Bean, or XML.
+		All these beans are managed by the Spring IoC container — either BeanFactory or ApplicationContext (most commonly ApplicationContext).
+		
+15. What is API versioning and how you will do it.
+
+16. How spring boot application will start and from which class flow will be started and life cycle of beans
+	Application.class
+	main()
+	  ↓
+	SpringApplication.run()
+	  ↓
+	Create ApplicationContext
+	  ↓
+	Load configurations
+	  ↓
+	Create & initialize beans
+	  ↓
+	Start embedded server (Tomcat)
+	  ↓
+	Application is ready
+
+17. How we can create multiple instances of the same bean? How can we qualify which bean to use?
+
+	“We can create multiple beans of the same type using multiple @Bean methods or @Component implementations. Spring resolves ambiguity using @Qualifier, and if not specified, it injects the @Primary bean by default.
+	
+18. How did you handle exceptions in your project?
+
+19. Explain end to end flow from frontend to backend for a request.
+
+	✅  Short Interview Answer (2–3 minutes)
+	In my project, we handled exceptions using a centralized exception handling approach.
+	We created custom exception classes for business errors and used @ControllerAdvice with @ExceptionHandler to handle them globally.
+	This helped us return consistent error responses, proper HTTP status codes, and meaningful error messages.
+	We also logged exceptions properly and avoided exposing internal details to clients.
+
+20. Can you briefly describe what a deadlock is and how one would be created?	
+	
+	class DeadlockExample {
+
+    private static final Object lock1 = new Object();
+    private static final Object lock2 = new Object();
+
+		public static void main(String[] args) {
+
+			Thread t1 = new Thread(() -> {
+				synchronized (lock1) {
+					System.out.println("Thread 1 acquired lock1");
+					try { Thread.sleep(100); } catch (Exception ignored) {}
+
+					synchronized (lock2) {
+						System.out.println("Thread 1 acquired lock2");
+					}
+				}
+			});
+
+			Thread t2 = new Thread(() -> {
+				synchronized (lock2) {
+					System.out.println("Thread 2 acquired lock2");
+					try { Thread.sleep(100); } catch (Exception ignored) {}
+
+					synchronized (lock1) {
+						System.out.println("Thread 2 acquired lock1");
+					}
+				}
+			});
+
+			t1.start();
+			t2.start();
+		}
+	}
+
+	
+21. Interceptor vs filters 
+
+	Interceptor : In Spring MVC, we create an Interceptor by implementing the HandlerInterceptor interface.
+	Its methods (preHandle, postHandle, afterCompletion) execute before and after the controller method execution, but after Spring Security filters.
+	
+	Filters : Filters are Servlet-level components that process every HTTP request before it reaches Spring MVC.
+	
+	Client Request
+	   ↓
+	Servlet Filters  (Spring Security Filters)
+	   ↓
+	DispatcherServlet
+	   ↓
+	Interceptors
+	   ↓
+	Controller
+	
+	
+22. Improved speed in MFG :
+
+	1. Replace the all restTemaplate instance with singleton instance 
+	
+23. in aws how we can scale for serveless compoenent ?
+
+	In AWS, serverless components scale automatically—you don’t manage servers or autoscaling groups. Scaling is handled per service, based on events, traffic, or usage.
+	
+
+		
+		
+	
+	
+
+✔✔✔✔✔Manager round : 
+
+3. Release management strategies
+5. How was your code release process to production? How did you co-ordinate?	
+		
+		
+		
+---------------------------------------------
+
+1. High-level Architecture
+
+	Can you explain the end-to-end architecture of your Procure-to-Pay middleware and how different services interact with each other?
+
+2. Invoice Ingestion
+
+	How do you fetch invoices from Outlook using Microsoft Graph API?
+
+	How do you handle authentication (token refresh, expiry)?
+
+	What happens if the same email is processed twice?
+
+3. File Handling & S3
+
+	Invoices come via SFTP and email and are stored in S3.
+
+	How do you design the S3 bucket structure?
+
+	How do you handle duplicate files, partial uploads, or corrupted files?
+
+4. PDF → XML → cXML Flow
+
+	Can you explain why Ariba cannot consume standard XML and why cXML is required?
+
+	What are the main challenges while converting XML to cXML?
+
+	How do you validate the cXML before sending it to Ariba?
+
+5. Error Handling & Retries
+
+	Suppose:
+
+	XML conversion fails
+
+	Ariba API is down
+
+	S3 upload fails
+
+	How does your system handle failures, retries, and recovery without losing invoices?
+
+6. Idempotency & Data Consistency
+
+	How do you ensure that the same invoice is not processed multiple times across:
+
+	Email ingestion
+
+	S3 processing
+
+	Ariba submission
+
+	What keys or checks do you use?
+
+7. Database & Reporting Design
+
+	What kind of data do you store for reporting purposes?
+
+	How do you design tables for invoices, POs, and requisitions?
+
+	How do you handle large reporting queries efficiently?
+
+8. AWS Usage
+
+	You mentioned using Lambda, DynamoDB, CloudWatch, and S3.
+
+	Why did you choose DynamoDB vs RDS in certain cases?
+
+	How do you monitor failures and performance using CloudWatch?
+
+9. Security & Compliance
+
+	Since invoices are financial documents, how do you ensure:
+
+	Secure storage in S3
+
+	Secure API communication with Ariba
+
+	Proper access control between services?
+
+10. Scalability & Real-World Scenarios
+
+	If tomorrow invoice volume increases 10x:
+
+	What parts of your system will break first?
+
+	How would you scale the solution without changing the business flow?
+	
+---------------------------------------
+
+serlization in deatils
+multithreading scenarios
+kubernetese
+
+
+----------------------------------------------
+
+1. lifecycle of a Spring Bean and how it ties into the Application Context?
+
+Sure. You’d want to structure it clearly. Start by saying that when the Application Context initializes, it creates beans based on annotations like Component or configurations. Then explain key phases: instantiation, dependency injection, and initialization methods like PostConstruct. Mention bean scopes (singleton or prototype), and finally, how destruction callbacks, like PreDestroy, clean up before shutdown. Keep it logical and thorough!
+
+
+2. How would you implement exception handling and logging in a Spring Boot microservice architecture—especially in production?
+
+You should answer by explaining that you handle exceptions using a global exception handler (like RestControllerAdvice), with specific methods for different exceptions. For logging, you’d describe how you use a tool like CloudWatch or Elasticsearch to collect and monitor logs. Also mention best practices like log levels and structured logging. Keep it concise, covering both tools and strategy.
+
+3. how dependency injection works in Spring, and why it’s beneficial in building enterprise applications.
+
+"In Spring, beans are created when classes are annotated with @Component, @Service, or @Repository. These beans are stored in the IoC (Inversion of Control) container, also known as the Application Context. To use these beans, we inject them into other classes by using the @Autowired annotation. This allows Spring to supply the right bean from the container directly into our fields, constructors, or setters. This approach removes manual instantiation, making our code more modular, easier to test, and easier to maintain."
+
+4. How would you optimize the performance of a Spring Boot application that handles a large number of database queries?"
+
+To optimize database performance, I would start by ensuring proper indexing on frequently queried fields. I’d avoid the N+1 query problem by using eager fetching or optimized joins—fetching related data in one go. I'd implement caching for frequently accessed data to reduce repeated hits. For efficiency, I'd use connection pooling to reuse database connections rather than creating new ones each time. Lastly, I’d use pagination for large datasets, fetching data in smaller chunks rather than all at once. This combination ensures efficient, scalable database interactions
+
+5. What’s the difference between using a blocking REST client like RestTemplate and a non-blocking one like WebClient in Spring?"
+
+"RestTemplate is a synchronous, blocking client. When you call an API with it, the thread waits until the response arrives before continuing. WebClient, on the other hand, is asynchronous and non-blocking. It uses reactive streams, returning types like Mono or Flux, so you can handle data when it’s ready, without tying up threads. WebClient is more efficient for high-concurrency use cases, while RestTemplate is simpler but suited for synchronous workflows."
+
+6. How would you handle sensitive configuration values like passwords or API keys in a Spring Boot application?"
+
+In our Spring Boot application in production, we externalize secrets using Vault. When deploying to Docker or Kubernetes, we fetch the secrets from Vault and store them as Kubernetes secrets. We then use these secrets in the application to access the database or S3. This ensures sensitive values are never hard-coded and remain secure
+
+7. How would you implement centralized logging in a microservices architecture to make it easier to monitor and troubleshoot issues across multiple services?
+
+We use Filebeat to collect logs from each service and forward them to Elasticsearch. Each service’s logs are aggregated in Elasticsearch, making them easily searchable. This way, we have a centralized view of all services’ logs, allowing us to quickly trace issues. Additionally, tools like Kibana can be layered on top for visualization and dashboards, helping us monitor everything in one place
+
+8. How do you ensure a Spring Boot application starts quickly, especially in a containerized environment like Docker or Kubernetes?
+
+You're on the right track! Keeping dependencies minimal is a great start. You can also optimize by enabling lazy initialization (so beans load only when needed), precomputing or caching configurations, and using optimized base images. In Kubernetes, readiness probes also help by ensuring the app is ready before sending traffic. Keep it lean, keep it fast!
+
+
+Certainly! First, the user logs in by sending their credentials—like username and password. Spring Security authenticates them (often checking a database). If valid, a JWT is created with roles and expiry. That JWT is sent back to the user. For future requests, the user includes this JWT in the Authorization header. Spring Security intercepts requests, validates the JWT, and checks roles. If roles match the endpoint’s requirements, access is granted. If not, it’s denied. That’s the full flow!
+
+10. How would you design a Spring Boot application to gracefully handle failures when calling external APIs, ensuring resilience and fallback behavior?
+
+You’re on the right path! With a circuit breaker (like Resilience4J), you define how many failures trigger it to open, stopping more calls for a cooldown period. After that, it tries again. You can add retries if a call fails briefly. And you can define a fallback method to provide default responses. Together, these ensure your app stays resilient even when external services struggle!
+
+11. How do you profile or monitor the performance of a Spring Boot application in production to identify bottlenecks or slow components?
+
+That’s a manual approach, and it works for specific cases! But in production, you'd typically use tools like Spring Boot Actuator with metrics, or a profiler like Java Flight Recorder or a distributed tracing tool (such as Zipkin or Jaeger). These give you broader insight without manual log points. But your approach is correct—just consider more automated profiling tools for a holistic picture!
+
+12. How would you implement caching in a Spring Boot application to improve performance for frequently accessed data?
+
+You’ve got the core steps right! You’d enable caching, then use “@Cacheable” on methods where you fetch data, so results are stored in the cache. “@CachePut” updates the cache when you save data, and “@CacheEvict” removes entries when data is deleted or changed. Add that you can choose an in-memory cache like ConcurrentMapCache or integrate with providers like Redis. That’s the full picture!
+
+13. How would you design and implement a custom exception handling mechanism in Spring Boot to return meaningful error responses to API clients?
+We create a global exception handler class annotated with @RestControllerAdvice. Inside, we use methods annotated with @ExceptionHandler for each custom exception. Each method returns a meaningful error response, such as a specific status code and a JSON body. This way, all exceptions are handled in one centralized place, keeping responses consistent and clean.
+
+In Spring Boot, we handle exceptions globally using a class annotated with @RestControllerAdvice, which is a combination of @ControllerAdvice and @ResponseBody.
+
+Inside this class, we define methods annotated with @ExceptionHandler for specific custom and framework exceptions. Each handler returns a standardized error response using ResponseEntity, allowing us to control both the HTTP status code and response body.
+
+This approach centralizes exception handling, avoids repetitive try-catch blocks in controllers, ensures consistent error responses, and improves maintainability and separation of concerns across the application.
+
+
+------------------------------------------------------------------------------------
+
+Issue faced while migration from java 11 to 21 
+
+1. ClassNotFoundException: javax.xml.bind.JAXBException
+	Replace javax.* with jakarta.* and add explicit dependencies.
+	
+2. Jakarta Migration Pain (javax → jakarta)
+
+	If you’re using Spring Boot, JPA, Hibernate, REST APIs:
+	javax.persistence.* → jakarta.persistence.*
+	javax.validation.* → jakarta.validation.*
+	
+	Entity classes stopped compiling
+	REST controllers failed at runtime
+	Hibernate mappings broke
+	
+3. Spring Boot 2.x  →  Spring Boot 3.x
+   Hibernate 5.x    →  Hibernate 6.x
+   
+4. Upgrade plugins: 
+	1. maven-compiler-plugin 
+	2. Surefire plugin 
+	
+5. JUnit 4 to JUnit 5
+
+6. Old Docker base image (openjdk:11) -> 21-jdk
+   CI pipelines using Java 11 -> Java 21
+   
+----------------------------------------------------------
+
+which Java 11 feature you used :
+
+1. HttpClient to call exteranl API
+2. var in lambda parameters -> (var x, var y) -> x + y
+	- to add (@NotNull var name) -> name.toUpperCase()
+	- Improves readability in complex lambdas
+3. Optional<String> opt = Optional.empty();
+	opt.isEmpty(); // true
+
+	before java 11 :
+	Java 8  -> !optional.isPresent()
+	Java 11 -> optional.isEmpty() // cleaner & readable
+
+
+---------------------------------------------------------
+
+Sonar Issue : 
+
+Most of the Sonar issues I handled were related to potential null pointer exceptions, resource leaks, and duplicate code.
+For example, Sonar flagged null safety issues in our invoice processing service. I fixed them by adding proper validations and null checks.
+I also refactored file-handling code using try-with-resources to avoid resource leaks.
+Additionally, I removed duplicate logic by moving common code into utility classes, which improved maintainability.”
+
+-------------------------------------------------------
+
+Prod issue fixed: 
+
+1. Added retry in one of our services to fix timeout issue
+2. Instead of the scheduler we shifted to delayed

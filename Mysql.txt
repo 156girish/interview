@@ -1,0 +1,51 @@
+create table students(
+	id int primary key,
+	student_name varchar(50),
+	subject varchar(10),
+	join_date date
+)
+
+
+
+	insert into students(id,student_name,subject,join_date)
+	values(1, 'Raghav' , 'Math', '2026-02-07')
+
+	insert into students(id,student_name,subject,join_date)
+	values(1, 'Raghav' , 'Math', now())
+
+	update studnets set mark = 7 where id = 10;
+
+	alter table students add column makrs int;
+	
+
+** to get max marks from jan month;
+
+
+	+-----+--------------+---------+------------+-------+
+	| id  | student_name | subject | join_date  | marks |
+	+-----+--------------+---------+------------+-------+
+	|   1 | Raghav       | Math    | 2026-02-07 |     7 |
+	|   2 | Shanta       | Math    | 2026-02-07 |  NULL |
+	|   3 | Shanta       | Math    | 2026-02-07 |    10 |
+	| 201 | Amit Sharma  | Maths   | 2026-01-05 |    78 |
+	| 202 | Neha Verma   | Physics | 2026-01-12 |    85 |
+	| 203 | Rahul Singh  | Chem    | 2026-01-20 |    69 |
+	| 204 | Pooja Patel  | Biology | 2026-02-03 |    88 |
+	| 205 | Suresh Rao   | Maths   | 2026-02-14 |    74 |
+	| 206 | Kiran Mehta  | CS      | 2026-02-25 |    91 |
+	| 207 | Anil Kumar   | Physics | 2026-03-02 |    82 |
+	| 208 | Sneha Joshi  | Chem    | 2026-03-11 |    76 |
+	| 209 | Vikas Patil  | Maths   | 2026-03-27 |    89 |
+	+-----+--------------+---------+------------+-------+
+	
+	select student_name, marks as Topper
+	from students
+	where join_date > '2026-01-01'
+	and join_date < '2026-01-31'
+	and marks = (
+		select max(marks) 
+		form students
+			where join_date > '2026-01-01'
+			and join_date < '2026-01-31'
+	)
+	
