@@ -1,0 +1,2098 @@
+
+
+================================================================================
+
+	✅ 1. Find Largest Element
+	🔹 Normal Approach (Sorting)
+	int[] arr = {10, 20, 5, 40, 30};
+
+
+	Arrays.sort(arr);
+
+
+	System.out.println("Largest = " + arr[arr.length - 1]);
+
+	Explanation:
+
+	Sort the array.
+	Last element is the largest.
+
+	Time Complexity: O(n log n)
+	Space Complexity: O(1)
+
+	🔹 Optimized Approach (Single Traversal)
+	int[] arr = {10, 20, 5, 40, 30};
+
+
+	int largest = arr[0];
+
+
+	for (int i = 1; i < arr.length; i++) {
+		if (arr[i] > largest) {
+			largest = arr[i];
+		}
+	}
+
+
+	System.out.println("Largest = " + largest);
+
+	Why better:
+
+	Only one traversal.
+	No sorting required.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 2. Find Second Largest
+	🔹 Normal Approach (Sorting)
+	int[] arr = {10, 20, 5, 40, 30};
+
+
+	Arrays.sort(arr);
+
+
+	System.out.println("Second Largest = " + arr[arr.length - 2]);
+
+	Explanation:
+
+	Sort array.
+	Second last element is the second largest.
+
+	Time Complexity: O(n log n)
+
+	🔹 Optimized Approach
+	int[] arr = {10, 20, 5, 40, 30};
+
+
+	int largest = Integer.MIN_VALUE;
+	int secondLargest = Integer.MIN_VALUE;
+
+
+	for (int num : arr) {
+		if (num > largest) {
+			secondLargest = largest;
+			largest = num;
+		} else if (num > secondLargest && num != largest) {
+			secondLargest = num;
+		}
+	}
+
+
+	System.out.println("Second Largest = " + secondLargest);
+
+	Why better:
+
+	Finds both largest and second largest in one pass.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 3. Find Nth Largest
+	🔹 Normal Approach (Sorting)
+	int[] arr = {10, 20, 5, 40, 30};
+	int n = 3;
+
+
+	Arrays.sort(arr);
+
+
+	System.out.println(n + "rd Largest = " + arr[arr.length - n]);
+
+	Explanation:
+
+	Sort array.
+	Nth largest = arr[length - n].
+
+	Time Complexity: O(n log n)
+
+	🔹 Optimized Approach (Min Heap)
+	int[] arr = {10, 20, 5, 40, 30};
+	int k = 3;
+
+
+	PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+
+	for (int num : arr) {
+		pq.offer(num);
+
+
+		if (pq.size() > k) {
+			pq.poll();
+		}
+	}
+
+
+	System.out.println(k + "rd Largest = " + pq.peek());
+
+	Why better:
+
+	Efficient for large arrays.
+	No need to sort the entire array.
+
+	Time Complexity: O(n log k)
+	Space Complexity: O(k)
+
+
+================================================================================
+
+	✅ 4. Find Smallest
+	🔹 Normal Approach (Sorting)
+	int[] arr = {10, 20, 5, 40, 30};
+
+
+	Arrays.sort(arr);
+
+
+	System.out.println("Smallest = " + arr[0]);
+
+	Explanation:
+
+	Sort array.
+	First element is smallest.
+
+	Time Complexity: O(n log n)
+
+	🔹 Optimized Approach
+	int[] arr = {10, 20, 5, 40, 30};
+
+
+	int smallest = arr[0];
+
+
+	for (int i = 1; i < arr.length; i++) {
+		if (arr[i] < smallest) {
+			smallest = arr[i];
+		}
+	}
+
+
+	System.out.println("Smallest = " + smallest);
+
+	Why better:
+
+	One traversal.
+	No sorting.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 5. Check if Array is Sorted
+	🔹 Normal Approach
+	int[] arr = {1, 2, 3, 4, 5};
+
+
+	boolean sorted = true;
+
+
+	for (int i = 0; i < arr.length - 1; i++) {
+		if (arr[i] > arr[i + 1]) {
+			sorted = false;
+			break;
+		}
+	}
+
+
+	System.out.println(sorted);
+
+	Explanation:
+
+	Compare every element with next element.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (Early Exit)
+	int[] arr = {1, 2, 3, 4, 5};
+
+
+	for (int i = 0; i < arr.length - 1; i++) {
+		if (arr[i] > arr[i + 1]) {
+			System.out.println(false);
+			return;
+		}
+	}
+
+
+	System.out.println(true);
+
+	Why better:
+
+	Stops immediately when an unsorted pair is found.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 6. Remove Duplicates from Sorted Array
+	🔹 Normal Approach (Using ArrayList)
+	int[] arr = {1, 1, 2, 2, 3, 4, 4};
+
+
+	ArrayList<Integer> list = new ArrayList<>();
+
+
+	for (int num : arr) {
+		if (!list.contains(num)) {
+			list.add(num);
+		}
+	}
+
+
+	System.out.println(list);
+
+	Explanation:
+
+	Store unique elements in another collection.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (Two Pointer)
+	int[] arr = {1, 1, 2, 2, 3, 4, 4};
+
+
+	int j = 0;
+
+
+	for (int i = 1; i < arr.length; i++) {
+		if (arr[i] != arr[j]) {
+			j++;
+			arr[j] = arr[i];
+		}
+	}
+
+
+	for (int i = 0; i <= j; i++) {
+		System.out.print(arr[i] + " ");
+	}
+
+	Why better:
+
+	No extra space.
+	In-place modification.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 7. Left Rotate by 1
+	🔹 Normal Approach (Extra Array)
+	int[] arr = {1, 2, 3, 4, 5};
+
+
+	int[] temp = new int[arr.length];
+
+
+	for (int i = 1; i < arr.length; i++) {
+		temp[i - 1] = arr[i];
+	}
+
+
+	temp[arr.length - 1] = arr[0];
+
+
+	System.out.println(Arrays.toString(temp));
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (In-place)
+	int[] arr = {1, 2, 3, 4, 5};
+
+
+	int first = arr[0];
+
+
+	for (int i = 0; i < arr.length - 1; i++) {
+		arr[i] = arr[i + 1];
+	}
+
+
+	arr[arr.length - 1] = first;
+
+
+	System.out.println(Arrays.toString(arr));
+
+	Why better:
+
+	No extra array.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 8. Left Rotate by K
+	🔹 Normal Approach (Extra Array)
+	int[] arr = {1, 2, 3, 4, 5};
+	int k = 2;
+
+
+	k %= arr.length;
+
+
+	int[] temp = new int[arr.length];
+
+
+	for (int i = 0; i < arr.length; i++) {
+		temp[i] = arr[(i + k) % arr.length];
+	}
+
+
+	System.out.println(Arrays.toString(temp));
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (Reversal Algorithm)
+	int[] arr = {1, 2, 3, 4, 5};
+	int k = 2;
+
+
+	k %= arr.length;
+
+
+	reverse(arr, 0, k - 1);
+	reverse(arr, k, arr.length - 1);
+	reverse(arr, 0, arr.length - 1);
+
+
+	System.out.println(Arrays.toString(arr));
+
+
+	static void reverse(int[] arr, int start, int end) {
+		while (start < end) {
+			int temp = arr[start];
+			arr[start] = arr[end];
+			arr[end] = temp;
+			start++;
+			end--;
+		}
+	}
+
+	Why better:
+
+	In-place rotation.
+	No extra array.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 9. Move Zeroes to End
+	🔹 Normal Approach (Extra Array)
+	int[] arr = {0, 1, 0, 3, 12};
+
+
+	int[] temp = new int[arr.length];
+	int index = 0;
+
+
+	for (int num : arr) {
+		if (num != 0) {
+			temp[index++] = num;
+		}
+	}
+
+
+	System.out.println(Arrays.toString(temp));
+
+	Explanation:
+
+	Copy all non-zero elements.
+	Remaining positions automatically contain zero.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+	🔹 Optimized Approach (Two Pointer)
+	int[] arr = {0, 1, 0, 3, 12};
+
+
+	int j = 0;
+
+
+	for (int i = 0; i < arr.length; i++) {
+		if (arr[i] != 0) {
+			int temp = arr[i];
+			arr[i] = arr[j];
+			arr[j] = temp;
+			j++;
+		}
+	}
+
+
+	System.out.println(Arrays.toString(arr));
+
+	Why better:
+
+	In-place solution.
+	No extra space.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+	
+	
+	
+	
+
+================================================================================
+
+	✅ 10. Reverse Array
+	🔹 Normal Approach (Using Extra Array)
+	int[] arr = {1, 2, 3, 4, 5};
+
+
+	int[] rev = new int[arr.length];
+
+
+	for (int i = 0; i < arr.length; i++) {
+		rev[i] = arr[arr.length - 1 - i];
+	}
+
+
+	System.out.println(Arrays.toString(rev));
+
+	Explanation:
+
+	Create another array.
+	Copy elements in reverse order.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+	🔹 Optimized Approach (Two Pointer)
+	int[] arr = {1, 2, 3, 4, 5};
+
+
+	int left = 0;
+	int right = arr.length - 1;
+
+
+	while (left < right) {
+		int temp = arr[left];
+		arr[left] = arr[right];
+		arr[right] = temp;
+
+
+		left++;
+		right--;
+	}
+
+
+	System.out.println(Arrays.toString(arr));
+
+	Why better:
+
+	Reverses array in-place.
+	No extra memory.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 11. Count Frequency of Each Element
+	🔹 Normal Approach (Nested Loop)
+	int[] arr = {1, 2, 2, 3, 1};
+
+
+	for (int i = 0; i < arr.length; i++) {
+		int count = 1;
+
+
+		for (int j = i + 1; j < arr.length; j++) {
+			if (arr[i] == arr[j]) {
+				count++;
+			}
+		}
+
+
+		System.out.println(arr[i] + " = " + count);
+	}
+
+	Explanation:
+
+	Compare every element with remaining elements.
+	Repeated output for duplicates.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (HashMap)
+	int[] arr = {1, 2, 2, 3, 1};
+
+
+	Map<Integer, Integer> map = new HashMap<>();
+
+
+	for (int num : arr) {
+		map.put(num, map.getOrDefault(num, 0) + 1);
+	}
+
+
+	System.out.println(map);
+
+	Why better:
+
+	Single traversal.
+	No duplicate counting.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+
+================================================================================
+
+	✅ 12. Two Sum
+	🔹 Normal Approach (Nested Loop)
+	int[] arr = {2, 7, 11, 15};
+	int target = 9;
+
+
+	for (int i = 0; i < arr.length; i++) {
+		for (int j = i + 1; j < arr.length; j++) {
+			if (arr[i] + arr[j] == target) {
+				System.out.println(i + " " + j);
+			}
+		}
+	}
+
+	Explanation:
+
+	Check every possible pair.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (HashMap)
+	int[] arr = {2, 7, 11, 15};
+	int target = 9;
+
+
+	Map<Integer, Integer> map = new HashMap<>();
+
+
+	for (int i = 0; i < arr.length; i++) {
+
+
+		int diff = target - arr[i];
+
+
+		if (map.containsKey(diff)) {
+			System.out.println(map.get(diff) + " " + i);
+			break;
+		}
+
+
+		map.put(arr[i], i);
+	}
+
+	Why better:
+
+	Finds answer in one traversal.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+
+================================================================================
+
+	✅ 13. Container With Most Water
+	🔹 Normal Approach (Brute Force)
+	int[] height = {1,8,6,2,5,4,8,3,7};
+
+
+	int max = 0;
+
+
+	for (int i = 0; i < height.length; i++) {
+		for (int j = i + 1; j < height.length; j++) {
+
+
+			int area = Math.min(height[i], height[j]) * (j - i);
+
+
+			max = Math.max(max, area);
+		}
+	}
+
+
+	System.out.println(max);
+
+	Explanation:
+
+	Check every pair.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (Two Pointer)
+	int[] height = {1,8,6,2,5,4,8,3,7};
+
+
+	int left = 0;
+	int right = height.length - 1;
+	int max = 0;
+
+
+	while (left < right) {
+
+
+		int area = Math.min(height[left], height[right]) * (right - left);
+
+
+		max = Math.max(max, area);
+
+
+		if (height[left] < height[right]) {
+			left++;
+		} else {
+			right--;
+		}
+	}
+
+
+	System.out.println(max);
+
+	Why better:
+
+	Eliminates unnecessary comparisons.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 14. Longest Subarray with Given Sum
+	🔹 Normal Approach
+	int[] arr = {1,2,3,1,1,1,1};
+	int target = 3;
+
+
+	int maxLength = 0;
+
+
+	for (int i = 0; i < arr.length; i++) {
+
+
+		int sum = 0;
+
+
+		for (int j = i; j < arr.length; j++) {
+
+
+			sum += arr[j];
+
+
+			if (sum == target) {
+				maxLength = Math.max(maxLength, j - i + 1);
+			}
+		}
+	}
+
+
+	System.out.println(maxLength);
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (HashMap - Works for Positive & Negative Numbers)
+	int[] arr = {1,2,3,1,1,1,1};
+	int target = 3;
+
+
+	Map<Integer, Integer> map = new HashMap<>();
+
+
+	int sum = 0;
+	int max = 0;
+
+
+	for (int i = 0; i < arr.length; i++) {
+
+
+		sum += arr[i];
+
+
+		if (sum == target)
+			max = i + 1;
+
+
+		if (map.containsKey(sum - target))
+			max = Math.max(max, i - map.get(sum - target));
+
+
+		map.putIfAbsent(sum, i);
+	}
+
+
+	System.out.println(max);
+
+	Why better:
+
+	Handles negative numbers also.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 15. Find Missing Number
+	🔹 Normal Approach
+	int[] arr = {1,2,4,5};
+
+
+	int n = 5;
+
+
+	for (int i = 1; i <= n; i++) {
+
+
+		boolean found = false;
+
+
+		for (int num : arr) {
+			if (num == i) {
+				found = true;
+				break;
+			}
+		}
+
+
+		if (!found) {
+			System.out.println(i);
+		}
+	}
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (Sum Formula)
+	int[] arr = {1,2,4,5};
+
+
+	int n = 5;
+
+
+	int expected = n * (n + 1) / 2;
+
+
+	int actual = 0;
+
+
+	for (int num : arr)
+		actual += num;
+
+
+	System.out.println(expected - actual);
+
+	Why better:
+
+	Uses mathematical formula.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 16. Find Duplicate Number
+	🔹 Normal Approach
+	int[] arr = {1,3,4,2,2};
+
+
+	for (int i = 0; i < arr.length; i++) {
+
+
+		for (int j = i + 1; j < arr.length; j++) {
+
+
+			if (arr[i] == arr[j]) {
+				System.out.println(arr[i]);
+			}
+		}
+	}
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (HashSet)
+	int[] arr = {1,3,4,2,2};
+
+
+	Set<Integer> set = new HashSet<>();
+
+
+	for (int num : arr) {
+
+
+		if (!set.add(num)) {
+			System.out.println(num);
+			break;
+		}
+	}
+
+	Why better:
+
+	Stops immediately when duplicate is found.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+
+================================================================================
+
+	✅ 17. Product Except Self
+	🔹 Normal Approach
+	int[] arr = {1,2,3,4};
+
+
+	int[] result = new int[arr.length];
+
+
+	for (int i = 0; i < arr.length; i++) {
+
+
+		int product = 1;
+
+
+		for (int j = 0; j < arr.length; j++) {
+
+
+			if (i != j)
+				product *= arr[j];
+		}
+
+
+		result[i] = product;
+	}
+
+
+	System.out.println(Arrays.toString(result));
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (Prefix & Suffix Products)
+	int[] arr = {1,2,3,4};
+
+
+	int n = arr.length;
+
+
+	int[] result = new int[n];
+
+
+	result[0] = 1;
+
+
+	for (int i = 1; i < n; i++)
+		result[i] = result[i - 1] * arr[i - 1];
+
+
+	int suffix = 1;
+
+
+	for (int i = n - 1; i >= 0; i--) {
+
+
+		result[i] *= suffix;
+
+
+		suffix *= arr[i];
+	}
+
+
+	System.out.println(Arrays.toString(result));
+
+	Why better:
+
+	No division used.
+	Two linear traversals.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 18. Kth Largest Element
+	🔹 Normal Approach
+	int[] arr = {3,2,1,5,6,4};
+
+
+	int k = 2;
+
+
+	Arrays.sort(arr);
+
+
+	System.out.println(arr[arr.length - k]);
+
+	Time Complexity: O(n log n)
+
+	🔹 Optimized Approach (Min Heap)
+	int[] arr = {3,2,1,5,6,4};
+
+
+	int k = 2;
+
+
+	PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+
+	for (int num : arr) {
+
+
+		pq.offer(num);
+
+
+		if (pq.size() > k)
+			pq.poll();
+	}
+
+
+	System.out.println(pq.peek());
+
+	Why better:
+
+	Heap size remains k.
+	Better for very large arrays.
+
+	Time Complexity: O(n log k)
+
+
+================================================================================
+
+	✅ 19. Search in Rotated Sorted Array
+	🔹 Normal Approach (Linear Search)
+	int[] arr = {4,5,6,7,0,1,2};
+
+
+	int target = 0;
+
+
+	for (int i = 0; i < arr.length; i++) {
+
+
+		if (arr[i] == target) {
+			System.out.println(i);
+			break;
+		}
+	}
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (Modified Binary Search)
+	int[] arr = {4,5,6,7,0,1,2};
+
+
+	int target = 0;
+
+
+	int left = 0;
+	int right = arr.length - 1;
+
+
+	while (left <= right) {
+
+
+		int mid = left + (right - left) / 2;
+
+
+		if (arr[mid] == target) {
+			System.out.println(mid);
+			break;
+		}
+
+
+		if (arr[left] <= arr[mid]) {
+
+
+			if (target >= arr[left] && target < arr[mid]) {
+				right = mid - 1;
+			} else {
+				left = mid + 1;
+			}
+
+
+		} else {
+
+
+			if (target > arr[mid] && target <= arr[right]) {
+				left = mid + 1;
+			} else {
+				right = mid - 1;
+			}
+		}
+	}
+
+	Why better:
+
+	Uses binary search on the sorted half of the rotated array.
+
+	Time Complexity: O(log n)
+	Space Complexity: O(1)
+	
+	
+	
+
+================================================================================
+
+	✅ 20. Reverse String
+	🔹 Normal Approach (Using Another String)
+	String str = "Hello";
+
+
+	String rev = "";
+
+
+	for (int i = str.length() - 1; i >= 0; i--) {
+		rev += str.charAt(i);
+	}
+
+
+	System.out.println(rev);
+
+	Explanation:
+
+	Traverse from last character to first.
+	Build a new reversed string.
+
+	Time Complexity: O(n²) (String concatenation)
+	Space Complexity: O(n)
+
+	🔹 Optimized Approach (StringBuilder)
+	String str = "Hello";
+
+
+	StringBuilder sb = new StringBuilder(str);
+
+
+	System.out.println(sb.reverse());
+
+	Why better:
+
+	Uses built-in optimized reverse method.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+
+================================================================================
+
+	✅ 21. Palindrome
+	🔹 Normal Approach (Reverse String)
+	String str = "madam";
+
+
+	String rev = "";
+
+
+	for (int i = str.length() - 1; i >= 0; i--) {
+		rev += str.charAt(i);
+	}
+
+
+	if (str.equals(rev))
+		System.out.println("Palindrome");
+	else
+		System.out.println("Not Palindrome");
+
+	Explanation:
+
+	Reverse the string.
+	Compare original and reversed.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (Two Pointer)
+	String str = "madam";
+
+
+	int left = 0;
+	int right = str.length() - 1;
+
+
+	boolean palindrome = true;
+
+
+	while (left < right) {
+
+
+		if (str.charAt(left) != str.charAt(right)) {
+			palindrome = false;
+			break;
+		}
+
+
+		left++;
+		right--;
+	}
+
+
+	System.out.println(palindrome ? "Palindrome" : "Not Palindrome");
+
+	Why better:
+
+	No extra string required.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 22. Count Character Frequency
+	🔹 Normal Approach (Nested Loop)
+	String str = "program";
+
+
+	for (int i = 0; i < str.length(); i++) {
+
+
+		int count = 1;
+
+
+		for (int j = i + 1; j < str.length(); j++) {
+			if (str.charAt(i) == str.charAt(j))
+				count++;
+		}
+
+
+		System.out.println(str.charAt(i) + " = " + count);
+	}
+
+	Explanation:
+
+	Count occurrences of every character.
+	Duplicate output possible.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (HashMap)
+	String str = "program";
+
+
+	Map<Character, Integer> map = new HashMap<>();
+
+
+	for (char ch : str.toCharArray()) {
+		map.put(ch, map.getOrDefault(ch, 0) + 1);
+	}
+
+
+	System.out.println(map);
+
+	Why better:
+
+	Counts all characters in one traversal.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+
+================================================================================
+
+	✅ 23. Find Duplicate Characters
+	🔹 Normal Approach (Nested Loop)
+	String str = "program";
+
+
+	for (int i = 0; i < str.length(); i++) {
+
+
+		for (int j = i + 1; j < str.length(); j++) {
+
+
+			if (str.charAt(i) == str.charAt(j)) {
+				System.out.println(str.charAt(i));
+				break;
+			}
+		}
+	}
+
+	Explanation:
+
+	Compare each character with remaining characters.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (HashMap)
+	String str = "program";
+
+
+	Map<Character, Integer> map = new HashMap<>();
+
+
+	for (char ch : str.toCharArray()) {
+		map.put(ch, map.getOrDefault(ch, 0) + 1);
+	}
+
+
+	for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+		if (entry.getValue() > 1)
+			System.out.println(entry.getKey());
+	}
+
+	Why better:
+
+	One pass for counting.
+	Easy to identify duplicates.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 24. Remove Duplicate Characters
+	🔹 Normal Approach
+	String str = "program";
+
+
+	String result = "";
+
+
+	for (char ch : str.toCharArray()) {
+
+
+		if (!result.contains(String.valueOf(ch))) {
+			result += ch;
+		}
+	}
+
+
+	System.out.println(result);
+
+	Explanation:
+
+	Add character only if not already present.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (LinkedHashSet)
+	String str = "program";
+
+
+	Set<Character> set = new LinkedHashSet<>();
+
+
+	for (char ch : str.toCharArray()) {
+		set.add(ch);
+	}
+
+
+	StringBuilder sb = new StringBuilder();
+
+
+	for (char ch : set) {
+		sb.append(ch);
+	}
+
+
+	System.out.println(sb);
+
+	Why better:
+
+	Maintains insertion order.
+	No repeated search.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 25. Anagram
+	🔹 Normal Approach (Sorting)
+	String s1 = "listen";
+	String s2 = "silent";
+
+
+	char[] a = s1.toCharArray();
+	char[] b = s2.toCharArray();
+
+
+	Arrays.sort(a);
+	Arrays.sort(b);
+
+
+	System.out.println(Arrays.equals(a, b));
+
+	Explanation:
+
+	Sort both strings.
+	Compare sorted arrays.
+
+	Time Complexity: O(n log n)
+
+	🔹 Optimized Approach (Character Count)
+	String s1 = "listen";
+	String s2 = "silent";
+
+
+	if (s1.length() != s2.length()) {
+		System.out.println(false);
+		return;
+	}
+
+
+	int[] count = new int[26];
+
+
+	for (int i = 0; i < s1.length(); i++) {
+		count[s1.charAt(i) - 'a']++;
+		count[s2.charAt(i) - 'a']--;
+	}
+
+
+	boolean anagram = true;
+
+
+	for (int c : count) {
+		if (c != 0) {
+			anagram = false;
+			break;
+		}
+	}
+
+
+	System.out.println(anagram);
+
+	Why better:
+
+	No sorting required.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 26. Count Words
+	🔹 Normal Approach (Split)
+	String str = "Java is easy";
+
+
+	String[] words = str.split(" ");
+
+
+	System.out.println(words.length);
+
+	Explanation:
+
+	Split string by spaces.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (Single Traversal)
+	String str = "Java is easy";
+
+
+	int count = 1;
+
+
+	for (int i = 0; i < str.length(); i++) {
+		if (str.charAt(i) == ' ')
+			count++;
+	}
+
+
+	System.out.println(count);
+
+	Why better:
+
+	No extra array created.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 27. Reverse Words
+	🔹 Normal Approach
+	String str = "Java is easy";
+
+
+	String[] words = str.split(" ");
+
+
+	for (int i = words.length - 1; i >= 0; i--) {
+		System.out.print(words[i] + " ");
+	}
+
+	Explanation:
+
+	Split into words.
+	Print from last to first.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (StringBuilder)
+	String str = "Java is easy";
+
+
+	String[] words = str.split(" ");
+
+
+	StringBuilder sb = new StringBuilder();
+
+
+	for (int i = words.length - 1; i >= 0; i--) {
+		sb.append(words[i]).append(" ");
+	}
+
+
+	System.out.println(sb.toString().trim());
+
+	Why better:
+
+	Efficient string concatenation.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 28. Remove White Spaces
+	🔹 Normal Approach
+	String str = "Java is easy";
+
+
+	String result = "";
+
+
+	for (char ch : str.toCharArray()) {
+
+
+		if (ch != ' ')
+			result += ch;
+	}
+
+
+	System.out.println(result);
+
+	Explanation:
+
+	Skip space characters.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (replaceAll)
+	String str = "Java is easy";
+
+
+	String result = str.replaceAll("\\s+", "");
+
+
+	System.out.println(result);
+
+	Why better:
+
+	Removes all whitespace (spaces, tabs, newlines).
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 29. First Non-Repeated Character
+	🔹 Normal Approach
+	String str = "swiss";
+
+
+	for (int i = 0; i < str.length(); i++) {
+
+
+		boolean unique = true;
+
+
+		for (int j = 0; j < str.length(); j++) {
+
+
+			if (i != j && str.charAt(i) == str.charAt(j)) {
+				unique = false;
+				break;
+			}
+		}
+
+
+		if (unique) {
+			System.out.println(str.charAt(i));
+			break;
+		}
+	}
+
+	Explanation:
+
+	Compare each character with every other character.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (LinkedHashMap)
+	String str = "swiss";
+
+
+	Map<Character, Integer> map = new LinkedHashMap<>();
+
+
+	for (char ch : str.toCharArray()) {
+		map.put(ch, map.getOrDefault(ch, 0) + 1);
+	}
+
+
+	for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+		if (entry.getValue() == 1) {
+			System.out.println(entry.getKey());
+			break;
+		}
+	}
+
+	Why better:
+
+	Preserves insertion order.
+	Finds the first unique character in linear time.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+	
+	
+	
+
+================================================================================
+
+	✅ 30. First Repeated Character
+	🔹 Normal Approach (Nested Loop)
+	String str = "programming";
+
+
+	for (int i = 0; i < str.length(); i++) {
+
+
+		for (int j = i + 1; j < str.length(); j++) {
+
+
+			if (str.charAt(i) == str.charAt(j)) {
+				System.out.println(str.charAt(i));
+				return;
+			}
+		}
+	}
+
+	Explanation:
+
+	Compare every character with the remaining characters.
+	First matching character is the answer.
+
+	Time Complexity: O(n²)
+	Space Complexity: O(1)
+
+	🔹 Optimized Approach (HashSet)
+	String str = "programming";
+
+
+	Set<Character> set = new HashSet<>();
+
+
+	for (char ch : str.toCharArray()) {
+
+
+		if (!set.add(ch)) {
+			System.out.println(ch);
+			break;
+		}
+	}
+
+	Why better:
+
+	Stops immediately when a repeated character is found.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+
+================================================================================
+
+	✅ 31. Count Occurrences of a Character
+	🔹 Normal Approach
+	String str = "programming";
+	char target = 'g';
+
+
+	int count = 0;
+
+
+	for (int i = 0; i < str.length(); i++) {
+
+
+		if (str.charAt(i) == target)
+			count++;
+	}
+
+
+	System.out.println(count);
+
+	Explanation:
+
+	Traverse the string and count matching characters.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (Streams)
+	String str = "programming";
+	char target = 'g';
+
+
+	long count = str.chars()
+					.filter(ch -> ch == target)
+					.count();
+
+
+	System.out.println(count);
+
+	Why better:
+
+	Uses Java Streams for concise code.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 32. String to Integer
+	🔹 Normal Approach (Manual Conversion)
+	String str = "1234";
+
+
+	int number = 0;
+
+
+	for (int i = 0; i < str.length(); i++) {
+
+
+		number = number * 10 + (str.charAt(i) - '0');
+	}
+
+
+	System.out.println(number);
+
+	Explanation:
+
+	Convert each character into its numeric value.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach
+	String str = "1234";
+
+
+	int number = Integer.parseInt(str);
+
+
+	System.out.println(number);
+
+	Why better:
+
+	Built-in and reliable.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 33. Check if String Contains Only Digits
+	🔹 Normal Approach
+	String str = "123456";
+
+
+	boolean digits = true;
+
+
+	for (char ch : str.toCharArray()) {
+
+
+		if (!Character.isDigit(ch)) {
+			digits = false;
+			break;
+		}
+	}
+
+
+	System.out.println(digits);
+
+	Explanation:
+
+	Check every character.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (Regex)
+	String str = "123456";
+
+
+	System.out.println(str.matches("\\d+"));
+
+	Why better:
+
+	Very concise.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 34. Longest Common Prefix
+	🔹 Normal Approach
+	String[] strs = {"flower","flow","flight"};
+
+
+	String prefix = strs[0];
+
+
+	for (int i = 1; i < strs.length; i++) {
+
+
+		while (!strs[i].startsWith(prefix)) {
+			prefix = prefix.substring(0, prefix.length() - 1);
+		}
+	}
+
+
+	System.out.println(prefix);
+
+	Explanation:
+
+	Keep reducing prefix until every string starts with it.
+
+	Time Complexity: O(n × m)
+
+	🔹 Optimized Approach (Sorting)
+	String[] strs = {"flower","flow","flight"};
+
+
+	Arrays.sort(strs);
+
+
+	String first = strs[0];
+	String last = strs[strs.length - 1];
+
+
+	StringBuilder ans = new StringBuilder();
+
+
+	for (int i = 0; i < Math.min(first.length(), last.length()); i++) {
+
+
+		if (first.charAt(i) == last.charAt(i))
+			ans.append(first.charAt(i));
+		else
+			break;
+	}
+
+
+	System.out.println(ans);
+
+	Why better:
+
+	Compare only first and last strings after sorting.
+
+	Time Complexity: O(n log n)
+
+
+================================================================================
+
+	✅ 35. Valid Parentheses
+	🔹 Normal Approach
+	String str = "()[]{}";
+
+
+	while (str.contains("()") || str.contains("{}") || str.contains("[]")) {
+
+
+		str = str.replace("()", "")
+				 .replace("{}", "")
+				 .replace("[]", "");
+	}
+
+
+	System.out.println(str.isEmpty());
+
+	Explanation:
+
+	Remove matching pairs repeatedly.
+
+	Time Complexity: O(n²)
+
+	🔹 Optimized Approach (Stack)
+	String str = "()[]{}";
+
+
+	Stack<Character> stack = new Stack<>();
+
+
+	for (char ch : str.toCharArray()) {
+
+
+		if (ch == '(' || ch == '{' || ch == '[')
+			stack.push(ch);
+
+
+		else {
+
+
+			if (stack.isEmpty()) {
+				System.out.println(false);
+				return;
+			}
+
+
+			char top = stack.pop();
+
+
+			if ((ch == ')' && top != '(') ||
+				(ch == '}' && top != '{') ||
+				(ch == ']' && top != '[')) {
+
+
+				System.out.println(false);
+				return;
+			}
+		}
+	}
+
+
+	System.out.println(stack.isEmpty());
+
+	Why better:
+
+	Standard interview solution.
+
+	Time Complexity: O(n)
+	Space Complexity: O(n)
+
+
+================================================================================
+
+	✅ 36. Roman to Integer
+	🔹 Normal Approach
+	String s = "XIV";
+
+
+	Map<Character, Integer> map = new HashMap<>();
+
+
+	map.put('I',1);
+	map.put('V',5);
+	map.put('X',10);
+	map.put('L',50);
+	map.put('C',100);
+	map.put('D',500);
+	map.put('M',1000);
+
+
+	int result = 0;
+
+
+	for (int i = 0; i < s.length(); i++) {
+
+
+		int current = map.get(s.charAt(i));
+
+
+		if (i < s.length()-1 && current < map.get(s.charAt(i+1)))
+			result -= current;
+		else
+			result += current;
+	}
+
+
+	System.out.println(result);
+
+	Explanation:
+
+	Add or subtract based on the next Roman symbol.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach
+	String s = "XIV";
+
+
+	int result = 0;
+
+
+	for (int i = 0; i < s.length(); i++) {
+
+
+		int current = value(s.charAt(i));
+
+
+		if (i < s.length()-1 && current < value(s.charAt(i+1)))
+			result -= current;
+		else
+			result += current;
+	}
+
+
+	System.out.println(result);
+
+
+	static int value(char c) {
+
+
+		switch (c) {
+			case 'I': return 1;
+			case 'V': return 5;
+			case 'X': return 10;
+			case 'L': return 50;
+			case 'C': return 100;
+			case 'D': return 500;
+			case 'M': return 1000;
+		}
+
+
+		return 0;
+	}
+
+	Why better:
+
+	Avoids HashMap lookup.
+
+	Time Complexity: O(n)
+
+
+================================================================================
+
+	✅ 37. Maximum Sum Subarray of Size K
+	🔹 Normal Approach
+	int[] arr = {2,1,5,1,3,2};
+
+
+	int k = 3;
+	int max = Integer.MIN_VALUE;
+
+
+	for (int i = 0; i <= arr.length-k; i++) {
+
+
+		int sum = 0;
+
+
+		for (int j = i; j < i+k; j++)
+			sum += arr[j];
+
+
+		max = Math.max(max, sum);
+	}
+
+
+	System.out.println(max);
+
+	Explanation:
+
+	Calculate every window separately.
+
+	Time Complexity: O(n × k)
+
+	🔹 Optimized Approach (Sliding Window)
+	int[] arr = {2,1,5,1,3,2};
+
+
+	int k = 3;
+
+
+	int sum = 0;
+
+
+	for (int i = 0; i < k; i++)
+		sum += arr[i];
+
+
+	int max = sum;
+
+
+	for (int i = k; i < arr.length; i++) {
+
+
+		sum += arr[i] - arr[i-k];
+
+
+		max = Math.max(max, sum);
+	}
+
+
+	System.out.println(max);
+
+	Why better:
+
+	Reuses previous window sum.
+
+	Time Complexity: O(n)
+	Space Complexity: O(1)
+
+
+================================================================================
+
+	✅ 38. Binary Search
+	🔹 Normal Approach (Linear Search)
+	int[] arr = {2,4,6,8,10,12};
+
+
+	int target = 10;
+
+
+	for (int i = 0; i < arr.length; i++) {
+
+
+		if (arr[i] == target) {
+			System.out.println(i);
+			break;
+		}
+	}
+
+	Explanation:
+
+	Check every element one by one.
+
+	Time Complexity: O(n)
+
+	🔹 Optimized Approach (Binary Search)
+	int[] arr = {2,4,6,8,10,12};
+
+
+	int target = 10;
+
+
+	int left = 0;
+	int right = arr.length - 1;
+
+
+	while (left <= right) {
+
+
+		int mid = left + (right - left) / 2;
+
+
+		if (arr[mid] == target) {
+			System.out.println(mid);
+			break;
+		}
+
+
+		if (arr[mid] < target)
+			left = mid + 1;
+		else
+			right = mid - 1;
+	}
+
+	Why better:
+
+	Divides the search space into halves each iteration.
+	Works only for sorted arrays.
+
+	Time Complexity: O(log n)
+	Space Complexity: O(1)
